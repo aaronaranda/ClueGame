@@ -23,6 +23,7 @@ public class BoardCell {
 	private boolean doorway;
 	private boolean occupied;
 	private boolean walkway;
+	private boolean passage;
 
     // Default attributes
 	private Set<BoardCell> adjList;
@@ -97,6 +98,7 @@ public class BoardCell {
     }
 
     public void setSecretPassage(char passage) {
+    	this.passage = true;
         this.secretPassage = passage;
     }
     
@@ -151,6 +153,10 @@ public class BoardCell {
 	
 	public boolean isWalkway() {
 		return this.walkway;
+	}
+	
+	public boolean isPassage() {
+		return this.passage;
 	}
 	
 	public char getSecretPassage() {

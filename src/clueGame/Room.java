@@ -7,6 +7,10 @@ public class Room {
 	private BoardCell centerCell;
 	private BoardCell labelCell;
 	
+    public Room(String name) {
+        this.name = name;
+    }
+	
 	// Setters
 	public void setLabelCell(BoardCell cell) {
 		if (cell.isLabel()) {
@@ -20,10 +24,7 @@ public class Room {
 		}
 	}
 	
-    public Room(String name) {
-        this.name = name;
-    }
-
+    // Getters
 	public String getName() {
 		return this.name;
 	}

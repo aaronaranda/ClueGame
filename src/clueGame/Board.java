@@ -7,8 +7,8 @@ import java.util.Map;
 import java.io.*;
 import java.util.*;
 
-
 public class Board {
+	
 	// Sizing
 	private int numRows;
 	private int numColumns;
@@ -21,6 +21,7 @@ public class Board {
 	private Map<Character, Room> roomMap;	
 	private Set<BoardCell> targets;
 	private BoardCell[][] grid;
+	private Map<String,BoardCell> centers;	// Keep track of room centers for adjacencies
 
 	/*
 	 * variable and methods used for singleton pattern
@@ -87,12 +88,13 @@ public class Board {
                 this.roomMap.put(label, room);
             }
 	    }
+        scan.close();
     }
 	
 	// Reads csv layout file, configures board accordingly
 	public void loadLayoutConfig() throws BadConfigFormatException {
 		ArrayList<BoardCell> tempBoard = new ArrayList<BoardCell>();
-		
+		centers = new HashMap<String, BoardCell>();
         FileReader layoutReader = null;
 		try {
 			layoutReader = new FileReader(this.layoutConfigFile);
@@ -128,6 +130,9 @@ public class Board {
                 		cell.setCenter(indicator);
                 		cell.setDirection(indicator);
                 		cell.setLabel(indicator);
+                		if (cell.isRoomCenter()) {
+                			this.centers.put(initial, cell);
+                		}
                 	}
                 	tempBoard.add(cell);
                 	col++;
@@ -142,6 +147,7 @@ public class Board {
             	throw new BadConfigFormatException(maxCol, col);
             }            
         }
+        scan.close();
         
         // Setting the board dimensions after the layout is read
         this.numRows = row;
@@ -161,116 +167,76 @@ public class Board {
 		}
 	}
 	 //Calculates the adjacencies for every board cell
-    public void calcAdj() {
+    public void calcAdjacencies() {
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColumns; j++) {
             	// Determine if cell is walkway, then only add adjacent walkways
             	// Determine if cell is walkway with door, connect to roomcenter (*)
             	// Room center (*) ONLY connects to door walkways that enter, secret passage room center
             	boolean isWalkway = grid[i][j].isWalkway();
+            	boolean isDoor = grid[i][j].isDoorway();
+            	boolean isPassage = grid[i][j].isPassage();
             	
-                if (isValidCell(i + 1, j)) {
-                	if (isWalkway && grid[i+ 1][j].isWalkway()) {
-                		grid[i][j].addAdj(grid[i + 1][j]);
-                	}
-                }
-                if (isValidCell(i - 1, j)) {
-                	if (isWalkway && grid[i - 1][j].isWalkway()) {
-                		grid[i][j].addAdj(grid[i - 1][j]);
-                	}
-                }
-                if (isValidCell(i, j + 1)) {
-                	if (isWalkway && grid[i][j + 1].isWalkway()) {
-                		grid[i][j].addAdj(grid[i][j + 1]);
-                	}                	
-                }
-                if (isValidCell(i, j - 1)) {
-                	if (isWalkway && grid[i][j - 1].isWalkway()) {
-                		grid[i][j].addAdj(grid[i][j - 1]);
-                	}                	
-                }
+            	// Door ways and Room Centers 
+            	if (isDoor) {
+            		DoorDirection direction = grid[i][j].getDoorDirection();
+            		if (direction == DoorDirection.UP) {
+            			String room = grid[i - 1][j].getInitial() + "*";
+            			if (this.centers.containsKey(room)) {
+            				grid[i][j].addAdj(this.centers.get(room));
+            				this.centers.get(room).addAdj(grid[i][j]);
+            			}
+            		} else if (direction == DoorDirection.DOWN ) {
+            			String room = grid[i + 1][j].getInitial() + "*";
+            			if (this.centers.containsKey(room)) {
+            				grid[i][j].addAdj(this.centers.get(room));
+            				this.centers.get(room).addAdj(grid[i][j]);
+            			}
+            		} else if (direction == DoorDirection.LEFT) {
+            			String room = grid[i][j - 1].getInitial() + "*";
+            			if (this.centers.containsKey(room)) {
+            				grid[i][j].addAdj(this.centers.get(room));
+            				this.centers.get(room).addAdj(grid[i][j]);
+            			} 	
+            		} else if (direction == DoorDirection.RIGHT) {
+            			String room = grid[i][j + 1].getInitial() + "*";
+            			if (this.centers.containsKey(room) ) {
+            				grid[i][j].addAdj(this.centers.get(room));
+            				this.centers.get(room).addAdj(grid[i][j]);
+            			}
+            		}
+            	}
+            	
+            	// Secret Passages
+            	if (isPassage) {
+            		String roomOne = grid[i][j].getInitial() + "*";
+            		String roomTwo = grid[i][j].getSecretPassage() + "*";
+            		this.centers.get(roomOne).addAdj(this.centers.get(roomTwo));
+            		this.centers.get(roomTwo).addAdj(this.centers.get(roomOne));
+            	}        	
+            	
+            	// Walkways
+            	if (isWalkway) {
+	                if (isValidCell(i + 1, j) && grid[i+ 1][j].isWalkway()) {	                	
+	                	grid[i][j].addAdj(grid[i + 1][j]);
+	                }
+	                if (isValidCell(i - 1, j) && grid[i - 1][j].isWalkway()) {	                
+	                	grid[i][j].addAdj(grid[i - 1][j]);	                	
+	                }
+	                if (isValidCell(i, j + 1) && grid[i][j + 1].isWalkway()) {	                
+	                	grid[i][j].addAdj(grid[i][j + 1]);	                               
+	                }
+	                if (isValidCell(i, j - 1) && grid[i][j - 1].isWalkway()) {	                	
+	                	grid[i][j].addAdj(grid[i][j - 1]);	                	                
+	                }
+            	}
             }
         }
-    }
-
-    // To pass BoardAdjTargetTest
-    public void calcAdjacencies() {
-
-		//testAdjacenciesRooms
-		grid[2][2].addAdj(grid[4][6]);
-		grid[2][2].addAdj(grid[20][19]);
-
-		// Ball room 20,11 size 4
-		grid[20][11].addAdj(grid[16][9]);
-		grid[20][11].addAdj(grid[19][7]);
-		grid[20][11].addAdj(grid[16][14]);
-		grid[20][11].addAdj(grid[19][16]);
-
-		// Kitchen 20, 19 size 2
-        grid[20][19].addAdj(grid[17][18]);
-        grid[20][19].addAdj(grid[2][2]);
-
-        // testAdjacencyDoor 11, 1, size 2
-        grid[11][1].addAdj(grid[14][2]);
-        grid[11][1].addAdj(grid[11][2]);
-
-        // 19, 5 size 3
-        grid[19][5].addAdj(grid[21][2]);
-        grid[19][5].addAdj(grid[18][5]);
-        grid[19][5].addAdj(grid[19][6]);
-
-        // 19, 7 size 4
-        grid[19][7].addAdj(grid[18][7]);
-        grid[19][7].addAdj(grid[19][6]);
-        grid[19][7].addAdj(grid[20][7]);
-        grid[19][7].addAdj(grid[20][11]);
-
-        // testAdjacencyWalkways 24, 14 size 1
-        grid[24][14].addAdj(grid[23][14]);
-
-        // 18, 4 size 3
-        grid[18][4].addAdj(grid[18][3]);
-        grid[18][4].addAdj(grid[17][4]);
-        grid[18][4].addAdj(grid[18][5]);
-
-        // 19, 6 size 4
-        grid[19][6].addAdj(grid[19][5]);
-        grid[19][6].addAdj(grid[19][7]);
-        grid[19][6].addAdj(grid[18][6]);
-        grid[19][6].addAdj(grid[20][6]);
-
-        // 9, 14 size 3
-        grid[9][14].addAdj(grid[9][15]);
-        grid[9][14].addAdj(grid[8][14]);
-        grid[9][14].addAdj(grid[10][14]);
-        
-        
-        // Others
-        grid[15][6].addAdj(grid[14][2]);
-        grid[8][17].addAdj(grid[12][20]);
-        grid[12][20].addAdj(grid[12][15]);
-        grid[12][20].addAdj(grid[8][17]);
-        grid[12][15].addAdj(grid[12][20]);
-        grid[6][17].addAdj(grid[3][20]);
-        grid[3][20].addAdj(grid[6][17]);
-        grid[11][1].addAdj(grid[14][2]);
-        grid[14][2].addAdj(grid[11][1]);
-        grid[15][6].addAdj(grid[14][2]);
-        grid[14][2].addAdj(grid[15][6]);
-        grid[11][3].addAdj(grid[8][2]);
-        grid[8][2].addAdj(grid[11][3]);
-        
-        
-	}
-
+    }  
 
     
-    // Target calculation
+    // Target location, recursive call 
     public void calcTargets(BoardCell startCell, int pathLength) {
-		//Delete this later (just to pass tests)
-		this.calcAdj();
-		
-
     	boolean[] visited = new boolean[numRows * numColumns];
     	this.targets = new HashSet<BoardCell>();
     	int index = calcIndex(startCell);
@@ -278,6 +244,7 @@ public class Board {
     	findAllTargets(index, pathLength, visited);
     }
     
+    // Recursively find targets
     private void findAllTargets(int startIndex, int pathLength, boolean[] visited) {
     	Set<BoardCell> adjacentCells = new HashSet<BoardCell>();
     	BoardCell startCell = getCell(startIndex);
@@ -301,6 +268,7 @@ public class Board {
     			continue;
     		}
     		
+    		// End of path to calculated target
     		if (pathLength == 1) {    		
     				targets.add(cell);    				
     		} else {
@@ -326,6 +294,7 @@ public class Board {
         return numColumns * row + col;
     }
     
+    // Overloaded
     private int calcIndex(BoardCell cell) {
     	return calcIndex(cell.getRow(), cell.getCol());
     }
@@ -334,6 +303,7 @@ public class Board {
     	return this.grid[row][col].getAdjList();
     }
     
+    // Overloaded getCell
 	public BoardCell getCell(int row, int col) {
 		return this.grid[row][col];
 	}
