@@ -145,6 +145,10 @@ public class BoardCell {
 		return this.roomCenter;
 	}
 	
+	public boolean isOccupied() {
+		return this.occupied;
+	}
+	
 	public boolean isWalkway() {
 		return this.walkway;
 	}

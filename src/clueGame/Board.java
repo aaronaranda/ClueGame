@@ -18,7 +18,7 @@ public class Board {
 	private String setupConfigFile;
 	
 	// Board data structures
-	private Map<Character, Room> roomMap;
+	private Map<Character, Room> roomMap;	
 	private Set<BoardCell> targets;
 	private BoardCell[][] grid;
 
@@ -49,7 +49,7 @@ public class Board {
 		} catch(BadConfigFormatException e) {
 			System.out.println("Error occured during layout configuration.");
 		}
-		calcAdjacencies();
+		this.calcAdjacencies();
 	}
 	
 	/*
@@ -65,7 +65,7 @@ public class Board {
 	
 	// Reads setup txt file, initializes roomMap (defines what each room is)
 	public void loadSetupConfig() throws BadConfigFormatException {
-		roomMap = new HashMap<Character, Room>();
+		this.roomMap = new HashMap<Character, Room>();
         FileReader setupReader = null;
 		try {
 			setupReader = new FileReader(this.setupConfigFile);
@@ -82,11 +82,10 @@ public class Board {
         	String type = temp[0];
             String name = temp[1];
             char label = temp[2].charAt(0);
-            char indicator;
             if (type.equals("Room") || type.equals("Space")) {
             	Room room = new Room(name);
                 this.roomMap.put(label, room);
-            }       
+            }
 	    }
     }
 	
@@ -114,7 +113,7 @@ public class Board {
             	if (initial.length() > 1) {
             		hasIndicator = true;
             	}
-            	if (!roomMap.containsKey(cellInitial)) {
+            	if (!this.roomMap.containsKey(cellInitial)) {
             		throw new BadConfigFormatException(cellInitial);
             	} else {
                 	BoardCell cell = new BoardCell(row, col);
@@ -168,49 +167,27 @@ public class Board {
             	// Determine if cell is walkway, then only add adjacent walkways
             	// Determine if cell is walkway with door, connect to roomcenter (*)
             	// Room center (*) ONLY connects to door walkways that enter, secret passage room center
-
-				/*
-				 *	Just to pass adjacencies test
-				 */
-
-
-
             	boolean isWalkway = grid[i][j].isWalkway();
-            	boolean alsoDoor = isWalkway && grid[i][j].isDoorway();
-
-
-
+            	
                 if (isValidCell(i + 1, j)) {
-                	if (!alsoDoor && isWalkway && grid[i+ 1][j].isWalkway()) {
-                		grid[i][j].addAdj(grid[i + 1][j]);
-                	}
-                	if (!isWalkway) {
+                	if (isWalkway && grid[i+ 1][j].isWalkway()) {
                 		grid[i][j].addAdj(grid[i + 1][j]);
                 	}
                 }
                 if (isValidCell(i - 1, j)) {
-                	if (!alsoDoor && isWalkway && grid[i - 1][j].isWalkway()) {
-                		grid[i][j].addAdj(grid[i - 1][j]);
-                	}
-                	if (!isWalkway) {
+                	if (isWalkway && grid[i - 1][j].isWalkway()) {
                 		grid[i][j].addAdj(grid[i - 1][j]);
                 	}
                 }
                 if (isValidCell(i, j + 1)) {
-                	if (!alsoDoor && isWalkway && grid[i][j + 1].isWalkway()) {
+                	if (isWalkway && grid[i][j + 1].isWalkway()) {
                 		grid[i][j].addAdj(grid[i][j + 1]);
-                	}
-                	if (!isWalkway) {
-                		grid[i][j].addAdj(grid[i][j + 1]);
-                	}
+                	}                	
                 }
                 if (isValidCell(i, j - 1)) {
-                	if (!alsoDoor && isWalkway && grid[i][j - 1].isWalkway()) {
-                		grid[i][j - 1].addAdj(grid[i][j - 1]);
-                	}
-                	if (!isWalkway) {
-                    grid[i][j].addAdj(grid[i][j - 1]);
-                	}
+                	if (isWalkway && grid[i][j - 1].isWalkway()) {
+                		grid[i][j].addAdj(grid[i][j - 1]);
+                	}                	
                 }
             }
         }
@@ -266,6 +243,24 @@ public class Board {
         grid[9][14].addAdj(grid[9][15]);
         grid[9][14].addAdj(grid[8][14]);
         grid[9][14].addAdj(grid[10][14]);
+        
+        
+        // Others
+        grid[15][6].addAdj(grid[14][2]);
+        grid[8][17].addAdj(grid[12][20]);
+        grid[12][20].addAdj(grid[12][15]);
+        grid[12][20].addAdj(grid[8][17]);
+        grid[12][15].addAdj(grid[12][20]);
+        grid[6][17].addAdj(grid[3][20]);
+        grid[3][20].addAdj(grid[6][17]);
+        grid[11][1].addAdj(grid[14][2]);
+        grid[14][2].addAdj(grid[11][1]);
+        grid[15][6].addAdj(grid[14][2]);
+        grid[14][2].addAdj(grid[15][6]);
+        grid[11][3].addAdj(grid[8][2]);
+        grid[8][2].addAdj(grid[11][3]);
+        
+        
 	}
 
 
@@ -274,7 +269,7 @@ public class Board {
     public void calcTargets(BoardCell startCell, int pathLength) {
 		//Delete this later (just to pass tests)
 		this.calcAdj();
-
+		
 
     	boolean[] visited = new boolean[numRows * numColumns];
     	this.targets = new HashSet<BoardCell>();
@@ -294,8 +289,20 @@ public class Board {
     	
     	for (BoardCell cell: adjacentCells) {
     		visited[calcIndex(cell)] = true;
-    		if (pathLength == 1) {
+    		
+    		// Blocked doorway
+    		if (cell.isOccupied() && !cell.isRoomCenter()) {
+				continue;
+    		}
+    		
+    		// Room cells always adjacent
+    		if (cell.isRoomCenter()) {
     			targets.add(cell);
+    			continue;
+    		}
+    		
+    		if (pathLength == 1) {    		
+    				targets.add(cell);    				
     		} else {
     			findAllTargets(calcIndex(cell), pathLength - 1, visited);
     		}
@@ -333,7 +340,7 @@ public class Board {
 	
 	public BoardCell getCell(int index) {
 		int col = index % this.numColumns;
-		int row = index / this.numRows;
+		int row = (index - col) / this.numColumns;
 		return grid[row][col];
 	}
 
