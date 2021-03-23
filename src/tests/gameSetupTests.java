@@ -69,7 +69,7 @@ public class gameSetupTests {
 	@Test
 	public void testDeckCreation() {
 		// Testing proper deck sizing (9 rooms, 6 players, 6 weapons)
-		assertEquals(12, board.getDeck().size());
+		assertEquals(21, board.getDeck().size());
 		
 		ArrayList<Card> deck = board.getDeck();
 		int players = 0;
@@ -87,9 +87,7 @@ public class gameSetupTests {
 		
 		assertEquals(9, rooms);
 		assertEquals(6, players);
-		assertEquals(6, weapons);
-		
-		
+		assertEquals(6, weapons);		
 	}
 	
 	@Test

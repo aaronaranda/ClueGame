@@ -72,7 +72,7 @@ public class Board {
 		this.roomMap = new HashMap<Character, Room>();
 		this.weapons = new HashMap<Character, String>();
 		this.players = new HashMap<Character, Player>();
-		this.cards = new ArrayList<Card>(10);
+		this.cards = new ArrayList<Card>();
 		
         FileReader setupReader = null;
 		try {
@@ -92,21 +92,26 @@ public class Board {
             String name = temp[1];
             char label = temp[2].charAt(0);
             if (type.equals("Room") || type.equals("Space")) {
-            	Room room = new Room(name);
+            	Room room = new Room(name);            
                 this.roomMap.put(label, room);
+                if (type.equals("Room")) {
+                	this.cards.add(new Card(name, CardType.ROOM));
+                }
             } else if (type.equals("Weapon")) {
             	this.weapons.put(label, name);
+            	this.cards.add(new Card(name, CardType.WEAPON));
             } else if (type.equals("Player")) {
             	if (x == 0) {
             		Player player = new HumanPlayer(name);
             		this.players.put(temp[2].charAt(1), player);
-            		x += 1;
+            		x += 1;            	
             	}
             	else {
             		Player player = new ComputerPlayer(name);
-            		this.players.put(temp[2].charAt(1), player);
+            		this.players.put(temp[2].charAt(1), player);            		
             	}
-            }
+            	this.cards.add(new Card(name, CardType.PERSON));
+            }          
 	    }
         scan.close();
     }
