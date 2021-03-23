@@ -17,6 +17,7 @@ public class Player {
 	
 	public Player(String name) {
 		this.name = name;
+		playerDeck = new HashSet<Card>();
 	}
 	
 	public String getName() {

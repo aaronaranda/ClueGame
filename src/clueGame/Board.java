@@ -302,14 +302,19 @@ public class Board {
     		visited[calcIndex(cell)] = false;
     	}
     }
-    
-    
-    
-    
-    //TODO
+        
+    // deal() works almost like a stack, popping off cards from card set
     public void deal() {
-    	int i = 0;
-    	
+    	int i = 1;
+    	while (!this.cards.isEmpty()) {
+    		if (i == 7) {
+    			i = 1;
+    		}
+    		int index = this.cards.size() - 1;
+    		players.get((char)(i + 48)).updateHand(cards.get(index));
+    		cards.remove(index);
+    		i++;    	
+    	}    	
     }
     
     
