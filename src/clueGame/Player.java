@@ -1,10 +1,9 @@
 package clueGame;
 
-import java.awt.Color; 
-import java.awt.Point;
+import java.awt.*;
 import java.util.*;
 
-public class Player {
+public abstract class Player {
 	
 	private String name;
 	private boolean isHuman;
@@ -12,13 +11,28 @@ public class Player {
 	private Color color;
 	private Set<Card> playerDeck;
 	
-	// Type is '#' in UML...?
-	int row, col;
+	private int row, col;
 	
 	public Player(String name) {
 		this.name = name;
 		playerDeck = new HashSet<Card>();
 	}
+	
+	// Adds card to players deck of cards
+	public void updateHand(Card card) {
+		if (!playerDeck.contains(card)) {
+			playerDeck.add(card);
+		} 
+	}
+	
+	// Updates the color of each player
+	public void updateColor(String colorType) {
+		this.color = Color.getColor(colorType);
+	}
+
+	/*
+	 * GETTERS
+	 */
 	
 	public String getName() {
 		return this.name;
@@ -28,18 +42,7 @@ public class Player {
 		return isHuman;
 	}
 	
-	public void updateColor(String colorType) {
-		this.color = color.getColor(colorType);
-	}
-	
 	public Set<Card> getDeck() {
 		return this.playerDeck;
-	}
-	
-	
-	public void updateHand(Card card) {
-		if (!playerDeck.contains(card)) {
-			playerDeck.add(card);
-		} 
-	}
+	}	
 }

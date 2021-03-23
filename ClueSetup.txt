@@ -25,4 +25,3 @@ Player, Peter, P3
 Player, Katelynn, P4
 Player, Jessica, P5
 Player, Anna, P6
-
