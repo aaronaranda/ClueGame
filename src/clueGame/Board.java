@@ -94,8 +94,9 @@ public class Board {
             } else if (type.equals("Weapon")) {
             	this.weapons.put(label, name);
             } else if (type.equals("Player")) {
-            	Player player = new Player(name);
+            	Player player = new ComputerPlayer(name);
             	this.players.put(temp[2].charAt(1), player);
+            	
             }
 	    }
         scan.close();

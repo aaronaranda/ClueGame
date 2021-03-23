@@ -1,9 +1,10 @@
 package clueGame;
 
-import java.awt.Point;
 import java.awt.Color;
+import java.awt.Point;
 
-public class ComputerPlayer extends Player{
+public class Player {
+	
 	private String name;
 	private boolean isHuman;
 	private Point startLocation;
@@ -11,9 +12,15 @@ public class ComputerPlayer extends Player{
 	
 	// Type is '#' in UML...?
 	int row, col;
-	public ComputerPlayer(String name) {
-		super(name);
+	
+	public Player(String name) {
+		this.name = name;
 	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
 	public void updateColor(String colorType) {
 		this.color = color.getColor(colorType);
 	}
