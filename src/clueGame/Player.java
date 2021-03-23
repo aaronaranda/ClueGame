@@ -15,8 +15,15 @@ public class Player {
 		// color = new Color(color);
 	}
 	
+	public String getName() {
+		return this.name;
+	}
 	
+	public void setType(boolean type) {
+		this.isHuman = true;
+	}
 	
+
 	
 	
 	public void updateHand(Card card) {
