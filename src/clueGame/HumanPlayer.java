@@ -4,8 +4,13 @@ import java.awt.Point;
 import java.awt.Color;
 
 public class HumanPlayer extends Player{
+	
+	public HumanPlayer(String name) {
+		super(name);
+	}
+
 	private String name;
-	private boolean isHuman;
+	private boolean isHuman = true;
 	private Point startLocation;
 	private Color color;
 	

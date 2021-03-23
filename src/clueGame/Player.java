@@ -21,13 +21,15 @@ public class Player {
 		return this.name;
 	}
 	
+	public boolean getType() {
+		return isHuman;
+	}
+	
 	public void updateColor(String colorType) {
 		this.color = color.getColor(colorType);
 	}
 	
-	public boolean getType() {
-		return isHuman;
-	}
+	
 	
 	public void updateHand(Card card) {
 		
