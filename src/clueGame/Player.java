@@ -12,28 +12,16 @@ public class Player {
 	private Color color;
 	private Set<Card> playerDeck;
 	
-	// Type is '#' in UML...?
 	int row, col;
 	
+	//Constructor
 	public Player(String name) {
 		this.name = name;
 		playerDeck = new HashSet<Card>();
 	}
 	
-	public String getName() {
-		return this.name;
-	}
-	
-	public boolean getType() {
-		return isHuman;
-	}
-	
 	public void updateColor(String colorType) {
 		this.color = color.getColor(colorType);
-	}
-	
-	public Set<Card> getDeck() {
-		return this.playerDeck;
 	}
 	
 	
@@ -42,4 +30,20 @@ public class Player {
 			playerDeck.add(card);
 		} 
 	}
+	
+	//Getters for the class
+	public String getName() {
+		return this.name;
+	}
+	
+	public boolean getType() {
+		return isHuman;
+	}
+	
+	public Set<Card> getDeck() {
+		return this.playerDeck;
+	}
+	
+	
+	
 }
