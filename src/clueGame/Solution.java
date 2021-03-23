@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Solution {
+	//Variables to hold the solution cards
 	public Card person;
 	public Card room;
 	public Card weapon;
@@ -14,6 +15,7 @@ public class Solution {
 		ArrayList<Card> personDeck = new ArrayList<Card>();
 		ArrayList<Card> weaponDeck = new ArrayList<Card>();
 		ArrayList<Card> roomDeck = new ArrayList<Card>();
+		//Loops through the deck and adds each specific card type to its respective card ArrayList
 		for (Card c: deck) {
 			if (c.getType().equals(CardType.PERSON) == true) {
 				personDeck.add(c);
@@ -23,6 +25,8 @@ public class Solution {
 				roomDeck.add(c);
 			}
 		}
+		//Creates a random number based on the size of the array list, then sets the solution to
+		//a random card from that list for each of the respective card types
 		randNumber = rand.nextInt(personDeck.size());
 		this.person = personDeck.get(randNumber);
 		randNumber = rand.nextInt(weaponDeck.size());

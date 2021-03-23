@@ -9,8 +9,9 @@ public class ComputerPlayer extends Player{
 	private Point startLocation;
 	private Color color;
 	
-	// Type is '#' in UML...?
 	int row, col;
+	
+	//Constructor
 	public ComputerPlayer(String name) {
 		super(name);
 		isHuman = false;
@@ -19,6 +20,7 @@ public class ComputerPlayer extends Player{
 		this.color = color.getColor(colorType);
 	}
 	
+	//Getter for boolean type
 	public boolean getType() {
 		return isHuman;
 	}

@@ -11,8 +11,11 @@ public abstract class Player {
 	private Color color;
 	private Set<Card> playerDeck;
 	
+
 	private int row, col;
+
 	
+	//Constructor
 	public Player(String name) {
 		this.name = name;
 		playerDeck = new HashSet<Card>();
@@ -33,7 +36,7 @@ public abstract class Player {
 	/*
 	 * GETTERS
 	 */
-	
+
 	public String getName() {
 		return this.name;
 	}
@@ -44,5 +47,6 @@ public abstract class Player {
 	
 	public Set<Card> getDeck() {
 		return this.playerDeck;
-	}	
+	}
 }
+

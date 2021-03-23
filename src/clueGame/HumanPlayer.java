@@ -10,7 +10,7 @@ public class HumanPlayer extends Player{
 	private Point startLocation;
 	private Color color;
 	
-
+	//Constructor
 	public HumanPlayer(String name) {
 		super(name);
 		isHuman = true;
@@ -25,6 +25,7 @@ public class HumanPlayer extends Player{
 		this.color = color.getColor(colorType);
 	}
 	
+	//Getter for boolean type
 	public boolean getType() {
 		return isHuman;
 	}

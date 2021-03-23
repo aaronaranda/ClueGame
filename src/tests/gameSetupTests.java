@@ -16,6 +16,7 @@ public class gameSetupTests {
 	
 	@BeforeAll
 	public static void setUp() {
+		//Sets up the board amd configures it before each test
 		board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();
@@ -45,6 +46,7 @@ public class gameSetupTests {
 	public void testHumanComputer() {
 		int numPlayers = 0;
 		int numComputers = 0;
+		//Checks all the players to make sure that there is only 1 human player created
 		for (int i = 1; i <= 6; i++) {
 			boolean type;
 			type = board.getPlayer((char)(i + 48)).getType();
@@ -56,6 +58,7 @@ public class gameSetupTests {
 				numComputers += 1;
 			}
 		}
+		//There should always only be 1 human player
 		assertEquals(numPlayers, 1);
 		assertEquals(numComputers, 5);
 	}
@@ -91,6 +94,7 @@ public class gameSetupTests {
 		int playerSolution = 0;
 		int weaponSolution = 0;
 		Solution solution = new Solution(deck);
+		//Checks each car din the deck, and adds only if the card in the deck matches that of the solution
 		for (Card c: deck) {
 			if (c == solution.person) {
 				playerSolution += 1;
@@ -100,6 +104,7 @@ public class gameSetupTests {
 				weaponSolution += 1;
 			}
 		}
+		//Makes sure that only 1 card of each type is a solution from the whole deck
 		assertEquals(playerSolution, 1);
 		assertEquals(roomSolution, 1);
 		assertEquals(weaponSolution, 1);
