@@ -12,7 +12,9 @@ import org.junit.jupiter.api.Test;
 import clueGame.Board;
 import clueGame.BoardCell;
 import clueGame.Card;
+import clueGame.CardType;
 
+import java.util.*;
 
 public class gameSetupTests {
 	
@@ -66,6 +68,27 @@ public class gameSetupTests {
 	
 	@Test
 	public void testDeckCreation() {
+		// Testing proper deck sizing (9 rooms, 6 players, 6 weapons)
+		assertEquals(12, board.getDeck().size());
+		
+		ArrayList<Card> deck = board.getDeck();
+		int players = 0;
+		int weapons = 0; 
+		int rooms = 0;
+		for (Card c: deck) {
+			if (c.getType().equals(CardType.PERSON)) {
+				players++;
+			} else if (c.getType().equals(CardType.WEAPON)) {
+				weapons++;		
+			} else if (c.getType().equals(CardType.ROOM)) {
+				rooms++;
+			}
+		}
+		
+		assertEquals(9, rooms);
+		assertEquals(6, players);
+		assertEquals(6, weapons);
+		
 		
 	}
 	

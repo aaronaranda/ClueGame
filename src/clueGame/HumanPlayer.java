@@ -17,10 +17,6 @@ public class HumanPlayer extends Player{
 	// Type is '#' in UML...?
 	int row, col;
 	
-	public HumanPlayer(String name) {
-		super(name);
-	}
-	
 	
 	public void updateColor(String colorType) {
 		this.color = color.getColor(colorType);

@@ -147,16 +147,7 @@ public class FileInitTests306 {
 		
     }
 	
-//	// Testing proper deck sizing (9 rooms, 6 players, 6 weapons)
-//			assertEquals(12, board.getDeck().size());
-//			
-//			ArrayList<Card> deck = board.getDeck();
-//			int players = 0;
-//			int weapons = 0; 
-//			int rooms = 0;
-//			for (Card c: deck) {
-//				if (c.getType().equals("")))
-//			}
+
 		
 			
 }

@@ -24,6 +24,7 @@ public class Board {
 	private Set<BoardCell> targets;
 	private BoardCell[][] grid;
 	private Map<String,BoardCell> centers;	// Keep track of room centers for adjacencies
+	private ArrayList<Card> cards;
 
 	/*
 	 * variable and methods used for singleton pattern
@@ -71,6 +72,7 @@ public class Board {
 		this.roomMap = new HashMap<Character, Room>();
 		this.weapons = new HashMap<Character, String>();
 		this.players = new HashMap<Character, Player>();
+		this.cards = new ArrayList<Card>(10);
 		
         FileReader setupReader = null;
 		try {
@@ -357,6 +359,10 @@ public class Board {
 	
 	public Player getPlayer(char label) {
 		return this.players.get(label);
+	}
+	
+	public ArrayList<Card> getDeck() {
+		return this.cards;
 	}
 	
 }
