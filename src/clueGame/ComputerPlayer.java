@@ -5,7 +5,7 @@ import java.awt.Color;
 
 public class ComputerPlayer extends Player{
 	private String name;
-	private boolean isHuman = false;
+	private boolean isHuman;
 	private Point startLocation;
 	private Color color;
 	
@@ -13,6 +13,7 @@ public class ComputerPlayer extends Player{
 	int row, col;
 	public ComputerPlayer(String name) {
 		super(name);
+		isHuman = false;
 	}
 	public void updateColor(String colorType) {
 		this.color = color.getColor(colorType);

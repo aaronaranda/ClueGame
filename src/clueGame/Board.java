@@ -81,7 +81,8 @@ public class Board {
 			throw new BadConfigFormatException(setupConfigFile);
 		}
         Scanner scan = new Scanner(setupReader);
-       
+        
+        int x = 0;
         while (scan.hasNextLine()) {
         	String[] temp = scan.nextLine().split(", ");
         	if (temp.length < 2) {
@@ -96,9 +97,15 @@ public class Board {
             } else if (type.equals("Weapon")) {
             	this.weapons.put(label, name);
             } else if (type.equals("Player")) {
-            	Player player = new ComputerPlayer(name);
-            	this.players.put(temp[2].charAt(1), player);
-            	
+            	if (x == 0) {
+            		Player player = new HumanPlayer(name);
+            		this.players.put(temp[2].charAt(1), player);
+            		x += 1;
+            	}
+            	else {
+            		Player player = new ComputerPlayer(name);
+            		this.players.put(temp[2].charAt(1), player);
+            	}
             }
 	    }
         scan.close();
