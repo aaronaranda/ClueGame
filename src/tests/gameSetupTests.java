@@ -13,6 +13,7 @@ import clueGame.Board;
 import clueGame.BoardCell;
 import clueGame.Card;
 import clueGame.CardType;
+import clueGame.Solution;
 
 import java.util.*;
 
@@ -92,7 +93,23 @@ public class gameSetupTests {
 	
 	@Test
 	public void testSolutionDealt() {
-		
+		ArrayList<Card> deck = board.getDeck();
+		int roomSolution = 0;
+		int playerSolution = 0;
+		int weaponSolution = 0;
+		Solution solution = new Solution(deck);
+		for (Card c: deck) {
+			if (c == solution.person) {
+				playerSolution += 1;
+			} else if (c == solution.room) {
+				roomSolution += 1;		
+			} else if (c == solution.weapon) {
+				weaponSolution += 1;
+			}
+		}
+		assertEquals(playerSolution, 1);
+		assertEquals(roomSolution, 1);
+		assertEquals(weaponSolution, 1);
 	}
 	
 	@Test
