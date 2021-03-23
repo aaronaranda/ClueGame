@@ -47,7 +47,20 @@ public class gameSetupTests {
 	
 	@Test
 	public void testHumanComputer() {
-		
+		int numPlayers;
+		int numComputers;
+		for (int i = 1; i <= 6; i++) {
+			boolean type;
+			type = board.getPlayer(i).getType();
+			if (type == true) {
+				numPlayers += 1;
+			}
+			else {
+				numComputers += 1;
+			}
+		}
+		assertEquals(numPlayers, 1);
+		assertEquals(numComputers, 5);
 	}
 	
 	@Test
