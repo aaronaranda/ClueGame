@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import clueGame.Board;
 import clueGame.BoardCell;
+import clueGame.Card;
 import clueGame.DoorDirection;
 import clueGame.Room;
 
@@ -145,4 +146,17 @@ public class FileInitTests306 {
 		assertFalse( cell.isLabel() );
 		
     }
+	
+//	// Testing proper deck sizing (9 rooms, 6 players, 6 weapons)
+//			assertEquals(12, board.getDeck().size());
+//			
+//			ArrayList<Card> deck = board.getDeck();
+//			int players = 0;
+//			int weapons = 0; 
+//			int rooms = 0;
+//			for (Card c: deck) {
+//				if (c.getType().equals("")))
+//			}
+		
+			
 }
