@@ -351,10 +351,11 @@ public class Board {
 	}
 	
 	public String getWeapon(char label) {
-		if (this.weapons.containsKey(label)) {
-			return this.weapons.get(label);
-		}
+		return this.weapons.get(label);
 	}
 	
+	public Player getPlayer(char label) {
+		return this.players.get(label);
+	}
 	
 }
