@@ -16,7 +16,9 @@ public class Player {
 	}
 	
 	
-	
+	public boolean getType() {
+		return isHuman;
+	}
 	
 	
 	public void updateHand(Card card) {

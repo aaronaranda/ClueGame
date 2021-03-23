@@ -47,11 +47,11 @@ public class gameSetupTests {
 	
 	@Test
 	public void testHumanComputer() {
-		int numPlayers;
-		int numComputers;
+		int numPlayers = 0;
+		int numComputers = 0;
 		for (int i = 1; i <= 6; i++) {
 			boolean type;
-			type = board.getPlayer(i).getType();
+			type = board.getPlayer((char)i).getType();
 			if (type == true) {
 				numPlayers += 1;
 			}
