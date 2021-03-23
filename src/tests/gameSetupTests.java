@@ -13,6 +13,7 @@ import clueGame.Board;
 import clueGame.BoardCell;
 import clueGame.Card;
 import clueGame.CardType;
+import clueGame.Player;
 
 import java.util.*;
 
@@ -97,6 +98,45 @@ public class gameSetupTests {
 	
 	@Test
 	public void testCardsDealt() {
+		Player playerOne = board.getPlayer('1');
+		Player playerTwo = board.getPlayer('2');
+		int diff = playerOne.getDeck().size() - playerTwo.getDeck().size();
+		// Any difference in the number of cards dealt should only be one
+		assertTrue(diff <= 1);
+		boolean sameCard = false;		
+	
+		Player playerThree = board.getPlayer('3');
+		diff = playerOne.getDeck().size() - playerThree.getDeck().size();
+		
+		// Any difference in the number of cards dealt should only be one
+		assertTrue(diff <= 1);
+		
+		Player playerFour = board.getPlayer('4');
+		diff = playerOne.getDeck().size() - playerFour.getDeck().size();
+		
+		// Any difference in the number of cards dealt should only be one
+		assertTrue(diff <= 1);
+		
+		Player playerFive = board.getPlayer('5');
+		diff = playerOne.getDeck().size() - playerFive.getDeck().size();
+		
+		// Any difference in the number of cards dealt should only be one
+		assertTrue(diff <= 1);
+
+		Player playerSix = board.getPlayer('6');
+		diff = playerOne.getDeck().size() - playerSix.getDeck().size();
+		
+		// Any difference in the number of cards dealt should only be one
+		assertTrue(diff <= 1);
+		
+		for (Card c: playerOne.getDeck()) {
+			assertFalse(playerTwo.getDeck().contains(c));
+			assertFalse(playerThree.getDeck().contains(c));
+			assertFalse(playerFour.getDeck().contains(c));
+			assertFalse(playerFive.getDeck().contains(c));
+			assertFalse(playerSix.getDeck().contains(c));			
+		}
+		
 		
 	}
 	

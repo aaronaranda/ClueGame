@@ -1,7 +1,8 @@
 package clueGame;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Point;
+import java.util.*;
 
 public class Player {
 	
@@ -9,6 +10,7 @@ public class Player {
 	private boolean isHuman;
 	private Point startLocation;
 	private Color color;
+	private Set<Card> playerDeck;
 	
 	// Type is '#' in UML...?
 	int row, col;
@@ -29,9 +31,14 @@ public class Player {
 		this.color = color.getColor(colorType);
 	}
 	
+	public Set<Card> getDeck() {
+		return this.playerDeck;
+	}
 	
 	
 	public void updateHand(Card card) {
-		
+		if (!playerDeck.contains(card)) {
+			playerDeck.add(card);
+		} 
 	}
 }

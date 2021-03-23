@@ -308,6 +308,7 @@ public class Board {
     
     //TODO
     public void deal() {
+    	int i = 0;
     	
     }
     
