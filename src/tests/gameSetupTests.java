@@ -29,12 +29,12 @@ public class gameSetupTests {
 	public void testLoadPeople() {			
 		
 		// Tests weapon name and label associations
-		assertEquals("Sword", board.getWeapon('1').getName());
-		assertEquals("Pistol", board.getWeapon('2').getName());
-		assertEquals("Broom", board.getWeapon('3').getName());
-		assertEquals("Pencil", board.getWeapon('4').getName());
-		assertEquals("Rock", board.getWeapon('5').getName());
-		assertEquals("Lighter", board.getWeapon('6').getName());
+		assertEquals("Sword", board.getWeapon('1'));
+		assertEquals("Pistol", board.getWeapon('2'));
+		assertEquals("Broom", board.getWeapon('3'));
+		assertEquals("Pencil", board.getWeapon('4'));
+		assertEquals("Rock", board.getWeapon('5'));
+		assertEquals("Lighter", board.getWeapon('6'));
 		
 		// Tests player name and label associatons		
 		assertEquals("Johnny", board.getPlayer('1').getName());

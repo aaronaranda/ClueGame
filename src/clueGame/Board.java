@@ -18,7 +18,9 @@ public class Board {
 	private String setupConfigFile;
 	
 	// Board data structures
-	private Map<Character, Room> roomMap;	
+	private Map<Character, Room> roomMap;
+	private Map<Character, String> weapons;
+	private Map<Character, Player> players;
 	private Set<BoardCell> targets;
 	private BoardCell[][] grid;
 	private Map<String,BoardCell> centers;	// Keep track of room centers for adjacencies
@@ -67,6 +69,9 @@ public class Board {
 	// Reads setup txt file, initializes roomMap (defines what each room is)
 	public void loadSetupConfig() throws BadConfigFormatException {
 		this.roomMap = new HashMap<Character, Room>();
+		this.weapons = new HashMap<Character, String>();
+		this.players = new HashMap<Character, Player>();
+		
         FileReader setupReader = null;
 		try {
 			setupReader = new FileReader(this.setupConfigFile);
@@ -86,6 +91,11 @@ public class Board {
             if (type.equals("Room") || type.equals("Space")) {
             	Room room = new Room(name);
                 this.roomMap.put(label, room);
+            } else if (type.equals("Weapon")) {
+            	this.weapons.put(label, name);
+            } else if (type.equals("Player")) {
+            	Player player = new Player(name);
+            	this.players.put(temp[2].charAt(1), player);
             }
 	    }
         scan.close();
@@ -338,6 +348,12 @@ public class Board {
 	
 	public Set<BoardCell> getTargets() {
 		return this.targets;
+	}
+	
+	public String getWeapon(char label) {
+		if (this.weapons.containsKey(label)) {
+			return this.weapons.get(label);
+		}
 	}
 	
 	
