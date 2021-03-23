@@ -52,7 +52,7 @@ public class gameSetupTests {
 		for (int i = 1; i <= 6; i++) {
 			boolean type;
 			type = board.getPlayer((char)(i + 48)).getType();
-			
+		
 			if (type == true) {
 				numPlayers += 1;
 			}
