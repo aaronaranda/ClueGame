@@ -5,7 +5,7 @@ import java.awt.Color;
 
 public class ComputerPlayer extends Player{
 	private String name;
-	private boolean isHuman;
+	private boolean isHuman = false;
 	private Point startLocation;
 	private Color color;
 	
