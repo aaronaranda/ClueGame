@@ -5,26 +5,26 @@ import java.util.*;
 
 public abstract class Player {
 	
-	private String name;
-	private boolean isHuman;
-	private Point startLocation;
-	private Color color;
-	private Set<Card> playerDeck;
-	
-
-	private int row, col;
+	protected String name;
+	protected boolean isHuman;
+	protected Point startLocation;
+	protected Color color;
+	protected ArrayList<Card> playerDeck;
+	 
+	// Position
+	protected int row, col;
 
 	
 	//Constructor
 	public Player(String name) {
 		this.name = name;
-		playerDeck = new HashSet<Card>();
+		this.playerDeck = new ArrayList<Card>();
 	}
 	
 	// Adds card to players deck of cards
 	public void updateHand(Card card) {
-		if (!playerDeck.contains(card)) {
-			playerDeck.add(card);
+		if (!this.playerDeck.contains(card)) {
+			this.playerDeck.add(card);
 		} 
 	}
 	
@@ -32,6 +32,18 @@ public abstract class Player {
 	public void updateColor(String colorType) {
 		this.color = Color.getColor(colorType);
 	}
+	
+	public Card disproveSuggestion() {
+		// disprove suggestion
+		return new Card("",CardType.PERSON); //DELETE
+	}
+	
+	/*
+	public void updateSeen(Card seenCard) {
+	
+	}
+	 */
+	
 
 	/*
 	 * GETTERS
@@ -42,10 +54,10 @@ public abstract class Player {
 	}
 	
 	public boolean getType() {
-		return isHuman;
+		return this.isHuman;
 	}
 	
-	public Set<Card> getDeck() {
+	public ArrayList<Card> getDeck() {
 		return this.playerDeck;
 	}
 }

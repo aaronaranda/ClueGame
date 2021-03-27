@@ -96,11 +96,11 @@ public class gameSetupTests {
 		Solution solution = new Solution(deck);
 		//Checks each car din the deck, and adds only if the card in the deck matches that of the solution
 		for (Card c: deck) {
-			if (c == solution.person) {
+			if (c == solution.getThePerson()) {
 				playerSolution += 1;
-			} else if (c == solution.room) {
+			} else if (c == solution.getTheRoom()) {
 				roomSolution += 1;		
-			} else if (c == solution.weapon) {
+			} else if (c == solution.getTheWeapon()) {
 				weaponSolution += 1;
 			}
 		}

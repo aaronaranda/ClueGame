@@ -5,12 +5,12 @@ import java.util.Random;
 
 public class Solution {
 	//Variables to hold the solution cards
-	public Card person;
-	public Card room;
-	public Card weapon;
+	private Card thePerson;
+	private Card theRoom;
+	private Card theWeapon;
 	
 	public Solution(ArrayList<Card> deck) {
-		Random rand = new Random();
+		Random rand = new Random(deck.size());
 		int randNumber = 0;
 		ArrayList<Card> personDeck = new ArrayList<Card>();
 		ArrayList<Card> weaponDeck = new ArrayList<Card>();
@@ -28,10 +28,28 @@ public class Solution {
 		//Creates a random number based on the size of the array list, then sets the solution to
 		//a random card from that list for each of the respective card types
 		randNumber = rand.nextInt(personDeck.size());
-		this.person = personDeck.get(randNumber);
+		this.thePerson = personDeck.get(randNumber);
 		randNumber = rand.nextInt(weaponDeck.size());
-		this.room = weaponDeck.get(randNumber);;
+		this.theRoom = weaponDeck.get(randNumber);;
 		randNumber = rand.nextInt(roomDeck.size());
-		this.weapon = roomDeck.get(randNumber);;
+		this.theWeapon = roomDeck.get(randNumber);;
 	}
+	
+	/*
+	 * GETTERS 
+	 */
+	
+	public Card getThePerson() {
+		return this.thePerson;
+	}
+	
+	public Card getTheRoom() {
+		return this.theRoom;
+	}
+	
+	public Card getTheWeapon() {
+		return this.theWeapon;
+	}
+	
+	
 }

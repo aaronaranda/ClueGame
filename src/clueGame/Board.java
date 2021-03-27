@@ -25,6 +25,9 @@ public class Board {
 	private BoardCell[][] grid;
 	private Map<String,BoardCell> centers;	// Keep track of room centers for adjacencies
 	private ArrayList<Card> cards;
+	
+	// Answer to the game
+	private Solution theAnswer;
 
 	/*
 	 * variable and methods used for singleton pattern
@@ -54,6 +57,14 @@ public class Board {
 			System.out.println("Error occured during layout configuration.");
 		}
 		this.calcAdjacencies();
+		
+		if (!players.isEmpty()) {
+			this.deal();
+			// Make the answer to winning the game
+			this.theAnswer = new Solution(this.cards);
+		}
+		
+		
 	}
 	
 	/*
@@ -71,7 +82,7 @@ public class Board {
 	public void loadSetupConfig() throws BadConfigFormatException {
 		this.roomMap = new HashMap<Character, Room>();
 		this.weapons = new HashMap<Character, String>();
-		this.players = new HashMap<Character, Player>();
+		players = new HashMap<Character, Player>();
 		this.cards = new ArrayList<Card>();
 		
         FileReader setupReader = null;
@@ -103,13 +114,13 @@ public class Board {
             } else if (type.equals("Player")) {
             	if (x == 0) {
             		Player player = new HumanPlayer(name);
-            		this.players.put(temp[2].charAt(1), player);
+            		players.put(temp[2].charAt(1), player);
             		x += 1;            	
             	}
-            	else {
-            		Player player = new ComputerPlayer(name);
-            		this.players.put(temp[2].charAt(1), player);            		
-            	}
+  
+            	Player player = new ComputerPlayer(name);
+            	players.put(temp[2].charAt(1), player);            		
+            	
             	this.cards.add(new Card(name, CardType.PERSON));
             }          
 	    }
@@ -305,18 +316,30 @@ public class Board {
         
     // deal() works almost like a stack, popping off cards from card set
     public void deal() {
+    	ArrayList<Card> tempDeck = new ArrayList<Card>(this.cards);
     	int i = 1;
-    	while (!this.cards.isEmpty()) {
+    	while (!tempDeck.isEmpty()) {
     		if (i == 7) {
     			i = 1;
     		}
-    		int index = this.cards.size() - 1;
-    		players.get((char)(i + 48)).updateHand(cards.get(index));
-    		cards.remove(index);
+    		int index = tempDeck.size() - 1;
+    		this.players.get((char)(i + 48)).updateHand(this.cards.get(index));
+    		tempDeck.remove(index);
     		i++;    	
     	}    	
     }
     
+    // Compares an accusation to the answer
+    public boolean checkAccusation(Card accPerson, Card accRoom, Card accWeapon) {
+        return (theAnswer.getThePerson().equals(accPerson) &&
+        		theAnswer.getTheRoom().equals(accPerson) &&
+        		theAnswer.getTheWeapon().equals(accWeapon));
+    } 
+    
+
+    public Card handleSuggestion() {
+        return new Card("", CardType.ROOM);
+    }
     
     /*
      * GETTERS
@@ -382,5 +405,14 @@ public class Board {
 	public ArrayList<Card> getDeck() {
 		return this.cards;
 	}
+	
+	
+	// For testing only; DELETE
+	
+	public Solution getTheAnswer() {
+		return this.theAnswer;
+	}
+	
+	
 	
 }
