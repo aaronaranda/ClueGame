@@ -3,9 +3,6 @@ package clueGame;
 
 public class ComputerPlayer extends Player{
 	
-	
-	int row, col;
-	
 	//Constructor
 	public ComputerPlayer(String name) {
 		super(name);

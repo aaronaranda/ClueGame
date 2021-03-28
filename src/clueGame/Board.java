@@ -115,13 +115,13 @@ public class Board {
             	if (x == 0) {
             		Player player = new HumanPlayer(name);
             		players.put(temp[2].charAt(1), player);
-            		x += 1;            	
-            	}
-  
-            	Player player = new ComputerPlayer(name);
-            	players.put(temp[2].charAt(1), player);            		
-            	
-            	this.cards.add(new Card(name, CardType.PERSON));
+            		this.cards.add(new Card(name, CardType.PERSON));
+            		x = 1;            	
+            	} else {
+            		Player player = new ComputerPlayer(name);
+            		players.put(temp[2].charAt(1), player);
+            		this.cards.add(new Card(name, CardType.PERSON));
+            	}            	
             }          
 	    }
         scan.close();
@@ -332,7 +332,7 @@ public class Board {
     // Compares an accusation to the answer
     public boolean checkAccusation(Card accPerson, Card accRoom, Card accWeapon) {
         return (theAnswer.getThePerson().equals(accPerson) &&
-        		theAnswer.getTheRoom().equals(accPerson) &&
+        		theAnswer.getTheRoom().equals(accRoom) &&
         		theAnswer.getTheWeapon().equals(accWeapon));
     } 
     

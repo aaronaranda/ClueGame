@@ -13,26 +13,26 @@ public class Solution {
 		Random rand = new Random(deck.size());
 		int randNumber = 0;
 		ArrayList<Card> personDeck = new ArrayList<Card>();
-		ArrayList<Card> weaponDeck = new ArrayList<Card>();
 		ArrayList<Card> roomDeck = new ArrayList<Card>();
+		ArrayList<Card> weaponDeck = new ArrayList<Card>();
 		//Loops through the deck and adds each specific card type to its respective card ArrayList
 		for (Card c: deck) {
 			if (c.getType().equals(CardType.PERSON) == true) {
 				personDeck.add(c);
-			} else if (c.getType().equals(CardType.WEAPON) == true) {
-				weaponDeck.add(c);		
 			} else if (c.getType().equals(CardType.ROOM) == true) {
-				roomDeck.add(c);
+				roomDeck.add(c);		
+			} else if (c.getType().equals(CardType.WEAPON) == true) {
+				weaponDeck.add(c);
 			}
 		}
 		//Creates a random number based on the size of the array list, then sets the solution to
 		//a random card from that list for each of the respective card types
 		randNumber = rand.nextInt(personDeck.size());
 		this.thePerson = personDeck.get(randNumber);
-		randNumber = rand.nextInt(weaponDeck.size());
-		this.theRoom = weaponDeck.get(randNumber);;
 		randNumber = rand.nextInt(roomDeck.size());
-		this.theWeapon = roomDeck.get(randNumber);;
+		this.theRoom = roomDeck.get(randNumber);;
+		randNumber = rand.nextInt(weaponDeck.size());
+		this.theWeapon = weaponDeck.get(randNumber);;
 	}
 	
 	/*

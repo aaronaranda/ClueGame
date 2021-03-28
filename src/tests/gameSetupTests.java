@@ -52,15 +52,15 @@ public class gameSetupTests {
 			type = board.getPlayer((char)(i + 48)).getType();
 		
 			if (type == true) {
-				numPlayers += 1;
+				numPlayers++;
 			}
 			else {
-				numComputers += 1;
+				numComputers++;
 			}
 		}
 		//There should always only be 1 human player
-		assertEquals(numPlayers, 1);
-		assertEquals(numComputers, 5);
+		assertEquals(1, numPlayers);
+		assertEquals(5, numComputers);
 	}
 	
 	@Test
