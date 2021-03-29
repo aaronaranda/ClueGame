@@ -54,7 +54,7 @@ public class Board {
 		try {
 			loadLayoutConfig();
 		} catch(BadConfigFormatException e) {
-			System.out.println("Error occured during layout configuration.");
+			System.out.println("Error occurred during layout configuration.");
 		}
 		this.calcAdjacencies();
 		

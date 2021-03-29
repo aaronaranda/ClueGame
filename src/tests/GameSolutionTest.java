@@ -55,7 +55,23 @@ public class GameSolutionTest {
     
     @Test
     public void disproveSuggestion() {
-    	board.getDeck();
+    	// Human player
+    	Player playerOne = board.getPlayer('1');
+		ArrayList<Card> playerOneDeck = new ArrayList<Card>(playerOne.getDeck());
+
+		// Clear playerOne deck
+		playerOneDeck.clear();
+
+    	// Computer player (creates suggestion)
+    	Card card = new Card("test card", CardType.PERSON);
+
+    	assertTrue(playerOne.disproveSuggestion(card).equals(null));
+
+    	// Add suggested card to playerOne's deck
+		playerOneDeck.add(card);
+
+		// Ensure that disproveSuggestion returns the suggested card from player's deck
+		assertEquals(playerOne.disproveSuggestion(card).equals(card));
     }
     
     @Test
