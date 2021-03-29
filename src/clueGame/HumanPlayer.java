@@ -10,4 +10,16 @@ public class HumanPlayer extends Player{
 		super(name);
 		this.isHuman = true;
 	}
+
+	@Override
+	public void addSeenCard(Card card) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Solution createSuggestion(Card card5) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

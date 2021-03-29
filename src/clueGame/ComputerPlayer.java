@@ -1,7 +1,12 @@
 package clueGame;
 
+import java.util.ArrayList;
 
 public class ComputerPlayer extends Player{
+	
+	ArrayList<Card> seenRoomCards = new ArrayList<Card>();
+	ArrayList<Card> seenWeaponCards = new ArrayList<Card>();
+	ArrayList<Card> seenPeopleCards = new ArrayList<Card>();
 	
 	//Constructor
 	public ComputerPlayer(String name) {
@@ -10,11 +15,13 @@ public class ComputerPlayer extends Player{
 	}
 	
 	
-	/*
-	public Solution createSuggestion() {
-		
+	
+	public Solution createSuggestion(Card room) {
+		Solution solution = new Solution();
+		solution.setTheRoom(room);
+		return solution;
 	}
-	*/
+	
 	
 	/*
 	public Solution selectTargets() {
@@ -22,7 +29,17 @@ public class ComputerPlayer extends Player{
 	}
 	*/
 	
-	
+	public void addSeenCard(Card card) {
+		if (card.getType().equals(CardType.PERSON) == true) {
+			seenPeopleCards.add(card);
+		}
+		else if (card.getType().equals(CardType.WEAPON) == true) {
+			seenWeaponCards.add(card);
+		}
+		else if (card.getType().equals(CardType.ROOM) == true) {
+			seenRoomCards.add(card);
+		}
+	}
 	/*
 	 * GETTERS
 	 */

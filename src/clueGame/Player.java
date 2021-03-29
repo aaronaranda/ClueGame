@@ -43,12 +43,9 @@ public abstract class Player {
 		return disproval;
 	}
 	
-	/*
-	public void updateSeen(Card seenCard) {
+	public abstract void addSeenCard(Card card);
 	
-	}
-	 */
-	
+	public abstract Solution createSuggestion(Card card5);
 
 	/*
 	 * GETTERS
@@ -65,5 +62,9 @@ public abstract class Player {
 	public ArrayList<Card> getDeck() {
 		return this.playerDeck;
 	}
+
+	
+
+	
 }
 

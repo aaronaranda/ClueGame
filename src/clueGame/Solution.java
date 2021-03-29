@@ -9,6 +9,13 @@ public class Solution {
 	private Card theRoom;
 	private Card theWeapon;
 	
+	//Default Constructor
+	public Solution() {
+		this.thePerson = null;
+		this.theRoom = null;
+		this.theWeapon = null;
+	}
+	
 	public Solution(ArrayList<Card> deck) {
 		Random rand = new Random(deck.size());
 		int randNumber = 0;
@@ -51,5 +58,19 @@ public class Solution {
 		return this.theWeapon;
 	}
 	
+	/*
+	 * SETTERS 
+	 */
 	
+	public void setThePerson(Card card) {
+		this.thePerson = card;
+	}
+	
+	public void setTheRoom(Card card) {
+		this.theRoom = card;
+	}
+	
+	public void setTheWeapon(Card card) {
+		this.theWeapon = card;
+	}
 }
