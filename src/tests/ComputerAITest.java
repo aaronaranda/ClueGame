@@ -58,6 +58,46 @@ public class ComputerAITest {
 	
 	@Test
 	public void selectTargets() {
+		//AI player
+		Player aIPlayer = board.getPlayer('2');
+		aIPlayer.getDeck().clear();
+		
+		//Test rooms
+		Card card1 = new Card("test1", CardType.ROOM);
+		Card card2 = new Card("test2", CardType.ROOM);
+		Card card3 = new Card("test3", CardType.ROOM);
+		Card card4 = new Card("test4", CardType.ROOM);
+		Card card5 = new Card("test5", CardType.ROOM);
+		
+		//Adds card to hand
+		aIPlayer.updateHand(card1);
+		aIPlayer.updateHand(card2);
+		aIPlayer.updateHand(card3);
+		aIPlayer.updateHand(card4);
+		aIPlayer.updateHand(card5);
+				
+		
+		//Creates test cells
+		BoardCell cell1 = aIPlayer.selectTargets();
+		BoardCell cell2 = aIPlayer.selectTargets();
+		
+		//Tests that the 2 cells are not equal due to random selection, but will occasionally fail due to randomness
+		assertNotEquals(cell1, cell2);
+		
+		//Adds seen room test
+		aIPlayer.addSeenCard(card1);
+		aIPlayer.addSeenCard(card2);
+		aIPlayer.addSeenCard(card3);
+		aIPlayer.addSeenCard(card4);
+		aIPlayer.addSeenCard(card5);
+		
+		//Creates test cells
+		cell1 = aIPlayer.selectTargets();
+		cell2 = aIPlayer.selectTargets();
+		
+		//Tests that the 2 cells are not equal due to random selection, but will occasionally fail due to randomness
+		assertNotEquals(cell1, cell2);
+		
 		
 	}
 }

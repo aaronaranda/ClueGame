@@ -46,6 +46,8 @@ public abstract class Player {
 	public abstract void addSeenCard(Card card);
 	
 	public abstract Solution createSuggestion(Card card5);
+	
+	public abstract BoardCell selectTargets();
 
 	/*
 	 * GETTERS
@@ -62,6 +64,8 @@ public abstract class Player {
 	public ArrayList<Card> getDeck() {
 		return this.playerDeck;
 	}
+
+	
 
 	
 

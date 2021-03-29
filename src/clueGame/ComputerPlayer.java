@@ -67,11 +67,11 @@ public class ComputerPlayer extends Player{
 	}
 	
 	
-	/*
-	public Solution selectTargets() {
-		
+	
+	public BoardCell selectTargets() {
+		return null;
 	}
-	*/
+	
 	
 	public void addSeenCard(Card card) {
 		if (card.getType().equals(CardType.PERSON) == true) {

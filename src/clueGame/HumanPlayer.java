@@ -22,4 +22,10 @@ public class HumanPlayer extends Player{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public BoardCell selectTargets() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
