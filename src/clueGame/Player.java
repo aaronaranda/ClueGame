@@ -27,15 +27,20 @@ public abstract class Player {
 			this.playerDeck.add(card);
 		} 
 	}
-	
+
 	// Updates the color of each player
 	public void updateColor(String colorType) {
 		this.color = Color.getColor(colorType);
 	}
 	
-	public Card disproveSuggestion() {
-		// disprove suggestion
-		return new Card("",CardType.PERSON); //DELETE
+	public Card disproveSuggestion(Card suggestedCard) {
+		Card disproval = null;
+		for (Card c: this.playerDeck) {
+			if (c.equals(suggestedCard)) {
+				disproval = suggestedCard;
+			}
+		}
+		return disproval;
 	}
 	
 	/*

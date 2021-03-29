@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
@@ -14,8 +15,8 @@ public class GameSolutionTest {
     
     private static Board board;
     
-    @BeforeAll
-    public static void setUp() {
+    @BeforeEach
+    public void setUp() {
         // Sets up a newly configured board before each test
         board = Board.getInstance();
         board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
@@ -57,21 +58,20 @@ public class GameSolutionTest {
     public void disproveSuggestion() {
     	// Human player
     	Player playerOne = board.getPlayer('1');
-		ArrayList<Card> playerOneDeck = new ArrayList<Card>(playerOne.getDeck());
 
 		// Clear playerOne deck
-		playerOneDeck.clear();
+		playerOne.getDeck().clear();
 
     	// Computer player (creates suggestion)
     	Card card = new Card("test card", CardType.PERSON);
 
-    	assertTrue(playerOne.disproveSuggestion(card).equals(null));
+    	assertEquals(playerOne.disproveSuggestion(card), null);
 
     	// Add suggested card to playerOne's deck
-		playerOneDeck.add(card);
+		playerOne.getDeck().add(card);
 
 		// Ensure that disproveSuggestion returns the suggested card from player's deck
-		assertEquals(playerOne.disproveSuggestion(card).equals(card));
+		assertEquals(playerOne.disproveSuggestion(card), card);
     }
     
     @Test
