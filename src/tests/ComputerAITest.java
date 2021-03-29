@@ -68,6 +68,10 @@ public class ComputerAITest {
 		Card card3 = new Card("test3", CardType.ROOM);
 		Card card4 = new Card("test4", CardType.ROOM);
 		Card card5 = new Card("test5", CardType.ROOM);
+		Card card6 = new Card("test6", CardType.ROOM);
+		Card card7 = new Card("test7", CardType.ROOM);
+		Card card8 = new Card("test8", CardType.ROOM);
+		Card card9 = new Card("test9", CardType.ROOM);
 		
 		//Adds card to hand
 		aIPlayer.updateHand(card1);
@@ -75,14 +79,27 @@ public class ComputerAITest {
 		aIPlayer.updateHand(card3);
 		aIPlayer.updateHand(card4);
 		aIPlayer.updateHand(card5);
+		aIPlayer.updateHand(card6);
+		aIPlayer.updateHand(card7);
+		aIPlayer.updateHand(card8);
+		aIPlayer.updateHand(card9);
 				
 		
-		//Creates test cells
-		BoardCell cell1 = aIPlayer.selectTargets();
-		BoardCell cell2 = aIPlayer.selectTargets();
+		//Creates test rooms
+		Card room = aIPlayer.selectTargets();
 		
-		//Tests that the 2 cells are not equal due to random selection, but will occasionally fail due to randomness
-		assertNotEquals(cell1, cell2);
+		//Tests that a room was selected from the list
+		boolean bool = false;
+		int iterator = 0;
+		for (Card c: aIPlayer.getDeck()) {
+			if (c == room) {
+				iterator += 1;
+			}
+		}
+		if (iterator > 0) {
+			bool = true;
+		}
+		assertEquals(bool, true);
 		
 		//Adds seen room test
 		aIPlayer.addSeenCard(card1);
@@ -90,13 +107,26 @@ public class ComputerAITest {
 		aIPlayer.addSeenCard(card3);
 		aIPlayer.addSeenCard(card4);
 		aIPlayer.addSeenCard(card5);
+		aIPlayer.addSeenCard(card6);
+		aIPlayer.addSeenCard(card7);
+		aIPlayer.addSeenCard(card8);
+		aIPlayer.addSeenCard(card9);
 		
 		//Creates test cells
-		cell1 = aIPlayer.selectTargets();
-		cell2 = aIPlayer.selectTargets();
+		room = aIPlayer.selectTargets();
 		
-		//Tests that the 2 cells are not equal due to random selection, but will occasionally fail due to randomness
-		assertNotEquals(cell1, cell2);
+		//Tests that the room was still selected even with seen rooms
+		bool = false;
+		iterator = 0;
+		for (Card c: aIPlayer.getSeenRoomCards()) {
+			if (c == room) {
+				iterator += 1;
+			}
+		}
+		if (iterator > 0) {
+			bool = true;
+		}
+		assertEquals(bool, true);
 		
 		
 	}

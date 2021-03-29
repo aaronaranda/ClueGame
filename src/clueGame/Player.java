@@ -13,6 +13,7 @@ public abstract class Player {
 	 
 	// Position
 	protected int row, col;
+	
 
 	
 	//Constructor
@@ -47,7 +48,9 @@ public abstract class Player {
 	
 	public abstract Solution createSuggestion(Card card5);
 	
-	public abstract BoardCell selectTargets();
+	public abstract Card selectTargets();
+	
+	public abstract ArrayList<Card> getSeenRoomCards();
 
 	/*
 	 * GETTERS

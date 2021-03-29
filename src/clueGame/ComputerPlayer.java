@@ -9,6 +9,7 @@ public class ComputerPlayer extends Player{
 	ArrayList<Card> seenWeaponCards = new ArrayList<Card>();
 	ArrayList<Card> seenPeopleCards = new ArrayList<Card>();
 	
+	
 	//Constructor
 	public ComputerPlayer(String name) {
 		super(name);
@@ -68,8 +69,42 @@ public class ComputerPlayer extends Player{
 	
 	
 	
-	public BoardCell selectTargets() {
-		return null;
+	public Card selectTargets() {
+		Random rand = new Random(playerDeck.size());
+		int randNumber = 0;
+		int seen = 0;
+		Card target;
+		ArrayList<Card> roomDeck = new ArrayList<Card>();
+		//Loops through the deck and adds each room card type to its respective card ArrayList
+		//As long as it hasn't already been seen
+		for (Card c: playerDeck) {
+			if (c.getType().equals(CardType.ROOM) == true) {
+				for (Card x: seenRoomCards) {
+					if (x == c) {
+						seen += 1;
+					}
+				}
+				if (seen > 0) {
+					seen = 0;
+					continue;
+				}
+				else {
+					roomDeck.add(c);
+				}
+			}
+		}
+		//If all rooms are seen then one is just selected from random
+		if (roomDeck.size() == 0) {
+			randNumber = rand.nextInt(seenRoomCards.size());
+			target = seenRoomCards.get(randNumber);
+			return target;
+		}
+		//Will choose a room at random from the list of non-seen rooms
+		else {
+			randNumber = rand.nextInt(roomDeck.size());
+			target = roomDeck.get(randNumber);
+			return target;
+		}
 	}
 	
 	
@@ -88,7 +123,9 @@ public class ComputerPlayer extends Player{
 	 * GETTERS
 	 */
 	
-	
+	public ArrayList<Card> getSeenRoomCards() {
+		return seenRoomCards;
+	}
 
 	
 	
