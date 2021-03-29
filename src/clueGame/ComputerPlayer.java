@@ -15,7 +15,7 @@ public class ComputerPlayer extends Player{
 	}
 	
 	
-	
+	//Creates a random suggestion based on non-seen cards
 	public Solution createSuggestion(Card room) {
 		Solution solution = new Solution();
 		solution.setTheRoom(room);

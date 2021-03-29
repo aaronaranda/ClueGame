@@ -22,6 +22,7 @@ public class ComputerAITest {
 	public void createSuggestion() {
 		//AI player
 		Player aIPlayer = board.getPlayer('2');
+		aIPlayer.getDeck().clear();
 		
 		//Created suggestion
 		Solution suggestion;
@@ -32,6 +33,13 @@ public class ComputerAITest {
 		Card card3 = new Card("test3", CardType.WEAPON);
 		Card card4 = new Card("test4", CardType.WEAPON);
 		Card card5 = new Card("test5", CardType.ROOM);
+		
+		//Adds card to hand
+		aIPlayer.updateHand(card1);
+		aIPlayer.updateHand(card2);
+		aIPlayer.updateHand(card3);
+		aIPlayer.updateHand(card4);
+		aIPlayer.updateHand(card5);
 		
 		//Adds seen cards
 		aIPlayer.addSeenCard(card1);
