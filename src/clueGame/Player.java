@@ -13,9 +13,7 @@ public abstract class Player {
 	 
 	// Position
 	protected int row, col;
-	
-
-	
+		
 	//Constructor
 	public Player(String name) {
 		this.name = name;
@@ -34,11 +32,21 @@ public abstract class Player {
 		this.color = Color.getColor(colorType);
 	}
 	
-	public Card disproveSuggestion(Card suggestedCard) {
+	public Card disproveSuggestion(Solution suggestion) {
 		Card disproval = null;
+		
+		// If player tries to dipsrove their own suggestion return null
+		if (this == suggestion.getWhoSuggested()) {
+			return disproval;
+		}
+		
 		for (Card c: this.playerDeck) {
-			if (c.equals(suggestedCard)) {
-				disproval = suggestedCard;
+			if (c.equals(suggestion.getThePerson())) {
+				disproval = suggestion.getThePerson();
+			} else if (c.equals(suggestion.getTheRoom())) {
+				disproval = suggestion.getTheRoom();
+			} else if (c.equals(suggestion.getTheWeapon())) {
+				disproval = suggestion.getTheWeapon();
 			}
 		}
 		return disproval;
@@ -46,7 +54,7 @@ public abstract class Player {
 	
 	public abstract void addSeenCard(Card card);
 	
-	public abstract Solution createSuggestion(Card card5);
+	public abstract Solution createSuggestion(Card card);
 	
 	public abstract Card selectTargets();
 	

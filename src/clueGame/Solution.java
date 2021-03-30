@@ -8,12 +8,14 @@ public class Solution {
 	private Card thePerson;
 	private Card theRoom;
 	private Card theWeapon;
+	private Player whoSuggested;
 	
 	//Default Constructor
-	public Solution() {
+	public Solution(Player player) {
 		this.thePerson = null;
 		this.theRoom = null;
 		this.theWeapon = null;
+		this.whoSuggested = player;
 	}
 	
 	public Solution(ArrayList<Card> deck) {
@@ -56,6 +58,10 @@ public class Solution {
 	
 	public Card getTheWeapon() {
 		return this.theWeapon;
+	}
+	
+	public Player getWhoSuggested() {
+		return this.whoSuggested;
 	}
 	
 	/*

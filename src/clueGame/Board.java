@@ -402,6 +402,10 @@ public class Board {
 		return this.players.get(label);
 	}
 	
+	public Map<Character ,Player> getPlayers() {
+		return this.players;
+	}
+	
 	public ArrayList<Card> getDeck() {
 		return this.cards;
 	}
