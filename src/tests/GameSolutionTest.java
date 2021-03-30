@@ -14,6 +14,8 @@ import java.util.*;
 public class GameSolutionTest {
     
     private static Board board;
+    private static Card testCard;
+    private static Solution testSuggestion;
     
     @BeforeEach
     public void setUp() {
@@ -21,6 +23,8 @@ public class GameSolutionTest {
         board = Board.getInstance();
         board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
         board.initialize();
+        testCard = new Card("test card", CardType.PERSON);
+        testSuggestion = board.getPlayer('2').createSuggestion(testCard);
     }    
 
     @Test
@@ -30,15 +34,36 @@ public class GameSolutionTest {
     	// Obtains the answer from the board
     	// (This getter will be deleted later)
     	Solution answer = board.getTheAnswer();   	
-    
+   
     	ArrayList<Card> playerOneDeck = new ArrayList<Card>(playerOne.getDeck());
+    	ArrayList<Card> people = new ArrayList<Card>();
+    	ArrayList<Card> rooms = new ArrayList<Card>();
+    	ArrayList <Card> weapons = new ArrayList<Card>();
+    	for (Card c: playerOneDeck) {
+    		if (c.getType().equals(CardType.PERSON)) {
+    			people.add(c);
+    		} else if (c.getType().equals(CardType.ROOM)) {
+    			rooms.add(c);
+    		} else if (c.getType().equals(CardType.WEAPON)) {
+    			weapons.add(c);
+    		}
+    	}
     	
-    	//First test false scenario
+    	// First false scenario with wrong person
     	assertFalse(board.checkAccusation(
-    			playerOneDeck.get(0),
-    			playerOneDeck.get(1),
-    			playerOneDeck.get(2)));
-    	    
+    			people.get(0), answer.getTheRoom(), answer.getTheWeapon()
+    			));
+    	
+    	// Second false scenario with wrong room
+    	assertFalse(board.checkAccusation(
+    			answer.getThePerson(), rooms.get(0), answer.getTheWeapon()
+    			));
+    	
+    	// Third false scenario with wrong weapon
+    	assertFalse(board.checkAccusation(
+    			answer.getThePerson(), answer.getTheRoom(), weapons.get(0)
+    			));
+    			    	    
     	/*
     	 * Clears players deck, fills with cards equal to 
     	 * the ones in the answer
@@ -51,7 +76,8 @@ public class GameSolutionTest {
     	assertTrue(board.checkAccusation(
     			playerOneDeck.get(0), 
     			playerOneDeck.get(1), 
-    			playerOneDeck.get(2)));    	
+    			playerOneDeck.get(2)
+    			));    	
     }
     
     @Test
@@ -61,24 +87,39 @@ public class GameSolutionTest {
 
 		// Clear playerOne deck
 		playerOne.getDeck().clear();
-
-    	// Computer player (creates suggestion)
-    	Card card = new Card("test card", CardType.PERSON);
-
-    	assertEquals(playerOne.disproveSuggestion(card), null);
+       			
+    	assertEquals(playerOne.disproveSuggestion(testSuggestion), null);
 
     	// Add suggested card to playerOne's deck
-		playerOne.getDeck().add(card);
+		playerOne.getDeck().add(testCard);
 
 		// Ensure that disproveSuggestion returns the suggested card from player's deck
-		assertEquals(playerOne.disproveSuggestion(card), card);
+		assertEquals(playerOne.disproveSuggestion(testSuggestion), testCard);
+		
+		Card matchingTestCard = new Card("test card", CardType.PERSON);
+		
+		playerOne.getDeck().add(matchingTestCard);
+		assertTrue(playerOne.disproveSuggestion(testSuggestion).equals(matchingTestCard));			
     }
     
     @Test
     public void handleSuggestion() {
-    	board.getDeck();
-    }
-    
-    
+    	// Get the map of all the players
+    	// Map<Character, Player> players = new HashMap<Character, Player>(board.getPlayers());
+    	
+    	Card resultCard = new Card("result card", CardType.PERSON);    	
+    	
+    	for (Character c: board.getPlayers().keySet()) {
+    		resultCard = board.getPlayer(c).disproveSuggestion(testSuggestion);
+    	}
+    	
+    	assertEquals(resultCard, null);
+    	
+    	// Test for null if accusing player can disprove its own suggestion
+    	resultCard = new Card("result card", CardType.PERSON);
+    	board.getPlayer('2').getDeck().add(resultCard);
 
+    	// Player attempts to disprove its own suggestion
+    	assertEquals(board.getPlayer('2').disproveSuggestion(testSuggestion), null);
+    }
 }

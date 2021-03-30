@@ -17,9 +17,11 @@ public class ComputerPlayer extends Player{
 	}
 	
 	
+	
 	//Creates a random suggestion based on non-seen cards
+	@Override
 	public Solution createSuggestion(Card room) {
-		Solution solution = new Solution();
+		Solution solution = new Solution(this);
 		solution.setTheRoom(room);
 		int seen = 0;
 		
@@ -68,7 +70,7 @@ public class ComputerPlayer extends Player{
 	}
 	
 	
-	
+	@Override
 	public Card selectTargets() {
 		Random rand = new Random(playerDeck.size());
 		int randNumber = 0;
