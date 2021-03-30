@@ -76,6 +76,7 @@ public class GameSolutionTest {
     
     @Test
     public void handleSuggestion() {
+    	
     	board.getDeck();
     }
     
