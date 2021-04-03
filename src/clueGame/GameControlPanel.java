@@ -91,20 +91,16 @@ public class GameControlPanel extends JPanel {
     }
 
     public static void main(String[] args) {
-    GameControlPanel controlPanel = new GameControlPanel(); 
-    JFrame frame = new JFrame();
-    frame.setContentPane(controlPanel);
-    frame.setSize(750, 180);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setVisible(true);
+        GameControlPanel controlPanel = new GameControlPanel(); 
+        JFrame frame = new JFrame();
+        frame.setContentPane(controlPanel);
+        frame.setSize(750, 180);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
 
-    controlPanel.setTurn(new ComputerPlayer("Dummy"), 5);
-    controlPanel.setGuess("I have no guess!");
-    controlPanel.setGuessResult("So you have nothing?");
-    
-    
-    
-
+        controlPanel.setTurn(new ComputerPlayer("Dummy"), 5);
+        controlPanel.setGuess("I have no guess!");
+        controlPanel.setGuessResult("So you have nothing?");
     }
 
 
