@@ -24,14 +24,14 @@ public class CardsPanel extends JPanel {
      * }
      */
 
-    private HumanPlayer player;
+    private Player player;
     private ArrayList<Card> deck;
     private ArrayList<Card> peopleCards;
     private ArrayList<Card> roomCards;
     private ArrayList<Card> weaponCards;
 
 
-    public CardsPanel(HumanPlayer player) {
+    public CardsPanel(Player player) {
         this.player = player;
         // Known Cards main panel
         JPanel mainPanel = new JPanel();
