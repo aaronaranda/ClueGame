@@ -4,12 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ComputerPlayer extends Player{
-	
-	ArrayList<Card> seenRoomCards = new ArrayList<Card>();
-	ArrayList<Card> seenWeaponCards = new ArrayList<Card>();
-	ArrayList<Card> seenPeopleCards = new ArrayList<Card>();
-	
-	
+
 	//Constructor
 	public ComputerPlayer(String name) {
 		super(name);
@@ -42,7 +37,7 @@ public class ComputerPlayer extends Player{
 					seen = 0;
 					continue;
 				}
-				else {
+	s			else {
 					personDeck.add(c);
 				}
 			} else if (c.getType().equals(CardType.WEAPON) == true) {
@@ -110,17 +105,6 @@ public class ComputerPlayer extends Player{
 	}
 	
 	
-	public void addSeenCard(Card card) {
-		if (card.getType().equals(CardType.PERSON) == true) {
-			seenPeopleCards.add(card);
-		}
-		else if (card.getType().equals(CardType.WEAPON) == true) {
-			seenWeaponCards.add(card);
-		}
-		else if (card.getType().equals(CardType.ROOM) == true) {
-			seenRoomCards.add(card);
-		}
-	}
 	/*
 	 * GETTERS
 	 */

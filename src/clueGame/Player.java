@@ -10,6 +10,10 @@ public abstract class Player {
 	protected Point startLocation;
 	protected Color color;
 	protected ArrayList<Card> playerDeck;
+    protected ArrayList<Card> seenPeopleCards;
+    protected ArrayList<Card> seenRoomCards;
+    protected ArrayList<Card> seenWeaponCards;
+
 	 
 	// Position
 	protected int row, col;
@@ -18,6 +22,9 @@ public abstract class Player {
 	public Player(String name) {
 		this.name = name;
 		this.playerDeck = new ArrayList<Card>();
+        this.seenPeopleCards = new ArrayList<Card>();
+        this.seenRoomCards = new ArrayList<Card>();
+        this.seenWeaponCards = new ArrayList<Card>();
 	}
 	
 	// Adds card to players deck of cards
@@ -52,13 +59,23 @@ public abstract class Player {
 		return disproval;
 	}
 	
-	public abstract void addSeenCard(Card card);
-	
-	public abstract Solution createSuggestion(Card card);
-	
+    public void addSeenCard(Card card) {
+        if (card.getType().equals(CardType.PERSON) == true) {
+			this.seenPeopleCards.add(card);
+		}
+		else if (card.getType().equals(CardType.ROOM) == true) {
+			this.seenRoomCards.add(card);
+		}
+		else if (card.getType().equals(CardType.WEAPON) == true) {
+			this.seenWeaponCards.add(card);
+		}
+    }	
+	 	
 	public abstract Card selectTargets();
 	
-	public abstract ArrayList<Card> getSeenRoomCards();
+    public ArrayList<Card> getSeenRoomCards() {
+        return this.seenRoomCards;
+    }
 
 	/*
 	 * GETTERS
