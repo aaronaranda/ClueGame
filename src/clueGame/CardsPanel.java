@@ -26,6 +26,15 @@ public class CardsPanel extends JPanel {
 
     private JPanel mainPanel;
 
+    private JLabel inHandPeopleLabel;
+    private JLabel seenPeopleLabel;
+    private JLabel inHandRoomsLabel;
+    private JLabel seenRoomsLabel;
+    private JLabel inHandWeaponsLabel;
+    private JLabel seenWeaponsLabel;
+    
+
+
     private Player player;
     private ArrayList<Card> deck;
     private ArrayList<Card> peopleCards;
@@ -51,15 +60,16 @@ public class CardsPanel extends JPanel {
         JPanel peoplePanel = new JPanel();
         peoplePanel.setLayout(new GridLayout(4, 0));
         peoplePanel.setBorder(new TitledBorder(new EtchedBorder(), "People"));
+        this.inHandPeopleLabel = new JLabel("In Hand:");
+        this.seenPeopleLabel = new JLabel("Seen:");
         this.inHandPeople = new JTextField("None");
         this.seenPeople = new JTextField("None");
-        JLabel inHandPeople = new JLabel("In Hand:");
-        JLabel seenPeople = new JLabel("Seen:");
-        
-        peoplePanel.add(inHandPeople);
-        peoplePanel.add(this.inHandPeople);
-        peoplePanel.add(seenPeople);
-        peoplePanel.add(this.seenPeople);
+       
+        this.inHandPeopleLabel.add(this.inHandPeople);
+        this.seenPeopleLabel.add(this.seenPeople);
+
+        peoplePanel.add(this.inHandPeopleLabel);
+        peoplePanel.add(this.seenPeopleLabel);
             
         // Rooms
         JPanel roomPanel = new JPanel();
@@ -67,27 +77,29 @@ public class CardsPanel extends JPanel {
         roomPanel.setBorder(new TitledBorder(new EtchedBorder(), "Rooms"));
         this.inHandRooms = new JTextField("None");
         this.seenRooms = new JTextField("None");
-        JLabel inHandRooms = new JLabel("In Hand:");
-        JLabel seenRooms = new JLabel("Seen:");
+        this.inHandRoomsLabel = new JLabel("In Hand:");
+        this.seenRoomsLabel = new JLabel("Seen:");
 
-        roomPanel.add(inHandRooms);
-        roomPanel.add(this.inHandRooms);
-        roomPanel.add(seenRooms);
-        roomPanel.add(this.seenRooms);
+        this.inHandRoomsLabel.add(this.inHandRooms);
+        this.seenRoomsLabel.add(this.inHandRooms);
+
+        roomPanel.add(this.inHandRoomsLabel);
+        roomPanel.add(this.seenRoomsLabel);
 
         // Weapons
         JPanel weaponPanel = new JPanel();
         weaponPanel.setLayout(new GridLayout(4, 0));
         weaponPanel.setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
+        this.inHandWeaponsLabel = new JLabel("In Hand:");
+        this.seenWeaponsLabel = new JLabel("Seen:");
         this.inHandWeapons = new JTextField("None");
         this.seenWeapons = new JTextField("None");
-        JLabel inHandWeapons = new JLabel("In Hand:");
-        JLabel seenWeapons = new JLabel("Seen:");
 
-        weaponPanel.add(inHandWeapons);
-        weaponPanel.add(this.inHandWeapons);
-        weaponPanel.add(seenWeapons);
-        weaponPanel.add(this.seenWeapons);
+        this.inHandWeaponsLabel.add(this.inHandWeapons);
+        this.seenWeaponsLabel.add(this.seenWeapons);
+
+        weaponPanel.add(this.inHandWeaponsLabel);
+        weaponPanel.add(this.seenWeaponsLabel);
 
         mainPanel.add(peoplePanel);
         mainPanel.add(roomPanel);
@@ -100,7 +112,8 @@ public class CardsPanel extends JPanel {
 
         //People
         for(Card c: this.peopleCards) {
-            JTextField
+            JTextField person = new JTextField(c.getName());
+            
         }
     }
 
