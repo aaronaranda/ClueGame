@@ -77,5 +77,15 @@ public abstract class Player {
 	public ArrayList<Card> getSeenRoomCards() {
 		return this.seenRoomCards;
 	}
+
+	public ArrayList<Card> getSeenPeopleCards() {
+		return this.seenPeopleCards;
+	}
+
+	public ArrayList<Card> getSeenWeaponCards() {
+		return this.seenWeaponCards;
+	}
+
+
 }
 

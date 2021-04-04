@@ -1,39 +1,26 @@
 package clueGame;
 
 import java.util.*;
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
+
 public class CardsPanel extends JPanel {
 
-    /* Known Cards {
-     *  People {
-     *      In hand:
-     *      Seen:
-     *  }
-     *  Rooms {
-     *      In hand:
-     *      Seen:
-     *  }
-     *  Weapons {
-     *      In hand:
-     *      Seen:
-     *  }
-     * }
-     */
-
     private JPanel mainPanel;
+    private JPanel peoplePanel;
+    private JPanel inHandPeoplePanel;
+    private JPanel seenPeoplePanel;
 
-    private JLabel inHandPeopleLabel;
-    private JLabel seenPeopleLabel;
-    private JLabel inHandRoomsLabel;
-    private JLabel seenRoomsLabel;
-    private JLabel inHandWeaponsLabel;
-    private JLabel seenWeaponsLabel;
-    
+    private JPanel roomPanel;
+    private JPanel inHandRoomPanel;
+    private JPanel seenRoomPanel;
 
+    private JPanel weaponPanel;
+    private JPanel inHandWeaponPanel;
+    private JPanel seenWeaponPanel;
 
     private Player player;
     private ArrayList<Card> deck;
@@ -41,79 +28,97 @@ public class CardsPanel extends JPanel {
     private ArrayList<Card> roomCards;
     private ArrayList<Card> weaponCards;
 
-    private JTextField inHandPeople;
-    private JTextField seenPeople;
-
-    private JTextField inHandRooms;
-    private JTextField seenRooms;
-
-    private JTextField inHandWeapons;
-    private JTextField seenWeapons;
-
     public CardsPanel() {
         // Known Cards main panel
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(3, 0));
-        mainPanel.setBorder(new TitledBorder(new EtchedBorder(), "Known Cards"));
+        this.mainPanel = new JPanel();
+        this.mainPanel.setLayout(new GridLayout(9, 0));
+        this.mainPanel.setBorder(new TitledBorder(new EtchedBorder(), "Known Cards"));
 
-        // People 
-        JPanel peoplePanel = new JPanel();
-        peoplePanel.setLayout(new GridLayout(4, 0));
-        peoplePanel.setBorder(new TitledBorder(new EtchedBorder(), "People"));
-        this.inHandPeopleLabel = new JLabel("In Hand:");
-        this.seenPeopleLabel = new JLabel("Seen:");
-        this.inHandPeople = new JTextField("None");
-        this.seenPeople = new JTextField("None");
-       
-        this.inHandPeopleLabel.add(this.inHandPeople);
-        this.seenPeopleLabel.add(this.seenPeople);
+        // People
+        this.peoplePanel = new JPanel();
+        this.inHandPeoplePanel = new JPanel();
+        this.seenPeoplePanel = new JPanel();
+        this.peoplePanel.setLayout(new BoxLayout(this.peoplePanel, BoxLayout.Y_AXIS));
+        this.inHandPeoplePanel.setLayout(new BoxLayout(this.inHandPeoplePanel, BoxLayout.Y_AXIS));
+        this.seenPeoplePanel.setLayout(new BoxLayout(this.seenPeoplePanel, BoxLayout.Y_AXIS));
+        this.peoplePanel.setBorder(new TitledBorder(new EtchedBorder(), "People"));
+        this.inHandPeoplePanel.add(new JLabel("In Hand:"));
+        this.seenPeoplePanel.add(new JLabel("Seen:"));
 
-        peoplePanel.add(this.inHandPeopleLabel);
-        peoplePanel.add(this.seenPeopleLabel);
-            
+        this.inHandPeoplePanel.add(new JTextField("None", 20));
+        this.seenPeoplePanel.add(new JTextField("None", 20));
+
+        this.peoplePanel.add(this.inHandPeoplePanel);
+        this.peoplePanel.add(this.seenPeoplePanel);
+
         // Rooms
-        JPanel roomPanel = new JPanel();
-        roomPanel.setLayout(new GridLayout(4, 0));
-        roomPanel.setBorder(new TitledBorder(new EtchedBorder(), "Rooms"));
-        this.inHandRooms = new JTextField("None");
-        this.seenRooms = new JTextField("None");
-        this.inHandRoomsLabel = new JLabel("In Hand:");
-        this.seenRoomsLabel = new JLabel("Seen:");
+        this.roomPanel = new JPanel();
+        this.inHandRoomPanel = new JPanel();
+        this.seenRoomPanel = new JPanel();
+        this.roomPanel.setLayout(new BoxLayout(this.roomPanel, BoxLayout.Y_AXIS));
+        this.inHandRoomPanel.setLayout(new BoxLayout(this.inHandRoomPanel, BoxLayout.Y_AXIS));
+        this.seenRoomPanel.setLayout(new BoxLayout(this.seenRoomPanel, BoxLayout.Y_AXIS));
+        this.roomPanel.setBorder(new TitledBorder(new EtchedBorder(), "Rooms"));
+        this.inHandRoomPanel.add(new JLabel("In Hand:"));
+        this.seenRoomPanel.add(new JLabel("Seen:"));
+        this.inHandRoomPanel.add(new JTextField("None", 20));
+        this.seenRoomPanel.add(new JTextField("None", 20));
 
-        this.inHandRoomsLabel.add(this.inHandRooms);
-        this.seenRoomsLabel.add(this.inHandRooms);
-
-        roomPanel.add(this.inHandRoomsLabel);
-        roomPanel.add(this.seenRoomsLabel);
+        this.roomPanel.add(this.inHandRoomPanel);
+        this.roomPanel.add(this.seenRoomPanel);
 
         // Weapons
-        JPanel weaponPanel = new JPanel();
-        weaponPanel.setLayout(new GridLayout(4, 0));
-        weaponPanel.setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
-        this.inHandWeaponsLabel = new JLabel("In Hand:");
-        this.seenWeaponsLabel = new JLabel("Seen:");
-        this.inHandWeapons = new JTextField("None");
-        this.seenWeapons = new JTextField("None");
+        this.weaponPanel = new JPanel();
+        this.inHandWeaponPanel = new JPanel();
+        this.seenWeaponPanel = new JPanel();
+        this.weaponPanel.setLayout(new BoxLayout(this.weaponPanel, BoxLayout.Y_AXIS));
+        this.inHandWeaponPanel.setLayout(new BoxLayout(this.inHandWeaponPanel, BoxLayout.Y_AXIS));
+        this.seenWeaponPanel.setLayout(new BoxLayout(this.seenWeaponPanel, BoxLayout.Y_AXIS));
+        this.weaponPanel.setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
+        this.inHandWeaponPanel.add(new JLabel("In Hand"));
+        this.seenWeaponPanel.add(new JLabel("Seen:"));
+        this.inHandWeaponPanel.add(new JTextField("None", 20));
+        this.seenWeaponPanel.add(new JTextField("None", 20));
 
-        this.inHandWeaponsLabel.add(this.inHandWeapons);
-        this.seenWeaponsLabel.add(this.seenWeapons);
+        this.weaponPanel.add(inHandWeaponPanel);
+        this.weaponPanel.add(seenWeaponPanel);
 
-        weaponPanel.add(this.inHandWeaponsLabel);
-        weaponPanel.add(this.seenWeaponsLabel);
-
-        mainPanel.add(peoplePanel);
-        mainPanel.add(roomPanel);
-        mainPanel.add(weaponPanel);
+        this.mainPanel.add(this.peoplePanel);
+        this.mainPanel.add(this.roomPanel);
+        this.mainPanel.add(this.weaponPanel);
         add(mainPanel);
     }
 
     public void updateCardsPanel(Player player) {
         this.player = player;
+        this.inHandPeoplePanel.remove(1);
+        this.seenPeoplePanel.remove(1);
+        this.inHandRoomPanel.remove(1);
+        this.seenRoomPanel.remove(1);
+        this.inHandWeaponPanel.remove(1);
+        this.seenWeaponPanel.remove(1);
 
-        //People
-        for(Card c: this.peopleCards) {
-            JTextField person = new JTextField(c.getName());
-            
+
+        for (Card c: this.player.getDeck()) {
+            if (c.getType().equals(CardType.PERSON)) {
+                if (!c.getSeen()) {
+                    this.inHandPeoplePanel.add(new JTextField(c.getName()));
+                } else if (c.getSeen()) {
+                    this.seenPeoplePanel.add(new JTextField(c.getName()));
+                }
+            } else if (c.getType().equals(CardType.ROOM)) {
+                if (!c.getSeen()) {
+                    this.inHandRoomPanel.add(new JTextField(c.getName()));
+                } else if (c.getSeen()) {
+                    this.seenRoomPanel.add(new JTextField(c.getName()));
+                }
+            } else if (c.getType().equals(CardType.WEAPON)) {
+                if (!c.getSeen()) {
+                    this.inHandWeaponPanel.add(new JTextField(c.getName()), this.getY()+1);
+                } else if (c.getSeen()) {
+                    this.seenWeaponPanel.add(new JTextField(c.getName()), this.getY()+1);
+                }
+            }
         }
     }
 
@@ -155,13 +160,12 @@ public class CardsPanel extends JPanel {
         board.initialize();    
 
         CardsPanel cardsPanel = new CardsPanel();
+        cardsPanel.updateCardsPanel(board.getPlayer('1'));
         JFrame frame = new JFrame();
         frame.setContentPane(cardsPanel);
-        frame.setSize(100, 500);
+        frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
-        cardsPanel.updateCardsPanel(board.getPlayer('1'));
 
 
     }
