@@ -37,7 +37,7 @@ public class ComputerPlayer extends Player{
 					seen = 0;
 					continue;
 				}
-	s			else {
+				else {
 					personDeck.add(c);
 				}
 			} else if (c.getType().equals(CardType.WEAPON) == true) {
@@ -63,7 +63,29 @@ public class ComputerPlayer extends Player{
 		solution.setTheWeapon(weaponDeck.get(randNumber));
 		return solution;
 	}
-	
+
+	@Override
+	public Card disproveSuggestion(Solution suggestion) {
+		Card disproval = null;
+
+		// If player tries to dipsrove their own suggestion return null
+		if (this == suggestion.getWhoSuggested()) {
+			return disproval;
+		}
+
+		for (Card c: this.playerDeck) {
+			if (c.equals(suggestion.getThePerson())) {
+				disproval = suggestion.getThePerson();
+			} else if (c.equals(suggestion.getTheRoom())) {
+				disproval = suggestion.getTheRoom();
+			} else if (c.equals(suggestion.getTheWeapon())) {
+				disproval = suggestion.getTheWeapon();
+			}
+		}
+		return disproval;
+	}
+
+
 	
 	@Override
 	public Card selectTargets() {
@@ -75,7 +97,7 @@ public class ComputerPlayer extends Player{
 		//Loops through the deck and adds each room card type to its respective card ArrayList
 		//As long as it hasn't already been seen
 		for (Card c: playerDeck) {
-			if (c.getType().equals(CardType.ROOM) == true) {
+			if (c.getType().equals(CardType.ROOM)) {
 				for (Card x: seenRoomCards) {
 					if (x == c) {
 						seen += 1;
@@ -103,19 +125,4 @@ public class ComputerPlayer extends Player{
 			return target;
 		}
 	}
-	
-	
-	/*
-	 * GETTERS
-	 */
-	
-	public ArrayList<Card> getSeenRoomCards() {
-		return seenRoomCards;
-	}
-
-	
-	
-	
-	
-
 }

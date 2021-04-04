@@ -13,9 +13,9 @@ public class HumanPlayer extends Player{
 	}
 
 	@Override
-	public void addSeenCard(Card card) {
-		// TODO Auto-generated method stub
-		
+	public Card disproveSuggestion(Solution suggestion) {
+		// Must allow human player to choose a card to disprove suggestion
+		return null;
 	}
 
 	@Override

@@ -154,12 +154,16 @@ public class CardsPanel extends JPanel {
         board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
         board.initialize();    
 
-        CardsPanel cardsPanel = new CardsPanel(board.getPlayer('1'));
+        CardsPanel cardsPanel = new CardsPanel();
         JFrame frame = new JFrame();
         frame.setContentPane(cardsPanel);
         frame.setSize(100, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);           
+        frame.setVisible(true);
+
+        cardsPanel.updateCardsPanel(board.getPlayer('1'));
+
+
     }
 }
 

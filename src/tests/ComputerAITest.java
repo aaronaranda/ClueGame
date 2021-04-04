@@ -42,8 +42,8 @@ public class ComputerAITest {
 		aIPlayer.updateHand(card5);
 		
 		//Adds seen cards
-		aIPlayer.addSeenCard(card1);
-		aIPlayer.addSeenCard(card3);
+		aIPlayer.updateSeen(card1);
+		aIPlayer.updateSeen(card3);
 		
 		//Creates test suggestion
 		suggestion = aIPlayer.createSuggestion(card5);
@@ -102,15 +102,15 @@ public class ComputerAITest {
 		assertEquals(bool, true);
 		
 		//Adds seen room test
-		aIPlayer.addSeenCard(card1);
-		aIPlayer.addSeenCard(card2);
-		aIPlayer.addSeenCard(card3);
-		aIPlayer.addSeenCard(card4);
-		aIPlayer.addSeenCard(card5);
-		aIPlayer.addSeenCard(card6);
-		aIPlayer.addSeenCard(card7);
-		aIPlayer.addSeenCard(card8);
-		aIPlayer.addSeenCard(card9);
+		aIPlayer.updateSeen(card1);
+		aIPlayer.updateSeen(card2);
+		aIPlayer.updateSeen(card3);
+		aIPlayer.updateSeen(card4);
+		aIPlayer.updateSeen(card5);
+		aIPlayer.updateSeen(card6);
+		aIPlayer.updateSeen(card7);
+		aIPlayer.updateSeen(card8);
+		aIPlayer.updateSeen(card9);
 		
 		//Creates test cells
 		room = aIPlayer.selectTargets();

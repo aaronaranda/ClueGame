@@ -38,44 +38,25 @@ public abstract class Player {
 	public void updateColor(String colorType) {
 		this.color = Color.getColor(colorType);
 	}
+
 	
-	public Card disproveSuggestion(Solution suggestion) {
-		Card disproval = null;
-		
-		// If player tries to dipsrove their own suggestion return null
-		if (this == suggestion.getWhoSuggested()) {
-			return disproval;
+    public void updateSeen(Card seenCard) {
+        if (seenCard.getType().equals(CardType.PERSON)) {
+			this.seenPeopleCards.add(seenCard);
 		}
-		
-		for (Card c: this.playerDeck) {
-			if (c.equals(suggestion.getThePerson())) {
-				disproval = suggestion.getThePerson();
-			} else if (c.equals(suggestion.getTheRoom())) {
-				disproval = suggestion.getTheRoom();
-			} else if (c.equals(suggestion.getTheWeapon())) {
-				disproval = suggestion.getTheWeapon();
-			}
+		else if (seenCard.getType().equals(CardType.ROOM)) {
+			this.seenRoomCards.add(seenCard);
 		}
-		return disproval;
-	}
-	
-    public void addSeenCard(Card card) {
-        if (card.getType().equals(CardType.PERSON) == true) {
-			this.seenPeopleCards.add(card);
-		}
-		else if (card.getType().equals(CardType.ROOM) == true) {
-			this.seenRoomCards.add(card);
-		}
-		else if (card.getType().equals(CardType.WEAPON) == true) {
-			this.seenWeaponCards.add(card);
+		else if (seenCard.getType().equals(CardType.WEAPON)) {
+			this.seenWeaponCards.add(seenCard);
 		}
     }	
 	 	
 	public abstract Card selectTargets();
-	
-    public ArrayList<Card> getSeenRoomCards() {
-        return this.seenRoomCards;
-    }
+
+	public abstract Solution createSuggestion(Card room);
+
+	public abstract Card disproveSuggestion(Solution suggestion);
 
 	/*
 	 * GETTERS
@@ -93,10 +74,8 @@ public abstract class Player {
 		return this.playerDeck;
 	}
 
-	
-
-	
-
-	
+	public ArrayList<Card> getSeenRoomCards() {
+		return this.seenRoomCards;
+	}
 }
 
