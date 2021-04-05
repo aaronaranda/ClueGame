@@ -8,10 +8,10 @@ public class ComputerPlayer extends Player{
 	//Constructor
 	public ComputerPlayer(String name) {
 		super(name);
-		this.isHuman = false;
+		this.isHuman = false; 
 	}
 	
-	
+	 
 	
 	//Creates a random suggestion based on non-seen cards
 	@Override

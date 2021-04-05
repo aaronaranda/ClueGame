@@ -21,7 +21,7 @@ public class GameControlPanel extends JPanel {
 	
 	//private String guessResult;
 	private JTextField guessResult;
-
+ 
     public GameControlPanel() {
     	
         JPanel mainPanel = new JPanel();
