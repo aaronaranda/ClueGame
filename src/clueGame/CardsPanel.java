@@ -152,8 +152,6 @@ public class CardsPanel extends JPanel {
         return this.weaponCards;
     }
 
-    
-
     public static void main(String[] args) {
         Board board = Board.getInstance();
         board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
@@ -166,8 +164,6 @@ public class CardsPanel extends JPanel {
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
-
     }
 }
 
