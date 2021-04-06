@@ -2,9 +2,13 @@
 
 package clueGame;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.*;
 
-public class BoardCell {
+import javax.swing.JPanel;
+
+public class BoardCell extends JPanel {
 
     // Location
 	private int row;
@@ -14,6 +18,7 @@ public class BoardCell {
 	private char initial;
 	private char secretPassage;
 	private Room room;
+	Color color;
 
 
     // Specifics 
@@ -39,6 +44,15 @@ public class BoardCell {
 			this.adjList = new HashSet<BoardCell>();
 		}
         this.adjList.add(cell);
+	}
+	
+	/*
+	 * GRAPHICS
+	 */
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		this.setBackground(color);
 	}
 
     /*
@@ -106,7 +120,9 @@ public class BoardCell {
     	this.occupied = occupied;
     }
     
-    
+    public void setColor(Color color) {
+    	this.color = color;
+    }
     /*
      * GETTERS
      */

@@ -6,9 +6,11 @@ public class Room {
 	private String name;
 	private BoardCell centerCell;
 	private BoardCell labelCell;
+	private boolean notRoom;
 	
     public Room(String name) {
         this.name = name;
+        notRoom = false;
     }
 	
 	// Setters
@@ -24,9 +26,17 @@ public class Room {
 		}
 	}
 	
+	public void isNotRoom() {
+		notRoom = true;
+	}
+	
     // Getters
 	public String getName() {
 		return this.name;
+	}
+	
+	public boolean getNotRoom() {
+		return notRoom;
 	}
 	
 	public BoardCell getLabelCell() {

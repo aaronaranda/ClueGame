@@ -3,11 +3,14 @@
 package clueGame;
 
 import java.util.Map;
-
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.io.*;
 import java.util.*;
+import javax.swing.*;
 
-public class Board {
+public class Board extends JPanel {
 	
 	// Sizing
 	private int numRows;
@@ -35,7 +38,7 @@ public class Board {
 	private static Board theInstance = new Board();
 	// constructor is private to ensure only one can be created
 	private Board() {
-		super() ;		
+		super();			
 	}
 	// this method returns the only Board
 	public static Board getInstance() {
@@ -103,7 +106,10 @@ public class Board {
             String name = temp[1];
             char label = temp[2].charAt(0);
             if (type.equals("Room") || type.equals("Space")) {
-            	Room room = new Room(name);            
+            	Room room = new Room(name);    
+            	if (type.equals("Space")) {
+            		room.isNotRoom();
+            	}
                 this.roomMap.put(label, room);
                 if (type.equals("Room")) {
                 	this.cards.add(new Card(name, CardType.ROOM));
@@ -340,6 +346,35 @@ public class Board {
     public Card handleSuggestion() {
         return new Card("", CardType.ROOM);
     }
+    
+    /*
+     * GRAPHICS
+     */
+    
+    public void paintComponent(Graphics g) {
+    	super.paintComponent(g);
+    	this.setBackground(Color.BLACK);
+    }
+    
+    public void drawCells() {
+    	setLayout(new GridLayout(numRows, numColumns, 2, 2));
+    	for (int i = 0; i < numRows; i++) {
+    		for (int j = 0; j < numColumns; j++) {
+    			if (roomMap.containsKey(grid[i][j].getInitial()) &&
+    					roomMap.get(grid[i][j].getInitial()).getNotRoom()) {
+    				grid[i][j].setColor(Color.LIGHT_GRAY);  				
+    			} else {
+    				grid[i][j].setColor(Color.CYAN);
+    			}
+    			
+    			if (grid[i][j].isWalkway()) {
+    				grid[i][j].setColor(Color.WHITE);
+    			}
+    			add(grid[i][j]);
+    		}
+    	}
+    }
+    
     
     /*
      * GETTERS
