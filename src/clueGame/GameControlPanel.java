@@ -24,6 +24,8 @@ public class GameControlPanel extends JPanel {
  
     public GameControlPanel() {
     	
+    	
+    	//Sets up the panel size
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(2, 0));
 
@@ -76,20 +78,25 @@ public class GameControlPanel extends JPanel {
         add(mainPanel);
 
     }
- 
+    
+    //Sets turn
     public void setTurn(Player player, int roll) {
         this.playerName.setText(player.getName());
         this.roll.setText(String.valueOf(roll));
     }
     
+    //Sets the guess
     public void setGuess(String guess) {
         this.guess.setText(guess);
     }
-        
+    
+    
+    //Sets the guess results
     public void setGuessResult(String result) {
         this.guessResult.setText(result);
     }
-
+    
+    //Main for calling the GUI
     public static void main(String[] args) {
         GameControlPanel controlPanel = new GameControlPanel(); 
         JFrame frame = new JFrame();
