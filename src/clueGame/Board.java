@@ -10,6 +10,8 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
+
+
 public class Board extends JPanel {
 	
 	// Sizing
@@ -65,9 +67,7 @@ public class Board extends JPanel {
 			this.deal();
 			// Make the answer to winning the game
 			this.theAnswer = new Solution(this.cards);
-		}
-		
-		
+		}		
 	}
 	
 	/*
@@ -342,7 +342,7 @@ public class Board extends JPanel {
         		theAnswer.getTheWeapon().equals(accWeapon));
     } 
     
-
+    
     public Card handleSuggestion() {
         return new Card("", CardType.ROOM);
     }
@@ -362,9 +362,12 @@ public class Board extends JPanel {
     		for (int j = 0; j < numColumns; j++) {
     			if (roomMap.containsKey(grid[i][j].getInitial()) &&
     					roomMap.get(grid[i][j].getInitial()).getNotRoom()) {
-    				grid[i][j].setColor(Color.LIGHT_GRAY);  				
+    				grid[i][j].setColor(Color.LIGHT_GRAY);    				
     			} else {
     				grid[i][j].setColor(Color.CYAN);
+    				if (grid[i][j].isDoorway()) {
+    					paintDoorway(grid[i][j]);
+    				}
     			}
     			
     			if (grid[i][j].isWalkway()) {
@@ -374,6 +377,19 @@ public class Board extends JPanel {
     		}
     	}
     }
+    
+    private void paintDoorway(BoardCell cell) {
+    	if (cell.getDoorDirection().equals(DoorDirection.UP)) {
+    		cell.setBorder(new BorderFactory(.));
+    	}
+    }
+    
+    	
+    	
+    	
+    	
+    	
+    
     
     
     /*
