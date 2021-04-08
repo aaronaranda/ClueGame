@@ -12,15 +12,15 @@ public class ClueGame extends JFrame {
 	private static Board board;
 	
 	public ClueGame() {
-		setSize(500, 500);
+		setSize(800, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cardsPanel = new CardsPanel();
 		gameControlPanel = new GameControlPanel();
 		
 		board = Board.getInstance();
-		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
+		board.setConfigFiles("ClueLayout306.csv", "ClueSetup306.txt");
 		board.initialize();
-		board.drawCells();
+		// board.drawCells();
 		add(board, BorderLayout.CENTER);
 		add(cardsPanel, BorderLayout.EAST);
 		add(gameControlPanel, BorderLayout.SOUTH);

@@ -24,7 +24,7 @@ public class Room {
 		if (cell.isRoomCenter()) {
 			this.centerCell = cell;
 		}
-	}
+	}	
 	
 	public void isNotRoom() {
 		notRoom = true;
@@ -45,6 +45,5 @@ public class Room {
 	
 	public BoardCell getCenterCell() {
 		return centerCell;
-	}
-	
+	}			
 }

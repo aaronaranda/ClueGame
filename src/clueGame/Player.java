@@ -54,8 +54,11 @@ public abstract class Player {
 	 	
 	public abstract Card selectTargets();
 
+	// Different createSuggestions for Computer and Human players
 	public abstract Solution createSuggestion(Card room);
-
+	
+	 
+	
 	public abstract Card disproveSuggestion(Solution suggestion);
 
 	/*

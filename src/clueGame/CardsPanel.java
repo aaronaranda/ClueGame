@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 
+@SuppressWarnings("serial")
 public class CardsPanel extends JPanel {
 
     private Player player;

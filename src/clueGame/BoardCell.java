@@ -3,6 +3,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.*;
 
@@ -36,8 +37,8 @@ public class BoardCell extends JPanel {
     // Constructors    
 	public BoardCell(int row, int col) {
 		this.row = row;
-		this.col = col;
-	}
+		this.col = col;		
+	}	
 	
 	public void addAdj(BoardCell cell) {
 		if (this.adjList == null) {
@@ -54,6 +55,7 @@ public class BoardCell extends JPanel {
 		super.paintComponent(g);
 		this.setBackground(color);
 	}
+	
 
     /*
      * SETTERS

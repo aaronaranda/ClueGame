@@ -3,6 +3,7 @@
 package clueGame;
 
 import java.util.Map;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -25,6 +26,7 @@ public class Board extends JPanel {
 	// Board data structures
 	private Map<Character, Room> roomMap;
 	private Map<Character, String> weapons;
+	private Map<Character, String> spaces;
 	private Map<Character, Player> players;
 	private Set<BoardCell> targets;
 	private BoardCell[][] grid;
@@ -61,6 +63,7 @@ public class Board extends JPanel {
 		} catch(BadConfigFormatException e) {
 			System.out.println("Error occurred during layout configuration.");
 		}
+		setLayout(new GridLayout(numRows, numColumns));
 		this.calcAdjacencies();
 		
 		if (!players.isEmpty()) {
@@ -85,7 +88,8 @@ public class Board extends JPanel {
 	public void loadSetupConfig() throws BadConfigFormatException {
 		this.roomMap = new HashMap<Character, Room>();
 		this.weapons = new HashMap<Character, String>();
-		players = new HashMap<Character, Player>();
+		this.spaces = new HashMap<Character, String>();
+		this.players = new HashMap<Character, Player>();
 		this.cards = new ArrayList<Card>();
 		
         FileReader setupReader = null;
@@ -105,16 +109,13 @@ public class Board extends JPanel {
         	String type = temp[0];
             String name = temp[1];
             char label = temp[2].charAt(0);
-            if (type.equals("Room") || type.equals("Space")) {
-            	Room room = new Room(name);    
-            	if (type.equals("Space")) {
-            		room.isNotRoom();
-            	}
-                this.roomMap.put(label, room);
-                if (type.equals("Room")) {
-                	this.cards.add(new Card(name, CardType.ROOM));
-                }
-            } else if (type.equals("Weapon")) {
+            if (type.equals("Room")) {
+            	Room room = new Room(name);                	
+                this.roomMap.put(label, room);               
+               	this.cards.add(new Card(name, CardType.ROOM));                     
+            } else if (type.equals("Space")) {
+            	this.spaces.put(label, name);            	
+        	}else if (type.equals("Weapon")) {
             	this.weapons.put(label, name);
             	this.cards.add(new Card(name, CardType.WEAPON));
             } else if (type.equals("Player")) {
@@ -157,28 +158,38 @@ public class Board extends JPanel {
             	if (initial.length() > 1) {
             		hasIndicator = true;
             	}
-            	if (!this.roomMap.containsKey(cellInitial)) {
-            		throw new BadConfigFormatException(cellInitial);
-            	} else {
-                	BoardCell cell = new BoardCell(row, col);
-                	cell.setInitial(cellInitial);
-                	cell.setRoom(roomMap.get(cellInitial));
-                	if (hasIndicator) {
-                		char indicator = initial.charAt(1);
-                		if (roomMap.containsKey(indicator)) {
-                			cell.setSecretPassage(indicator);
-                		}
-                		// All setters called, BoardCell handles each case
-                		cell.setCenter(indicator);
-                		cell.setDirection(indicator);
-                		cell.setLabel(indicator);
-                		if (cell.isRoomCenter()) {
-                			this.centers.put(initial, cell);
-                		}
-                	}
-                	tempBoard.add(cell);
-                	col++;
-            	} 
+            	
+            	if (this.roomMap.containsKey(cellInitial) || 
+                        this.spaces.containsKey(cellInitial)) {
+            		BoardCell cell = new BoardCell(row, col);
+            		cell.setInitial(cellInitial);
+                    if (this.roomMap.containsKey(cellInitial)) {
+                        cell.setRoom(roomMap.get(cellInitial));
+                        cell.setColor(Color.CYAN);
+                    } else {
+                    	if (this.spaces.get(cellInitial).equals("Unused")) {
+                    		cell.setColor(Color.BLACK);
+                    	} else if (this.spaces.get(cellInitial).equals("Walkway")) {
+                    		cell.setColor(Color.WHITE);
+                    	}                    	                    	
+                    }
+            		if (hasIndicator) {
+            			char indicator = initial.charAt(1);
+                        if (roomMap.containsKey(indicator)) {
+                            cell.setSecretPassage(indicator);                            
+                        }
+                        cell.setCenter(indicator);
+                        cell.setDirection(indicator);
+                        cell.setLabel(indicator);
+                        if (cell.isRoomCenter()) {
+                            this.centers.put(initial, cell);
+                        }
+            		}
+                    tempBoard.add(cell);
+                    col++;
+                } else{
+                    throw new BadConfigFormatException(cellInitial);
+                }
             }
             if (row == 0) {
             	maxCol = col;
@@ -205,6 +216,12 @@ public class Board extends JPanel {
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numColumns; j++) {
 				grid[i][j] = temp.get(calcIndex(i, j));
+				if (grid[i][j].isWalkway()) {
+					grid[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+					add(grid[i][j]);
+				} else {
+					add(grid[i][j]);
+				}
 			}
 		}
 	}
@@ -357,7 +374,7 @@ public class Board extends JPanel {
     }
     
     public void drawCells() {
-    	setLayout(new GridLayout(numRows, numColumns, 2, 2));
+    	
     	for (int i = 0; i < numRows; i++) {
     		for (int j = 0; j < numColumns; j++) {
     			if (roomMap.containsKey(grid[i][j].getInitial()) &&
@@ -366,7 +383,7 @@ public class Board extends JPanel {
     			} else {
     				grid[i][j].setColor(Color.CYAN);
     				if (grid[i][j].isDoorway()) {
-    					paintDoorway(grid[i][j]);
+    					// paintDoorway(grid[i][j]);
     				}
     			}
     			
@@ -378,12 +395,12 @@ public class Board extends JPanel {
     	}
     }
     
-    private void paintDoorway(BoardCell cell) {
-    	if (cell.getDoorDirection().equals(DoorDirection.UP)) {
-    		cell.setBorder(new BorderFactory(.));
-    	}
-    }
-    
+//    private void paintDoorway(BoardCell cell) {
+//    	if (cell.getDoorDirection().equals(DoorDirection.UP)) {
+//    		cell.setBorder(new BorderFactory(.));
+//    	}
+//    }
+//    
     	
     	
     	
