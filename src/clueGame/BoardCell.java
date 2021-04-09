@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.*;
 
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class BoardCell extends JPanel {
@@ -54,6 +56,25 @@ public class BoardCell extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		this.setBackground(color);
+		
+		// Painting border for doorway
+		if (this.isDoorway()) {
+			int top = 0; 
+			int left = 0; 
+			int bottom = 0;
+			int right = 0;
+			if (this.doorDirection.equals(DoorDirection.UP)) {
+				top = 2;
+			} else if (this.doorDirection.equals(DoorDirection.LEFT)) {
+				left = 2;
+			} else if (this.doorDirection.equals(DoorDirection.DOWN)) {
+				bottom = 2;
+			} else if (this.doorDirection.equals(DoorDirection.RIGHT)) {
+				right = 2;
+			}
+			setBorder(
+					BorderFactory.createMatteBorder(top, left, bottom, right, Color.RED));			
+		}				
 	}
 	
 
@@ -104,9 +125,11 @@ public class BoardCell extends JPanel {
     		this.roomLabel = true;
     		this.room.setLabelCell(this);
     		// Then set the label, which should be the name
+    		
     	} else {
     		this.roomLabel = false;
     	}
+    	
     }
     
     public void setRoom(Room room) {
@@ -179,5 +202,9 @@ public class BoardCell extends JPanel {
 	
 	public char getSecretPassage() {
 		return secretPassage;
+	}
+	
+	public String getLabel() {
+		return this.room.getName();
 	}
 }

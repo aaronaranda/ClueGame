@@ -373,8 +373,7 @@ public class Board extends JPanel {
     	this.setBackground(Color.BLACK);
     }
     
-    public void drawCells() {
-    	
+    public void drawCells() {    	
     	for (int i = 0; i < numRows; i++) {
     		for (int j = 0; j < numColumns; j++) {
     			if (roomMap.containsKey(grid[i][j].getInitial()) &&
@@ -394,14 +393,9 @@ public class Board extends JPanel {
     		}
     	}
     }
+
+     
     
-//    private void paintDoorway(BoardCell cell) {
-//    	if (cell.getDoorDirection().equals(DoorDirection.UP)) {
-//    		cell.setBorder(new BorderFactory(.));
-//    	}
-//    }
-//    
-    	
     	
     	
     	
