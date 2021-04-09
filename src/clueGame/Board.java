@@ -11,8 +11,6 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
-
-
 public class Board extends JPanel {
 	
 	// Sizing
@@ -64,6 +62,7 @@ public class Board extends JPanel {
 			System.out.println("Error occurred during layout configuration.");
 		}
 		setLayout(new GridLayout(numRows, numColumns));
+
 		this.calcAdjacencies();
 		
 		if (!players.isEmpty()) {
@@ -158,21 +157,13 @@ public class Board extends JPanel {
             	if (initial.length() > 1) {
             		hasIndicator = true;
             	}
-            	
             	if (this.roomMap.containsKey(cellInitial) || 
                         this.spaces.containsKey(cellInitial)) {
             		BoardCell cell = new BoardCell(row, col);
             		cell.setInitial(cellInitial);
                     if (this.roomMap.containsKey(cellInitial)) {
-                        cell.setRoom(roomMap.get(cellInitial));
-                        cell.setColor(Color.CYAN);
-                    } else {
-                    	if (this.spaces.get(cellInitial).equals("Unused")) {
-                    		cell.setColor(Color.BLACK);
-                    	} else if (this.spaces.get(cellInitial).equals("Walkway")) {
-                    		cell.setColor(Color.WHITE);
-                    	}                    	                    	
-                    }
+						cell.setRoom(roomMap.get(cellInitial));
+					}
             		if (hasIndicator) {
             			char indicator = initial.charAt(1);
                         if (roomMap.containsKey(indicator)) {
@@ -216,12 +207,6 @@ public class Board extends JPanel {
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numColumns; j++) {
 				grid[i][j] = temp.get(calcIndex(i, j));
-				if (grid[i][j].isWalkway()) {
-					grid[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-					add(grid[i][j]);
-				} else {
-					add(grid[i][j]);
-				}
 			}
 		}
 	}
@@ -292,7 +277,6 @@ public class Board extends JPanel {
             }
         }
     }  
-
     
     // Target location, recursive call 
     public void calcTargets(BoardCell startCell, int pathLength) {
@@ -308,7 +292,7 @@ public class Board extends JPanel {
     	Set<BoardCell> adjacentCells = new HashSet<BoardCell>();
     	BoardCell startCell = getCell(startIndex);
     	for (BoardCell cell: startCell.getAdjList()) {
-    		if (visited[calcIndex(cell)] == false) {
+    		if (!visited[calcIndex(cell)]) {
     			adjacentCells.add(cell);
     		}
     	}
@@ -371,38 +355,15 @@ public class Board extends JPanel {
     public void paintComponent(Graphics g) {
     	super.paintComponent(g);
     	this.setBackground(Color.BLACK);
-    }
-    
-    public void drawCells() {    	
+
     	for (int i = 0; i < numRows; i++) {
     		for (int j = 0; j < numColumns; j++) {
-    			if (roomMap.containsKey(grid[i][j].getInitial()) &&
-    					roomMap.get(grid[i][j].getInitial()).getNotRoom()) {
-    				grid[i][j].setColor(Color.LIGHT_GRAY);    				
-    			} else {
-    				grid[i][j].setColor(Color.CYAN);
-    				if (grid[i][j].isDoorway()) {
-    					// paintDoorway(grid[i][j]);
-    				}
-    			}
-    			
-    			if (grid[i][j].isWalkway()) {
-    				grid[i][j].setColor(Color.WHITE);
-    			}
-    			add(grid[i][j]);
-    		}
-    	}
+				add(grid[i][j]);
+				grid[i][j].paintComponent(g);
+			}
+		}
     }
 
-     
-    
-    	
-    	
-    	
-    	
-    
-    
-    
     /*
      * GETTERS
      */

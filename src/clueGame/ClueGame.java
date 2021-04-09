@@ -13,6 +13,7 @@ public class ClueGame extends JFrame {
 	
 	public ClueGame() {
 		setSize(800, 800);
+		setTitle("Clue! Game");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cardsPanel = new CardsPanel();
 		gameControlPanel = new GameControlPanel();
