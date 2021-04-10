@@ -2,11 +2,14 @@
 
 package clueGame;
 
+import java.awt.*;
+
 public class Room {
 	private String name;
 	private BoardCell centerCell;
 	private BoardCell labelCell;
 	private boolean notRoom;
+	private Color color = Color.CYAN;
 	
     public Room(String name) {
         this.name = name;
@@ -25,18 +28,10 @@ public class Room {
 			this.centerCell = cell;
 		}
 	}	
-	
-	public void isNotRoom() {
-		notRoom = true;
-	}
-	
+
     // Getters
 	public String getName() {
 		return this.name;
-	}
-	
-	public boolean getNotRoom() {
-		return notRoom;
 	}
 	
 	public BoardCell getLabelCell() {
