@@ -31,6 +31,5 @@ public class ClueGame extends JFrame {
 		ClueGame gui = new ClueGame();
 		gui.pack();
 		gui.setVisible(true);		
-	}
-	
+	}	
 }

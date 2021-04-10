@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
@@ -26,10 +27,11 @@ public class Board extends JPanel {
 	private Map<Character, String> weapons;
 	private Map<Character, String> spaces;
 	private Map<Character, Player> players;
+	private Map<Point, Player> startingPositions;
 	private Set<BoardCell> targets;
 	private BoardCell[][] grid;
 	private Map<String,BoardCell> centers;	// Keep track of room centers for adjacencies
-	private ArrayList<Card> cards;
+	private ArrayList<Card> cards;	
 	
 	// Answer to the game
 	private Solution theAnswer;
@@ -90,7 +92,8 @@ public class Board extends JPanel {
 		this.spaces = new HashMap<Character, String>();
 		this.players = new HashMap<Character, Player>();
 		this.cards = new ArrayList<Card>();
-		
+		ArrayList<Point> starts = initializeStartPositions();
+		this.startingPositions = new HashMap<Point, Player>();
         FileReader setupReader = null;
 		try {
 			setupReader = new FileReader(this.setupConfigFile);
@@ -118,15 +121,23 @@ public class Board extends JPanel {
             	this.weapons.put(label, name);
             	this.cards.add(new Card(name, CardType.WEAPON));
             } else if (type.equals("Player")) {
+            	String color = temp[3];
             	if (x == 0) {
             		Player player = new HumanPlayer(name);
+            		player.updateColor(color);            		
+            		player.setStartPosition(starts.get(x));
+            		this.startingPositions.put(starts.get(x), player);
             		players.put(temp[2].charAt(1), player);
             		this.cards.add(new Card(name, CardType.PERSON));
-            		x = 1;            	
+            		x++;            	
             	} else {
             		Player player = new ComputerPlayer(name);
             		players.put(temp[2].charAt(1), player);
             		this.cards.add(new Card(name, CardType.PERSON));
+            		player.updateColor(color);
+            		player.setStartPosition(starts.get(x));
+            		this.startingPositions.put(starts.get(x), player);
+            		x++;
             	}            	
             }          
 	    }
@@ -320,6 +331,19 @@ public class Board extends JPanel {
     		visited[calcIndex(cell)] = false;
     	}
     }
+    
+    private ArrayList<Point> initializeStartPositions() {
+    	ArrayList<Point> positions = new ArrayList<Point>();
+    	positions.add(new Point(21, 5));
+    	positions.add(new Point(16, 5));
+    	positions.add(new Point(23, 17));
+    	positions.add(new Point(14, 17));
+    	positions.add(new Point(10, 19));
+    	positions.add(new Point(0, 19));
+    	return positions;
+    }
+    
+    
         
     // deal() works almost like a stack, popping off cards from card set
     public void deal() {
@@ -355,13 +379,19 @@ public class Board extends JPanel {
     public void paintComponent(Graphics g) {
     	super.paintComponent(g);
     	this.setBackground(Color.BLACK);
-
-    	for (int i = 0; i < numRows; i++) {
-    		for (int j = 0; j < numColumns; j++) {
-				add(grid[i][j]);
+    		
+    	for (int i = numRows - 1; i > 0; i--) {
+    		for (int j = 0; j < numColumns; j++) {											
+				Point point = new Point(i, j);
+				if (this.startingPositions.containsKey(point)) {
+					grid[i][j].add(this.startingPositions.get(point));
+					
+					this.startingPositions.get(point).paintComponent(g);					
+				}				
+				add(grid[i][j], i, j);			    	
 				grid[i][j].paintComponent(g);
 			}
-		}
+		}    	    	    	
     }
 
     /*

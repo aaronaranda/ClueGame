@@ -3,7 +3,9 @@ package clueGame;
 import java.awt.*;
 import java.util.*;
 
-public abstract class Player {
+import javax.swing.JPanel;
+
+public abstract class Player extends JPanel {
 	
 	protected String name;
 	protected boolean isHuman;
@@ -51,14 +53,27 @@ public abstract class Player {
 			this.seenWeaponCards.add(seenCard);
 		}
     }	
-	 	
+	
+    public void setStartPosition(Point point) {
+    	this.row = point.x;
+    	this.col = point.y;
+    }
+    
+    public void paintComponent(Graphics g) {
+    	super.paintComponent(g);
+    	g.setColor(color);
+    	g.fillOval(0, 0, 10, 10);
+
+    	
+    	
+    }
+    
+    
 	public abstract Card selectTargets();
 
 	// Different createSuggestions for Computer and Human players
 	public abstract Solution createSuggestion(Card room);
-	
-	 
-	
+		 
 	public abstract Card disproveSuggestion(Solution suggestion);
 
 	/*
@@ -87,6 +102,14 @@ public abstract class Player {
 
 	public ArrayList<Card> getSeenWeaponCards() {
 		return this.seenWeaponCards;
+	}
+	
+	public int getRow() {
+		return this.row;
+	}
+	
+	public int getCol() {
+		return this.col;
 	}
 
 

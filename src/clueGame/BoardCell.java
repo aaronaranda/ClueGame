@@ -3,6 +3,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.*;
 import javax.swing.BorderFactory;
@@ -88,28 +89,29 @@ public class BoardCell extends JPanel {
     	this.doorway = true;
 
 		switch (direction) {
-			case '>' -> {
+			case '>': 
 				this.doorDirection = DoorDirection.RIGHT;
 				setBorder(new MatteBorder(
 								0, 0, 0, 2, Color.RED));
-			}
-			case '<' -> {
+				break;			
+			case '<': 
 				this.doorDirection = DoorDirection.LEFT;
 				setBorder(new MatteBorder(
 						0, 2, 0, 0, Color.RED));
-			}
-			case '^' -> {
+				break;
+			case '^':
 				this.doorDirection = DoorDirection.UP;
 				setBorder(new MatteBorder(
 							2, 0, 0, 0, Color.RED));
-			}
-			case 'v' -> {
+				break;			
+			case 'v':
 				this.doorDirection = DoorDirection.DOWN;
 				setBorder(new MatteBorder(
 							0, 0, 2, 0, Color.RED));
-			}
-			default -> {
+				break;
+			default : {
 				this.doorway = false;
+				break;
 			}
 		}
     }
