@@ -18,9 +18,8 @@ public class ClueGame extends JFrame {
 		gameControlPanel = new GameControlPanel();
 		
 		board = Board.getInstance();
-		board.setConfigFiles("ClueLayout306.csv", "ClueSetup306.txt");
-		board.initialize();
-		// board.drawCells();
+		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
+		board.initialize();	
 		add(board, BorderLayout.CENTER);
 		add(cardsPanel, BorderLayout.EAST);
 		add(gameControlPanel, BorderLayout.SOUTH);
