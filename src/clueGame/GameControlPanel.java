@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import Board;
 
 import javax.swing.*;
 
@@ -88,9 +89,6 @@ public class GameControlPanel extends JPanel {
 			if (true) {
 				String errorMessage = "Please finish your turn.";
 				JOptionPane.showMessageDialog(null, errorMessage);
-			}
-			else {
-				
 			}
 			
 			
