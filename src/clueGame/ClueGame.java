@@ -28,8 +28,21 @@ public class ClueGame extends JFrame {
 
 	
 	public static void main(String[] args) {
+		
 		ClueGame gui = new ClueGame();
-		gui.pack();
+	    gui.pack();
 		gui.setVisible(true);		
+		
+		String name = board.getPlayer('1').getName();
+	    
+	    // create a jframe
+	    JFrame frame = new JFrame("Intro");
+
+	    // show a joptionpane dialog using showMessageDialog
+	    JOptionPane.showMessageDialog(frame,
+	        "You are " + name + "\n" + "Can you find the solution" + "\n" + "before the computer players?",
+	        "Welcome to Clue",
+	        JOptionPane.INFORMATION_MESSAGE);
+	    
 	}	
 }
