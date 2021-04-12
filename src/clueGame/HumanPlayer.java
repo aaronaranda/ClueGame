@@ -14,14 +14,18 @@ public class HumanPlayer extends Player{
 
 	@Override
 	public Card disproveSuggestion(Solution suggestion) {
-		// Must allow human player to choose a card to disprove suggestion
-		return null;
-	}
+        Card disproval = null;
+        // Allow player to select a card to disprove        
+		return disproval;
+    }
 
-	@Override
-	public Solution createSuggestion(Card card) {
-		// TODO Auto-generated method stub
-		return null;
+	public Solution createSuggestion(
+            Card person, Card room, Card weapon) {
+        Solution suggestion = new Solution(this);
+        suggestion.setThePerson(person);
+        suggestion.setTheRoom(room);
+        suggestion.setTheWeapon(weapon);
+        return suggestion;
 	}
 
 	@Override
@@ -33,6 +37,11 @@ public class HumanPlayer extends Player{
 	@Override
 	public ArrayList<Card> getSeenRoomCards() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Solution createSuggestion(Card room) { 
 		return null;
 	}
 }

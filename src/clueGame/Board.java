@@ -3,11 +3,16 @@
 package clueGame;
 
 import java.util.Map;
-
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Point;
 import java.io.*;
 import java.util.*;
+import javax.swing.*;
 
-public class Board {
+public class Board extends JPanel {
 	
 	// Sizing
 	private int numRows;
@@ -20,11 +25,13 @@ public class Board {
 	// Board data structures
 	private Map<Character, Room> roomMap;
 	private Map<Character, String> weapons;
+	private Map<Character, String> spaces;
 	private Map<Character, Player> players;
+	private Map<Point, Player> startingPositions;
 	private Set<BoardCell> targets;
 	private BoardCell[][] grid;
 	private Map<String,BoardCell> centers;	// Keep track of room centers for adjacencies
-	private ArrayList<Card> cards;
+	private ArrayList<Card> cards;	
 	
 	// Answer to the game
 	private Solution theAnswer;
@@ -35,7 +42,7 @@ public class Board {
 	private static Board theInstance = new Board();
 	// constructor is private to ensure only one can be created
 	private Board() {
-		super() ;		
+		super();			
 	}
 	// this method returns the only Board
 	public static Board getInstance() {
@@ -56,15 +63,15 @@ public class Board {
 		} catch(BadConfigFormatException e) {
 			System.out.println("Error occurred during layout configuration.");
 		}
+		setLayout(new GridLayout(numRows, numColumns));
+
 		this.calcAdjacencies();
 		
 		if (!players.isEmpty()) {
 			this.deal();
 			// Make the answer to winning the game
 			this.theAnswer = new Solution(this.cards);
-		}
-		
-		
+		}		
 	}
 	
 	/*
@@ -82,9 +89,11 @@ public class Board {
 	public void loadSetupConfig() throws BadConfigFormatException {
 		this.roomMap = new HashMap<Character, Room>();
 		this.weapons = new HashMap<Character, String>();
-		players = new HashMap<Character, Player>();
+		this.spaces = new HashMap<Character, String>();
+		this.players = new HashMap<Character, Player>();
 		this.cards = new ArrayList<Card>();
-		
+		ArrayList<Point> starts = initializeStartPositions();
+		this.startingPositions = new HashMap<Point, Player>();
         FileReader setupReader = null;
 		try {
 			setupReader = new FileReader(this.setupConfigFile);
@@ -102,25 +111,33 @@ public class Board {
         	String type = temp[0];
             String name = temp[1];
             char label = temp[2].charAt(0);
-            if (type.equals("Room") || type.equals("Space")) {
-            	Room room = new Room(name);            
-                this.roomMap.put(label, room);
-                if (type.equals("Room")) {
-                	this.cards.add(new Card(name, CardType.ROOM));
-                }
-            } else if (type.equals("Weapon")) {
+            if (type.equals("Room")) {
+            	Room room = new Room(name);                	
+                this.roomMap.put(label, room);               
+               	this.cards.add(new Card(name, CardType.ROOM));                     
+            } else if (type.equals("Space")) {
+            	this.spaces.put(label, name);            	
+        	}else if (type.equals("Weapon")) {
             	this.weapons.put(label, name);
             	this.cards.add(new Card(name, CardType.WEAPON));
             } else if (type.equals("Player")) {
+            	String color = temp[3];
             	if (x == 0) {
             		Player player = new HumanPlayer(name);
+            		player.updateColor(color);            		
+            		player.setStartPosition(starts.get(x));
+            		this.startingPositions.put(starts.get(x), player);
             		players.put(temp[2].charAt(1), player);
             		this.cards.add(new Card(name, CardType.PERSON));
-            		x = 1;            	
+            		x++;            	
             	} else {
             		Player player = new ComputerPlayer(name);
             		players.put(temp[2].charAt(1), player);
             		this.cards.add(new Card(name, CardType.PERSON));
+            		player.updateColor(color);
+            		player.setStartPosition(starts.get(x));
+            		this.startingPositions.put(starts.get(x), player);
+            		x++;
             	}            	
             }          
 	    }
@@ -151,28 +168,30 @@ public class Board {
             	if (initial.length() > 1) {
             		hasIndicator = true;
             	}
-            	if (!this.roomMap.containsKey(cellInitial)) {
-            		throw new BadConfigFormatException(cellInitial);
-            	} else {
-                	BoardCell cell = new BoardCell(row, col);
-                	cell.setInitial(cellInitial);
-                	cell.setRoom(roomMap.get(cellInitial));
-                	if (hasIndicator) {
-                		char indicator = initial.charAt(1);
-                		if (roomMap.containsKey(indicator)) {
-                			cell.setSecretPassage(indicator);
-                		}
-                		// All setters called, BoardCell handles each case
-                		cell.setCenter(indicator);
-                		cell.setDirection(indicator);
-                		cell.setLabel(indicator);
-                		if (cell.isRoomCenter()) {
-                			this.centers.put(initial, cell);
-                		}
-                	}
-                	tempBoard.add(cell);
-                	col++;
-            	} 
+            	if (this.roomMap.containsKey(cellInitial) || 
+                        this.spaces.containsKey(cellInitial)) {
+            		BoardCell cell = new BoardCell(row, col);
+            		cell.setInitial(cellInitial);
+                    if (this.roomMap.containsKey(cellInitial)) {
+						cell.setRoom(roomMap.get(cellInitial));
+					}
+            		if (hasIndicator) {
+            			char indicator = initial.charAt(1);
+                        if (roomMap.containsKey(indicator)) {
+                            cell.setSecretPassage(indicator);                            
+                        }
+                        cell.setCenter(indicator);
+                        cell.setDirection(indicator);
+                        cell.setLabel(indicator);
+                        if (cell.isRoomCenter()) {
+                            this.centers.put(initial, cell);
+                        }
+            		}
+                    tempBoard.add(cell);
+                    col++;
+                } else{
+                    throw new BadConfigFormatException(cellInitial);
+                }
             }
             if (row == 0) {
             	maxCol = col;
@@ -269,7 +288,6 @@ public class Board {
             }
         }
     }  
-
     
     // Target location, recursive call 
     public void calcTargets(BoardCell startCell, int pathLength) {
@@ -285,7 +303,7 @@ public class Board {
     	Set<BoardCell> adjacentCells = new HashSet<BoardCell>();
     	BoardCell startCell = getCell(startIndex);
     	for (BoardCell cell: startCell.getAdjList()) {
-    		if (visited[calcIndex(cell)] == false) {
+    		if (!visited[calcIndex(cell)]) {
     			adjacentCells.add(cell);
     		}
     	}
@@ -313,6 +331,19 @@ public class Board {
     		visited[calcIndex(cell)] = false;
     	}
     }
+    
+    private ArrayList<Point> initializeStartPositions() {
+    	ArrayList<Point> positions = new ArrayList<Point>();
+    	positions.add(new Point(21, 5));
+    	positions.add(new Point(16, 5));
+    	positions.add(new Point(23, 17));
+    	positions.add(new Point(14, 17));
+    	positions.add(new Point(10, 19));
+    	positions.add(new Point(0, 19));
+    	return positions;
+    }
+    
+    
         
     // deal() works almost like a stack, popping off cards from card set
     public void deal() {
@@ -336,11 +367,33 @@ public class Board {
         		theAnswer.getTheWeapon().equals(accWeapon));
     } 
     
-
+    
     public Card handleSuggestion() {
         return new Card("", CardType.ROOM);
     }
     
+    /*
+     * GRAPHICS
+     */
+    
+    public void paintComponent(Graphics g) {
+    	super.paintComponent(g);
+    	this.setBackground(Color.BLACK);
+    		
+    	for (int i = numRows - 1; i > 0; i--) {
+    		for (int j = 0; j < numColumns; j++) {											
+				Point point = new Point(i, j);
+				if (this.startingPositions.containsKey(point)) {
+					grid[i][j].add(this.startingPositions.get(point));
+					
+					this.startingPositions.get(point).paintComponent(g);					
+				}				
+				add(grid[i][j], i, j);			    	
+				grid[i][j].paintComponent(g);
+			}
+		}    	    	    	
+    }
+
     /*
      * GETTERS
      */

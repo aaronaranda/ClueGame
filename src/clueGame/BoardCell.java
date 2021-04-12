@@ -2,9 +2,16 @@
 
 package clueGame;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.MatteBorder;
 
-public class BoardCell {
+public class BoardCell extends JPanel {
 
     // Location
 	private int row;
@@ -14,6 +21,7 @@ public class BoardCell {
 	private char initial;
 	private char secretPassage;
 	private Room room;
+	Color color;
 
 
     // Specifics 
@@ -24,6 +32,7 @@ public class BoardCell {
 	private boolean occupied;
 	private boolean walkway;
 	private boolean passage;
+	private JLabel label;
 
     // Default attributes
 	private Set<BoardCell> adjList;
@@ -32,7 +41,7 @@ public class BoardCell {
 	public BoardCell(int row, int col) {
 		this.row = row;
 		this.col = col;
-	}
+	}	
 	
 	public void addAdj(BoardCell cell) {
 		if (this.adjList == null) {
@@ -40,6 +49,16 @@ public class BoardCell {
 		}
         this.adjList.add(cell);
 	}
+	
+	/*
+	 * GRAPHICS
+	 */
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		this.setBackground(color);
+	}
+
 
     /*
      * SETTERS
@@ -49,7 +68,12 @@ public class BoardCell {
         this.initial = initial;
         if (initial == 'W') {
         	this.walkway = true;
-        }
+        	this.color = Color.WHITE;
+        	setBorder(BorderFactory.createMatteBorder(
+        			1, 1, 1, 1, Color.BLACK));
+        } else if (initial == 'X') {
+        	this.color = Color.BLACK;
+		}
     }
     
     public void setCenter(char center) {
@@ -63,23 +87,33 @@ public class BoardCell {
     
     public void setDirection(char direction) {
     	this.doorway = true;
-    	switch (direction) {
-    	case '>':
-    		this.doorDirection = DoorDirection.RIGHT;
-    		break;
-    	case '<':
-    		this.doorDirection = DoorDirection.LEFT;
-    		break;
-    	case '^':
-    		this.doorDirection = DoorDirection.UP;
-    		break;
-    	case 'v':
-    		this.doorDirection = DoorDirection.DOWN;
-    		break;
-		default:
-			this.doorway = false;
-			break;
-    	}
+
+		switch (direction) {
+			case '>': 
+				this.doorDirection = DoorDirection.RIGHT;
+				setBorder(new MatteBorder(
+								0, 0, 0, 2, Color.RED));
+				break;			
+			case '<': 
+				this.doorDirection = DoorDirection.LEFT;
+				setBorder(new MatteBorder(
+						0, 2, 0, 0, Color.RED));
+				break;
+			case '^':
+				this.doorDirection = DoorDirection.UP;
+				setBorder(new MatteBorder(
+							2, 0, 0, 0, Color.RED));
+				break;			
+			case 'v':
+				this.doorDirection = DoorDirection.DOWN;
+				setBorder(new MatteBorder(
+							0, 0, 2, 0, Color.RED));
+				break;
+			default : {
+				this.doorway = false;
+				break;
+			}
+		}
     }
     
     // If indicator is '#', indication of where to draw room label
@@ -88,13 +122,18 @@ public class BoardCell {
     		this.roomLabel = true;
     		this.room.setLabelCell(this);
     		// Then set the label, which should be the name
+			this.label = new JLabel(room.getName());
+			add(this.label);
     	} else {
     		this.roomLabel = false;
     	}
+
+    	
     }
     
     public void setRoom(Room room) {
-        this.room = room;
+    	this.room = room;
+    	this.color = Color.CYAN;
     }
 
     public void setSecretPassage(char passage) {
@@ -105,8 +144,7 @@ public class BoardCell {
     public void setOccupied(boolean occupied) {
     	this.occupied = occupied;
     }
-    
-    
+
     /*
      * GETTERS
      */
@@ -161,5 +199,9 @@ public class BoardCell {
 	
 	public char getSecretPassage() {
 		return secretPassage;
+	}
+	
+	public String getLabel() {
+		return this.room.getName();
 	}
 }

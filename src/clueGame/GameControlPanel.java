@@ -2,6 +2,8 @@ package clueGame;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -53,6 +55,7 @@ public class GameControlPanel extends JPanel {
     	// Buttons
     	JButton accusationButton = new JButton("Make Accusation");
         JButton nextButton = new JButton("NEXT!");
+        nextButton.addActionListener(new ButtonListener());
 
         JPanel guessPanel = new JPanel();
     	this.guess = new JTextField(20);
@@ -77,6 +80,22 @@ public class GameControlPanel extends JPanel {
         mainPanel.add(lowerPanel);
         add(mainPanel);
 
+    }
+    
+    private class ButtonListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			if (true) {
+				String errorMessage = "Please finish your turn.";
+				JOptionPane.showMessageDialog(null, errorMessage);
+			}
+			else {
+				
+			}
+			
+			
+		}
+    	
     }
     
     //Sets turn

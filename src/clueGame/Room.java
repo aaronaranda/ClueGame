@@ -2,13 +2,18 @@
 
 package clueGame;
 
+import java.awt.*;
+
 public class Room {
 	private String name;
 	private BoardCell centerCell;
 	private BoardCell labelCell;
+	private boolean notRoom;
+	private Color color = Color.CYAN;
 	
     public Room(String name) {
         this.name = name;
+        notRoom = false;
     }
 	
 	// Setters
@@ -22,8 +27,8 @@ public class Room {
 		if (cell.isRoomCenter()) {
 			this.centerCell = cell;
 		}
-	}
-	
+	}	
+
     // Getters
 	public String getName() {
 		return this.name;
@@ -35,6 +40,5 @@ public class Room {
 	
 	public BoardCell getCenterCell() {
 		return centerCell;
-	}
-	
+	}			
 }

@@ -19,9 +19,9 @@ Weapon, Pencil, 4
 Weapon, Rock, 5
 Weapon, Lighter, 6
 // Players
-Player, Johnny, P1 
-Player, Cooper, P2
-Player, Peter, P3
-Player, Katelynn, P4
-Player, Jessica, P5
-Player, Anna, P6
+Player, Johnny, P1, green
+Player, Cooper, P2, orange
+Player, Peter, P3, red
+Player, Katelynn, P4, pink
+Player, Jessica, P5, yellow
+Player, Anna, P6, magenta
