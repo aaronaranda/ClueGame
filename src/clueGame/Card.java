@@ -1,32 +1,58 @@
-package clueGame;
+import java.awt.*;
 
 public class Card {
-	private String cardName;
-	private CardType type;
+    private String name;
+    private CardType type;
     private boolean seen;
-	
-	public Card(String name, CardType type) {
-		this.cardName = name;
-		this.type = type;
-	}
-	
-	public boolean equals(Card target) {
-		return (this.cardName == target.getName() && this.type == target.getType());
-	}
+    private Color color;
 
-    public void setSeen() {
-        this.seen = true;
+    public Card(String name, CardType type) {
+        this.name = name;
+        this.type = type;
+        setColor();
+    }
+
+    public boolean equals(Card target) {
+        return (name.equals(target.getName()) && 
+                type.equals(target.getType()));
+    }
+
+/*
+ * SETTERS
+ */ 
+
+    public void seeCard() {
+        seen = true;
+    }
+
+    private void setColor() {
+        if (type.equals(CardType.PERSON)) {
+            // get color of the associated player
+        } else if (type.equals(CardType.WEAPON)) {
+            color = Color.RED;
+        } else if (type.equals(CardType.ROOM)) {
+            color = Color.CYAN;
+        }
+    }
+
+/*
+ * GETTERS
+ */ 
+
+    public String getName() {
+        return name;
+    }
+
+    public CardType getType() {
+        return type;        
     }
 
     public boolean getSeen() {
-        return this.seen;
+        return seen;
     }
-	
-	public CardType getType() {
-		return this.type;
-	}	
-	
-	public String getName() {
-		return this.cardName;
-	}
+
+    public Color Color() {
+        return color;
+    }
+    
 }

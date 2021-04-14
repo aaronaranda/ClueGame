@@ -1,117 +1,116 @@
-package clueGame;
 
-import java.awt.*;
 import java.util.*;
+import java.awt.*;
 
-import javax.swing.JPanel;
+public abstract class Player {
+    protected String name;
+    protected boolean isHuman;
+    protected Point start;
+    protected Color color;
+    protected ArrayList<Card> deck;
+    protected ArrayList<Card> seenCards;
 
-public abstract class Player extends JPanel {
-	
-	protected String name;
-	protected boolean isHuman;
-	protected Point startLocation;
-	protected Color color;
-	protected ArrayList<Card> playerDeck;
-    protected ArrayList<Card> seenPeopleCards;
-    protected ArrayList<Card> seenRoomCards;
-    protected ArrayList<Card> seenWeaponCards;
+    public Player(String name) {
+        this.name = name;
+        deck = new ArrayList<Card>();
+        seenCards = new ArrayList<Card>();
+    }
 
-	 
-	// Position
-	protected int row, col;
-		
-	//Constructor
-	public Player(String name) {
-		this.name = name;
-		this.playerDeck = new ArrayList<Card>();
-        this.seenPeopleCards = new ArrayList<Card>();
-        this.seenRoomCards = new ArrayList<Card>();
-        this.seenWeaponCards = new ArrayList<Card>();
-	}
-	
-	// Adds card to players deck of cards
-	public void updateHand(Card card) {
-		if (!this.playerDeck.contains(card)) {
-			this.playerDeck.add(card);
-		} 
-	}
+    public abstract Card disproveSuggestion(Solution suggestion);
+    public abstract Solution createSuggestion();
+    public abstract Card selectTargets();
 
-	// Updates the color of each player
-	public void updateColor(String colorType) {
-		this.color = Color.getColor(colorType);
-	}
+   
+/*
+ * SETTERS
+ */     
 
-	
-    public void updateSeen(Card seenCard) {
-        if (seenCard.getType().equals(CardType.PERSON)) {
-			this.seenPeopleCards.add(seenCard);
-		}
-		else if (seenCard.getType().equals(CardType.ROOM)) {
-			this.seenRoomCards.add(seenCard);
-		}
-		else if (seenCard.getType().equals(CardType.WEAPON)) {
-			this.seenWeaponCards.add(seenCard);
-		}
-    }	
-	
+    public void updateColor(String color) {
+        this.color = Color.getColor(color);
+    }
+
+    public void updateColor(int r, int g, int b) {
+        this.color = new Color(r, g, b);
+    }
+
+    public void updateHand(Card card) {
+        if (deck.contains(card)) {
+            deck.get(deck.indexOf(card)).seeCard();
+            seenCards.add(card);
+        } else {
+            deck.add(card);
+        }
+    }
+    
     public void setStartPosition(Point point) {
-    	this.row = point.x;
-    	this.col = point.y;
+    	start = point;
     }
-    
-    public void paintComponent(Graphics g) {
-    	super.paintComponent(g);
-    	g.setColor(color);
-    	g.fillOval(0, 0, 10, 10);
 
-    	
-    	
+/*
+ * GETTERS
+ */ 
+
+    public String getName() {
+        return name;
     }
+
+    public ArrayList<Card> getDeck() {
+        return deck;
+    }
+
+    public ArrayList<Card> getSeen() {
+        return seenCards;
+    }
+
+    public ArrayList<Card> getPersonCards(boolean seen) {
+        ArrayList<Card> personCards = new ArrayList<Card>();
+        for (Card c: deck) {
+            if (c.getType().equals(CardType.PERSON)) {
+                if (seen) {
+                    if (c.getSeen()) {
+                        personCards.add(c);
+                    }
+                } else {
+                    personCards.add(c);
+                }
+            }
+        }
+        return personCards;
+    }
+
+    public ArrayList<Card> getRoomCards(boolean seen) {
+        ArrayList<Card> roomCards = new ArrayList<Card>();
+        for (Card c: deck) {
+            if (c.getType().equals(CardType.ROOM)) {
+                if (seen) {
+                    if (c.getSeen()) {
+                        roomCards.add(c);
+                    }
+                } else {
+                    roomCards.add(c);
+                }
+            }
+        }
+        return roomCards;
+    }
+
+    public ArrayList<Card> getWeaponCards(boolean seen) {
+        ArrayList<Card> weaponCards = new ArrayList<Card>();
+        for (Card c: deck) {
+            if (c.getType().equals(CardType.WEAPON)) {
+                if (seen) {
+                    if (c.getSeen()) {
+                        weaponCards.add(c);                        
+                    } 
+                } else {
+                    weaponCards.add(c);
+                }
+            }
+        }
+        return weaponCards; 
+    }
+
     
-    
-	public abstract Card selectTargets();
-
-	// Different createSuggestions for Computer and Human players
-	public abstract Solution createSuggestion(Card room);
-		 
-	public abstract Card disproveSuggestion(Solution suggestion);
-
-	/*
-	 * GETTERS
-	 */
-
-	public String getName() {
-		return this.name;
-	}
-	
-	public boolean getType() {
-		return this.isHuman;
-	}
-	
-	public ArrayList<Card> getDeck() {
-		return this.playerDeck;
-	}
-
-	public ArrayList<Card> getSeenRoomCards() {
-		return this.seenRoomCards;
-	}
-
-	public ArrayList<Card> getSeenPeopleCards() {
-		return this.seenPeopleCards;
-	}
-
-	public ArrayList<Card> getSeenWeaponCards() {
-		return this.seenWeaponCards;
-	}
-	
-	public int getRow() {
-		return this.row;
-	}
-	
-	public int getCol() {
-		return this.col;
-	}
 
 
 }
-

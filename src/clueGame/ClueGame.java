@@ -1,4 +1,4 @@
-package clueGame;
+//package clueGame;
 
 import java.util.*;
 import java.awt.*;
@@ -6,24 +6,26 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class ClueGame extends JFrame {
-	private CardsPanel cardsPanel;
+	private CardPanel cardPanel;
 	private GameControlPanel gameControlPanel;
 	
 	private static Board board;
 	
 	public ClueGame() {
-		setSize(800, 800);
+		setSize(600, 600);
 		setTitle("Clue! Game");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		cardsPanel = new CardsPanel();
+		cardPanel = new CardPanel();
 		gameControlPanel = new GameControlPanel();
 		
 		board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();	
+		//setContentPane(board);
 		add(board, BorderLayout.CENTER);
-		add(cardsPanel, BorderLayout.EAST);
+		add(cardPanel, BorderLayout.EAST);
 		add(gameControlPanel, BorderLayout.SOUTH);
+		setLocationRelativeTo(null);
 	}	
 
 	
@@ -33,7 +35,7 @@ public class ClueGame extends JFrame {
 	    gui.pack();
 		gui.setVisible(true);		
 		
-		String name = board.getPlayer('1').getName();
+		String name = board.getPlayer(1).getName();
 	    
 	    // create a jframe
 	    JFrame frame = new JFrame("Intro");

@@ -1,4 +1,3 @@
-package clueGame;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -129,3 +128,4 @@ public class GameControlPanel extends JPanel {
 
 
 }
+

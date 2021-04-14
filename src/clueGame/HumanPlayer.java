@@ -1,47 +1,30 @@
-package clueGame;
+import java.util.*;
+import java.awt.*;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.awt.Color;
-
-public class HumanPlayer extends Player{
-
-	//Constructor
-	public HumanPlayer(String name) {
-		super(name);
-		this.isHuman = true;
-	}
-
-	@Override
-	public Card disproveSuggestion(Solution suggestion) {
-        Card disproval = null;
-        // Allow player to select a card to disprove        
-		return disproval;
+public class HumanPlayer extends Player {
+    public HumanPlayer(String name) {
+        super(name);
+        isHuman = true;
     }
 
-	public Solution createSuggestion(
-            Card person, Card room, Card weapon) {
-        Solution suggestion = new Solution(this);
-        suggestion.setThePerson(person);
-        suggestion.setTheRoom(room);
-        suggestion.setTheWeapon(weapon);
-        return suggestion;
-	}
+    @Override
+    public Card disproveSuggestion(Solution suggestion) {
+        // Allow human player to select card to disprove
+        Card disproval = null;
+        return disproval;
+    }
 
-	@Override
-	public Card selectTargets() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Solution createSuggestion() {
+        Solution suggestion = null;
+        // Human player chooses cards
+        // Create solution with 3 cards
+        return suggestion;        
+    }
 
-	@Override
-	public ArrayList<Card> getSeenRoomCards() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Solution createSuggestion(Card room) { 
-		return null;
-	}
+    @Override
+    public Card selectTargets() {
+        // choose where to move
+    	return null;
+    }
 }

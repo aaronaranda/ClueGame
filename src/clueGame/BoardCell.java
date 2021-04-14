@@ -1,207 +1,207 @@
-// Authors: Aaron Aranda and Alejandro Belli
 
-package clueGame;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.util.*;
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.MatteBorder;
+import java.awt.*;
 
-public class BoardCell extends JPanel {
+public class BoardCell {
+    // Positioning
+    int row, col;
+    
+    // Color
+    Color color;
 
-    // Location
-	private int row;
-	private int col;
+    // Type checks
+    // Rooms
+    private boolean isRoom;
+    private boolean isCenter;
+    private boolean isLabel;    
+    private Room room;
+    // SecretPassage
+    private boolean isPassage;
+    private Room passageRoom;
 
-    // Type Identifiers
-	private char initial;
-	private char secretPassage;
-	private Room room;
-	Color color;
-
-
-    // Specifics 
+    // Spaces/Walkways
+    private boolean isSpace;
+    private boolean isWalkway;
+    private boolean isDoorway;
     private DoorDirection doorDirection;
-	private boolean roomLabel;
-	private boolean roomCenter;
-	private boolean doorway;
-	private boolean occupied;
-	private boolean walkway;
-	private boolean passage;
-	private JLabel label;
 
-    // Default attributes
-	private Set<BoardCell> adjList;
+    // Starting position, player
+    private boolean isStart;
+    private boolean isOccupied;
 
-    // Constructors    
-	public BoardCell(int row, int col) {
-		this.row = row;
-		this.col = col;
-	}	
-	
-	public void addAdj(BoardCell cell) {
-		if (this.adjList == null) {
-			this.adjList = new HashSet<BoardCell>();
-		}
-        this.adjList.add(cell);
-	}
-	
-	/*
-	 * GRAPHICS
-	 */
-	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		this.setBackground(color);
-	}
+    // Adjacent Cells
+    ArrayList<BoardCell> adjList;
 
 
-    /*
-     * SETTERS
-     */
-	
-    public void setInitial(char initial) {
-        this.initial = initial;
-        if (initial == 'W') {
-        	this.walkway = true;
-        	this.color = Color.WHITE;
-        	setBorder(BorderFactory.createMatteBorder(
-        			1, 1, 1, 1, Color.BLACK));
-        } else if (initial == 'X') {
-        	this.color = Color.BLACK;
-		}
+    // Constructor
+    public BoardCell(int row, int col) {
+        this.row = row;
+        this.col = col;
+        adjList = new ArrayList<BoardCell>();       
     }
     
-    public void setCenter(char center) {
-    	if (center == '*') {
-    		this.roomCenter = true;
-    		this.room.setCenterCell(this);
-    	} else {
-    		this.roomCenter = false;
+
+/*
+ * SETTERS
+ */ 
+        
+    public void setRoom(Room room) {
+        isRoom = true;
+        this.room = room;
+        room.addCell(this);
+    }
+
+    public void hasMarker(Character marker) {
+        if (isRoom) {
+            setCenter(marker);
+            setLabel(marker);                                   
+        } else if (isSpace) {
+            setDoorway(marker);
+        }
+    }
+    
+    public void setCenter(Character marker)  {
+        if (marker.equals('*')) {
+            isCenter = true;
+            room.setCenterCell(this);
+        } else {
+            isCenter = false;
+        }
+    }
+
+    public void setLabel(Character marker) {
+        if (marker.equals('#')) {
+            isLabel = true;
+            room.setLabelCell(this);
+        } else {
+            isLabel = false;
+        }
+    }
+
+    public void setDoorway(Character marker) {
+        switch(marker) {
+            case '>':
+                doorDirection = DoorDirection.RIGHT;
+                break;
+            case '<':
+                doorDirection = DoorDirection.LEFT;
+                break;
+            case '^':
+                doorDirection = DoorDirection.UP;
+                break;
+            case 'v':
+                doorDirection = DoorDirection.DOWN;
+                break;
+            default:
+                isDoorway = false;
+                return;                
+        }
+        isDoorway = true;
+    }
+
+    public void setSpace(Character initial) {
+        if (initial.equals('W')) {
+            isWalkway = true;
+        } else if (initial.equals('X')) {
+            isSpace = true;
+        } 
+    }
+
+    public void setSecretPassage(Room passage) {
+        isPassage = true;
+        passageRoom = passage;
+    }
+
+    public void setOccupied() {
+        isOccupied = true;
+    }
+
+    public void addAdj(BoardCell cell) {
+        adjList.add(cell);
+    }
+
+
+ /*
+  * GETTERS
+  */  
+//Positioning
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;    
+    }
+// Types
+// Room
+    public boolean isRoom() {
+        return isRoom;
+    }
+
+    public boolean isCenter() {
+        return isCenter;
+    }
+
+    public boolean isLabel() {
+        return isLabel;
+    }       
+
+    public boolean isPassage() {
+        return isPassage;
+    }
+// Spaces
+    public boolean isSpace() {
+        return isSpace;
+    }
+
+    public boolean isWalkway() {
+        return isWalkway;
+    }
+
+    public boolean isDoorway() {
+        return isDoorway;
+    }
+// Player
+    public boolean isStart() {
+        return isStart;
+    }
+
+    public boolean isOccupied() {
+        return isOccupied;
+    }
+//Objects
+    public Room getRoom() {
+        return room;
+    }
+
+    public Room getPassage() {
+        return passageRoom;
+    }
+
+    public DoorDirection getDoorDirection() {
+        return doorDirection;
+    }
+
+    public ArrayList<BoardCell> getAdjList() {
+        return adjList;
+    }
+
+/*
+ * GRAPHICS
+ */ 
+
+    public void draw(Graphics2D g, int x, int y, int size) {
+
+    	if (isWalkway) {
+    		color = Color.WHITE;
+    	} else if (isRoom) {
+    		color = Color.cyan;
+    	} else if (isSpace) {
+    		color = Color.black;
     	}
-    }
-    
-    public void setDirection(char direction) {
-    	this.doorway = true;
-
-		switch (direction) {
-			case '>': 
-				this.doorDirection = DoorDirection.RIGHT;
-				setBorder(new MatteBorder(
-								0, 0, 0, 2, Color.RED));
-				break;			
-			case '<': 
-				this.doorDirection = DoorDirection.LEFT;
-				setBorder(new MatteBorder(
-						0, 2, 0, 0, Color.RED));
-				break;
-			case '^':
-				this.doorDirection = DoorDirection.UP;
-				setBorder(new MatteBorder(
-							2, 0, 0, 0, Color.RED));
-				break;			
-			case 'v':
-				this.doorDirection = DoorDirection.DOWN;
-				setBorder(new MatteBorder(
-							0, 0, 2, 0, Color.RED));
-				break;
-			default : {
-				this.doorway = false;
-				break;
-			}
-		}
-    }
-    
-    // If indicator is '#', indication of where to draw room label
-    public void setLabel(char isLabel) {
-    	if (isLabel == '#') {
-    		this.roomLabel = true;
-    		this.room.setLabelCell(this);
-    		// Then set the label, which should be the name
-			this.label = new JLabel(room.getName());
-			add(this.label);
-    	} else {
-    		this.roomLabel = false;
-    	}
-
+    	g.setColor(color);
+    	g.fillRect(x, y, size, size);
     	
     }
-    
-    public void setRoom(Room room) {
-    	this.room = room;
-    	this.color = Color.CYAN;
-    }
 
-    public void setSecretPassage(char passage) {
-    	this.passage = true;
-        this.secretPassage = passage;
-    }
-    
-    public void setOccupied(boolean occupied) {
-    	this.occupied = occupied;
-    }
-
-    /*
-     * GETTERS
-     */
-    
-    public int getRow() {
-    	return this.row;
-    }
-    
-    public int getCol() {
-    	return this.col;
-    }
-    
-    public Set<BoardCell> getAdjList() {
-    	return this.adjList;
-    }
-    
-	public Room getRoom() {
-		return this.room;
-	}
-	
-	public char getInitial() {
-		return this.initial;
-	}
-	
-	public DoorDirection getDoorDirection() {
-		return this.doorDirection;
-	}
-	
-	public boolean isLabel() {
-		return this.roomLabel;
-	}
-	
-	public boolean isDoorway() {
-		return this.doorway;
-	}
-	
-	public boolean isRoomCenter() {
-		return this.roomCenter;
-	}
-	
-	public boolean isOccupied() {
-		return this.occupied;
-	}
-	
-	public boolean isWalkway() {
-		return this.walkway;
-	}
-	
-	public boolean isPassage() {
-		return this.passage;
-	}
-	
-	public char getSecretPassage() {
-		return secretPassage;
-	}
-	
-	public String getLabel() {
-		return this.room.getName();
-	}
 }

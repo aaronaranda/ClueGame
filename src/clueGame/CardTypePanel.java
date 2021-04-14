@@ -1,14 +1,12 @@
-package clueGame;
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.border.TitledBorder;
 
 public class CardTypePanel extends JPanel {
     private JPanel inHandPanel;
     private JPanel seenPanel;
-    private ArrayList<Card> inHandCards;
+    private ArrayList<Card> inHandCards; 
     private ArrayList<Card> seenCards;
 
     public CardTypePanel(String type) {
@@ -16,7 +14,6 @@ public class CardTypePanel extends JPanel {
         setBorder(new TitledBorder(new EtchedBorder(), type));
         inHandPanel = new JPanel(new GridLayout(0, 1));
         seenPanel = new JPanel(new GridLayout(0, 1));
-        inHandPanel.add(new JLabel("In Hand:"));
         seenPanel.add(new JLabel("Seen:"));
         inHandCards = new ArrayList<Card>();
         seenCards = new ArrayList<Card>();
@@ -37,14 +34,9 @@ public class CardTypePanel extends JPanel {
     }
 
     // Updates the visible cards given a list of a type of cards
-    public void updateCardsPanel(ArrayList<Card> cards) {
-        for (Card c: cards) {
-            if (!c.getSeen()) {
-                inHandCards.add(c);
-            } else if (c.getSeen()) {
-                seenCards.add(c);
-            }
-        }
+    public void updateCardsPanel(ArrayList<Card> inHand, ArrayList<Card> seen) {
+    	inHandCards.addAll(inHand);
+    	seenCards.addAll(seen);
         if (inHandCards.size() > 1) {
             inHandCards.remove(0);
         }
@@ -57,9 +49,9 @@ public class CardTypePanel extends JPanel {
         seenPanel.add(new JLabel("Seen:"));
         displayCards();
     }
-
-
-
-
-
 }
+
+
+    
+
+
