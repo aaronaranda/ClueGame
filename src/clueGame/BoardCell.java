@@ -1,4 +1,4 @@
-
+package clueGame;
 import java.util.*;
 import java.awt.*;
 
@@ -120,6 +120,15 @@ public class BoardCell {
         adjList.add(cell);
     }
 
+    public void updateColor() {
+    	if (isRoom) {
+    		color = Color.CYAN;
+    	} else if (isSpace) {
+    		color = Color.BLACK;
+    	} else if (isWalkway) {
+    		color = Color.WHITE;
+    	}
+    }
 
  /*
   * GETTERS
@@ -184,6 +193,10 @@ public class BoardCell {
 
     public ArrayList<BoardCell> getAdjList() {
         return adjList;
+    }
+    
+    public Color getColor() {
+    	return color;
     }
 
 /*

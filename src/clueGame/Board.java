@@ -1,3 +1,5 @@
+package clueGame;
+
 import java.util.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
@@ -325,24 +327,19 @@ public class Board extends JPanel {
     public void paintComponent(Graphics g) {
     	super.paintComponent(g);
     	setBackground(Color.BLACK);
-    	int width = (int)(0.8 * getWidth());
-    	int height = (int)(0.8 * getHeight());
-    	        	
-    	int xNumCells = (int) (width / numCols); // or size
-    	int yNumCells = (int) (height / numRows);
-    	
-    	int dX = Math.min(xNumCells, yNumCells);
-    	int size = dX - 2;
-    	
-    	int xStart = (getWidth() - width) / 2;
-    	int yStart = (getHeight() - height) / 2;    	
-    	
-        
+    
         Graphics2D g2 = (Graphics2D) g;
         
+        int w = getWidth();
+        int h = getHeight();
+                
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
-            	grid[i][j].draw(g2, j * dX + xStart, i * dX + yStart, size);
+            	grid[i][j].updateColor();
+            	g2.setColor(grid[i][j].getColor());        
+            	g2.fillRect(j * w / numCols, i * h / numRows, w / numRows - 2, w / numRows - 2);
+            	g2.setColor(Color.BLACK);
+            	g2.drawRect(j * w / numCols, i * h / numRows, w / numRows, w / numRows);            	
             
             }
         }       

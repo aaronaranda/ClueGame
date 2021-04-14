@@ -1,3 +1,4 @@
+package clueGame;
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
@@ -15,6 +16,8 @@ public class CardPanel extends JPanel {
     
     // Constructor sets up overall panel
     public CardPanel() {
+    	setPreferredSize(new Dimension(300, 700));
+    	setMinimumSize(new Dimension(300, 700));
         setLayout(new GridLayout(0, 1));
         setBorder(new TitledBorder(new EtchedBorder(), "Known Cards"));
         peoplePanel = new CardTypePanel("People");

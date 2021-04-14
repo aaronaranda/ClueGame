@@ -11,3 +11,17 @@ Room, Hall, H
 // other spaces on board
 Space, Unused, X
 Space, Walkway, W
+// Weapons
+Weapon, Sword, 1
+Weapon, Pistol, 2
+Weapon, Broom, 3
+Weapon, Pencil, 4
+Weapon, Rock, 5
+Weapon, Lighter, 6
+// Players
+Player, Johnny, P1, green
+Player, Cooper, P2, orange
+Player, Peter, P3, red
+Player, Katelynn, P4, pink
+Player, Jessica, P5, yellow
+Player, Anna, P6, magenta

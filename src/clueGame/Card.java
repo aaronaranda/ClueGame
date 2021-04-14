@@ -1,3 +1,5 @@
+package clueGame;
+
 import java.awt.*;
 
 public class Card {

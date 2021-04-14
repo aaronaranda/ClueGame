@@ -1,3 +1,4 @@
+package clueGame;
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
@@ -10,6 +11,8 @@ public class CardTypePanel extends JPanel {
     private ArrayList<Card> seenCards;
 
     public CardTypePanel(String type) {
+    	setPreferredSize(new Dimension(500, 500));
+    	setMinimumSize(new Dimension(500, 500));
         setLayout(new GridLayout(0, 1));
         setBorder(new TitledBorder(new EtchedBorder(), type));
         inHandPanel = new JPanel(new GridLayout(0, 1));
@@ -26,10 +29,10 @@ public class CardTypePanel extends JPanel {
 
     private void displayCards() {
         for (Card c: inHandCards) {
-            inHandPanel.add(new JTextField(c.getName()));
+            inHandPanel.add(new JTextField(c.getName(), 20));
         }
         for (Card c: seenCards) {
-            seenPanel.add(new JTextField(c.getName()));
+            seenPanel.add(new JTextField(c.getName(), 20));
         }
     }
 
