@@ -26,12 +26,12 @@ public class gameSetupTests {
 	public void testLoadPeople() {			
 		
 		// Tests weapon name and label associations
-		assertEquals("Sword", board.getWeapon('1'));
-		assertEquals("Pistol", board.getWeapon('2'));
-		assertEquals("Broom", board.getWeapon('3'));
-		assertEquals("Pencil", board.getWeapon('4'));
-		assertEquals("Rock", board.getWeapon('5'));
-		assertEquals("Lighter", board.getWeapon('6'));
+		assertEquals("Sword", board.getWeapon(0));
+		assertEquals("Pistol", board.getWeapon(1));
+		assertEquals("Broom", board.getWeapon(2));
+		assertEquals("Pencil", board.getWeapon(3));
+		assertEquals("Rock", board.getWeapon(4));
+		assertEquals("Lighter", board.getWeapon(5));
 		
 		// Tests player name and label associatons		
 		assertEquals("Johnny", board.getPlayer('1').getName());
@@ -47,9 +47,9 @@ public class gameSetupTests {
 		int numPlayers = 0;
 		int numComputers = 0;
 		//Checks all the players to make sure that there is only 1 human player created
-		for (int i = 1; i <= 6; i++) {
+		for (int i = 0; i < 6; i++) {
 			boolean type;
-			type = board.getPlayer((char)(i + 48)).getType();
+			type = board.getPlayer(i).isHuman();
 		
 			if (type == true) {
 				numPlayers++;
@@ -96,11 +96,11 @@ public class gameSetupTests {
 		Solution solution = new Solution(deck);
 		//Checks each car din the deck, and adds only if the card in the deck matches that of the solution
 		for (Card c: deck) {
-			if (c == solution.getThePerson()) {
+			if (c == solution.getPerson()) {
 				playerSolution += 1;
-			} else if (c == solution.getTheRoom()) {
+			} else if (c == solution.getRoom()) {
 				roomSolution += 1;		
-			} else if (c == solution.getTheWeapon()) {
+			} else if (c == solution.getWeapon()) {
 				weaponSolution += 1;
 			}
 		}

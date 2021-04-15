@@ -14,7 +14,7 @@ public class Board extends JPanel {
     private int numRows;
     private int numCols;
 
-    //Config files
+    // Config files
     private String layoutConfigFile;
     private String setupConfigFile;
 
@@ -23,12 +23,17 @@ public class Board extends JPanel {
     private Map<Character, String> boardObjects;
     private Map<Character, Room> roomMap;    
     private ArrayList<Player> players;
+    private ArrayList<String> weapons;
     private Set<BoardCell> targets;
     private ArrayList<Card> cards;
     private GameControlPanel gcp;
-    public static int turnNumber;
-    
+   
+    // Current turn
+    public static int turnNumber;   
     private Player currentPlayer;
+    
+    // Answer to the game
+    private static Solution theSolution;
     
     // Singletop Pattern, once instance of the board
     private static Board theInstance = new Board();
@@ -75,6 +80,7 @@ public class Board extends JPanel {
     public void loadSetupConfig() throws BadConfigFormatException {
         roomMap = new HashMap<Character, Room>();
         players = new ArrayList<Player>();
+        weapons = new ArrayList<String>();
         cards = new ArrayList<Card>();
         boardObjects = new HashMap<Character, String>();        
 
@@ -102,6 +108,7 @@ public class Board extends JPanel {
                 roomMap.putIfAbsent(initial, room);
                 cards.add(new Card(room.getName(), CardType.ROOM));
             } else if (type.equals("Weapon")) {
+            	weapons.add(name);
                 cards.add(new Card(name, CardType.WEAPON));
             } else if (type.equals("Player")) {
                 cards.add(new Card(name, CardType.PERSON));
@@ -150,8 +157,9 @@ public class Board extends JPanel {
                 if (boardObjects.containsKey(cellInitial)) {
                     String type = boardObjects.get(cellInitial);
                     BoardCell cell = new BoardCell(row, col);
+                    cell.setInitial(cellInitial);
                     if (type.equals("Room")) {
-                        cell.setRoom(roomMap.get(cellInitial));
+                        cell.setRoom(roomMap.get(cellInitial));                       
                         if (hasIndicator) {
                             if (Character.isLetter(indicator)) {
                                 cell.setSecretPassage(
@@ -166,7 +174,7 @@ public class Board extends JPanel {
                         	if (Character.isDigit(indicator)) {
                         		players.get((int)(indicator - 48)).setStartPosition(cell);
                         	} else {
-                        	cell.hasMarker(indicator);
+                        	cell.hasMarker(indicator);                      
                         	}
                         }
                     }
@@ -199,9 +207,18 @@ public class Board extends JPanel {
         int k = 0;
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
-                grid[i][j] = temp.get(k);
+                grid[i][j] = temp.get(k);                
                 k++;
             }
+        }
+        for (int i = 0; i < numRows; i++) {
+        	for (int j = 0; j < numCols; j++) {
+        		if (grid[i][j].isDoorway()) {
+            		int row = grid[i][j].getRoomFromDoorway().y;
+            		int col = grid[i][j].getRoomFromDoorway().x;
+            		grid[i][j].setRoom(grid[i + row][j + col].getRoom());            		            		
+            	}
+        	}
         }
     }
 
@@ -296,7 +313,7 @@ public class Board extends JPanel {
     }
 
 
-    private void deal() {
+    public void deal() {
         ArrayList<Card> tempDeck = new ArrayList<Card>(cards);
         int i = 1;
         Random rand = new Random();
@@ -331,6 +348,9 @@ public class Board extends JPanel {
     	}
     }
     
+    public boolean checkAccusation(Solution accusation) {
+    	return theSolution.equals(accusation);
+    }
 
 
 
@@ -348,45 +368,34 @@ public class Board extends JPanel {
     	return players.get(turnNumber % 6); 
     }
     
-    public Set<BoardCell> getMoveable(int row, int col, int path) {
-    	Set<BoardCell> moveable = new HashSet<BoardCell>();
-    	BoardCell test = grid[row][col + path];
-    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
-    		moveable.add(test);
-    	}
-    	test = grid[row - path][col + path];
-    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
-    		moveable.add(test);
-    	}
-    	test = grid[row + path][col + path];
-    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
-    		moveable.add(test);
-    	}
-    	test = grid[row][col - path];
-    	if (test.isWalkway()) {
-    		moveable.add(test);
-    	}
-    	test = grid[row + path][col - path];
-    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
-    		moveable.add(test);
-    	}
-    	test = grid[row - path][col - path];
-    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
-    		moveable.add(test);
-    	}
-    	test = grid[row + path][col];
-    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
-    		moveable.add(test);
-    	}
-    	test = grid[row - path][col];
-    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
-    		moveable.add(test);
-    	}
-    	
-    	
-    	return moveable;
-    }
+   public BoardCell getCell(int row, int col) {
+	   return grid[row][col];
+   }
+   
+   public Room getRoom(BoardCell cell) {
+	   return cell.getRoom();
+   }
+   
+   public Room getRoom(Character initial) {
+	   return roomMap.get(initial);
+   }
+   
+   public int getNumRows() {
+	   return numRows;
+   }
+   
+   public int getNumColumns() {
+	   return numCols;
+   }  
 
+   public String getWeapon(int index) {
+	   return weapons.get(index);
+   }
+   
+   public ArrayList<Card> getDeck() {
+	   return cards;
+   }
+   
     public Set<BoardCell> getTargets() {
     	for (BoardCell c: targets) {
     		System.out.println(c.getRow() + " "+ c.getCol());
@@ -404,24 +413,28 @@ public class Board extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         setLayout(null);
         int w = getWidth();
-        int h = getHeight();        
+        int h = getHeight();  
+        removeAll();
         double off = Math.max((double)(w), (double)(h)) / Math.min((double)(w), (double)(h));        
         int offset = (int) (off * 100);                       
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {  
             	grid[i][j].draw(g2, j * w / numCols, i * h / numRows, offset);
-            	if (grid[i][j].isLabel()) {
-            		JLabel label = new JLabel(grid[i][j].getRoom().getName());
+            	if (grid[i][j].isLabel()) {      
+            		String roomName = grid[i][j].getRoom().getName(); 
+            		JLabel label = new JLabel(roomName);
             		Dimension size = label.getPreferredSize();
             		label.setBounds(
-            				(j * w) / numCols, (i * h) / numRows,
-            				size.width, size.height
-            				);
+            				(j * w) / numCols - (size.width / 2),
+            				(i * h) / numRows,size.width, size.height);
             		add(label);
             	}
             }
         }       
     }
+    
+   
+    
     
     private class gameListener implements MouseListener {
     	public void mousePressed(MouseEvent event) {       		    		    	

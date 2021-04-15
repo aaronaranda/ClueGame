@@ -86,11 +86,11 @@ public class FileInitTest {
 	@Test
 	public void testRoomCenters() {
 		BoardCell cell = board.getCell(18, 1);
-		assertTrue(cell.isRoomCenter());
+		assertTrue(cell.isCenter());
 		cell = board.getCell(11, 5);
-		assertTrue(cell.isRoomCenter());
+		assertTrue(cell.isCenter());
 		cell = board.getCell(18, 8);
-		assertTrue(cell.isRoomCenter());
+		assertTrue(cell.isCenter());
 	}
 	
 	

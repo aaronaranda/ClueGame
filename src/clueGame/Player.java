@@ -73,6 +73,10 @@ public abstract class Player {
         return name;
     }
     
+    public boolean isHuman() {
+    	return isHuman;
+    }
+    
     public boolean madeMove() {
     	return madeMove;
     }

@@ -20,6 +20,12 @@ public class Solution {
         weapon = player.getWeaponCards(true).get(rand.nextInt());
         whoSuggested = player;       
     }
+    
+    public boolean equals(Solution solution) {
+    	return (person.equals(solution.getPerson()) &&
+    			room.equals(solution.getRoom()) &&
+    			weapon.equals(solution.getWeapon()));
+    }
 
 
 /*

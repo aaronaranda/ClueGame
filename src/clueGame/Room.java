@@ -59,6 +59,10 @@ public class Room {
     public BoardCell getCenterCell() {
         return centerCell;
     }
+    
+    public ArrayList<BoardCell> getCells() {
+    	return roomCells;
+    }
 
 
 }

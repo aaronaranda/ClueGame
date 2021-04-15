@@ -3,14 +3,14 @@ import java.util.*;
 import java.awt.*;
 
 public class BoardCell {
+	private Character initial;
+	
     // Positioning
-    int row, col;
+    private int row, col;
     
     // Graphics
-    Color color;
-    private static final int WIDTH = 20;
-    private static final int HEIGHT = 20;
-
+    private Color color;
+    
     // Type checks
     // Rooms
     private boolean isRoom;
@@ -58,7 +58,7 @@ public class BoardCell {
         if (isRoom) {
             setCenter(marker);
             setLabel(marker);                                   
-        } else if (isSpace) {
+        } else {
             setDoorway(marker);            
         }
     }
@@ -82,24 +82,27 @@ public class BoardCell {
     }
 
     public void setDoorway(Character marker) {
+    	isDoorway = false;
         switch(marker) {
             case '>':
                 doorDirection = DoorDirection.RIGHT;
+                isDoorway = true;
                 break;
             case '<':
                 doorDirection = DoorDirection.LEFT;
+                isDoorway = true;
                 break;
             case '^':
                 doorDirection = DoorDirection.UP;
+                isDoorway = true;
                 break;
             case 'v':
                 doorDirection = DoorDirection.DOWN;
+                isDoorway = true;
                 break;
             default:
-                isDoorway = false;
-                return;                
-        }
-        isDoorway = true;
+            	return;                
+        }        
     }
 
     public void setSpace(Character initial) {
@@ -130,7 +133,7 @@ public class BoardCell {
     	} else if (isSpace) {
     		color = Color.BLACK;
     	} else if (isWalkway) {
-    		color = Color.WHITE;
+    		color = Color.WHITE;    		
     	} 	        	
     }   
 
@@ -140,8 +143,17 @@ public class BoardCell {
     	this.player = player;    	    	
     }
     
+    public void setColor(Color color) {
+    	this.color = color;
+    }
+    
     public void updateTargets() {
-    	color = Color.red;    	
+    	color = Color.red; 
+    	if (isDoorway) {
+    		for (BoardCell cell: room.getCells()) {
+    			cell.setColor(color);
+    		}    		
+    	}
     }
     
     public void setUnoccupied() {
@@ -150,7 +162,9 @@ public class BoardCell {
     	color = Color.white;
     }
     
-    
+    public void setInitial(Character initial) {
+    	this.initial = initial;
+    }
     
     
  /*
@@ -220,6 +234,32 @@ public class BoardCell {
     
     public Color getColor() {
     	return color;
+    }
+    
+    public Character getSecretPassage() {
+    	return room.getInitial();
+    }
+    
+    public Character getInitial() {
+    	return initial;
+    }
+    
+    public Point getRoomFromDoorway() {
+    	if (isDoorway) {
+    		int row = 0;
+    		int col = 0;
+    		if (doorDirection.equals(DoorDirection.UP)) {
+    			row = -1;    			
+    		} else if (doorDirection.equals(DoorDirection.DOWN)) {
+    			row = 1;
+    		} else if (doorDirection.equals(DoorDirection.RIGHT)) {
+    			col = 1;
+    		} else if (doorDirection.equals(DoorDirection.LEFT)) {
+    			col = -1;
+    		}
+    		return new Point(col, row);   		
+    	}
+    	return null;
     }
 
 /*

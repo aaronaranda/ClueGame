@@ -21,7 +21,7 @@ public class ComputerAITest {
 	@Test 
 	public void createSuggestion() {
 		//AI player
-		Player aIPlayer = board.getPlayer('2');
+		Player aIPlayer = board.getPlayer(2);
 		aIPlayer.getDeck().clear();
 		
 		//Created suggestion
@@ -42,15 +42,15 @@ public class ComputerAITest {
 		aIPlayer.updateHand(card5);
 		
 		//Adds seen cards
-		aIPlayer.updateSeen(card1);
-		aIPlayer.updateSeen(card3);
+		//aIPlayer.updateSeen(card1);
+		//aIPlayer.updateSeen(card3);
 		
 		//Creates test suggestion
-		suggestion = aIPlayer.createSuggestion(card5);
+		suggestion = aIPlayer.createSuggestion();
 		
 		//Tests that the created suggestion does not contain already seen cards
-		assertEquals(suggestion.getThePerson(), card2);
-		assertEquals(suggestion.getTheWeapon(), card4);
+		assertEquals(suggestion.getPerson(), card2);
+		assertEquals(suggestion.getWeapon(), card4);
 		
 		
 		
@@ -59,7 +59,7 @@ public class ComputerAITest {
 	@Test
 	public void selectTargets() {
 		//AI player
-		Player aIPlayer = board.getPlayer('2');
+		Player aIPlayer = board.getPlayer(1);
 		aIPlayer.getDeck().clear();
 		
 		//Test rooms
@@ -100,7 +100,7 @@ public class ComputerAITest {
 			bool = true;
 		}
 		assertEquals(bool, true);
-		
+
 		//Adds seen room test
 		aIPlayer.updateSeen(card1);
 		aIPlayer.updateSeen(card2);

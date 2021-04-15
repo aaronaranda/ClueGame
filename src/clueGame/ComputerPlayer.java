@@ -49,9 +49,21 @@ public class ComputerPlayer extends Player {
 
     @Override
     public Solution createSuggestion() {
+    	// Constructor of solution passed a ComputerPlayer creates a randomized suggestion
         Solution suggestion = new Solution(this);
+        Random rand = new Random();
         return suggestion;
     }
+    
+    public void updateSeen(Card card) {
+    	for (Card c: deck) {
+    		if (c.equals(card)) {
+    			c.seeCard();
+    		}
+    	}
+    }
+    	
+   
 
     @Override 
     public Card selectTargets() {
