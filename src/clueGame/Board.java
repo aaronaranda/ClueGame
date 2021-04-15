@@ -412,6 +412,7 @@ public class Board extends JPanel {
     	super.paintComponent(g);    	    
         Graphics2D g2 = (Graphics2D) g;
         setLayout(null);
+        removeAll();
         int w = getWidth();
         int h = getHeight();  
         removeAll();
