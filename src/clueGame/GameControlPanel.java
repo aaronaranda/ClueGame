@@ -13,7 +13,8 @@ import javax.swing.border.*;
 @SuppressWarnings("serial")
 public class GameControlPanel extends JPanel {
 	
-	
+	private static Board board;
+	private Player player;
 	//private String playerName;
 	private JTextField playerName;
 		
@@ -26,12 +27,13 @@ public class GameControlPanel extends JPanel {
 	//private String guessResult;
 	private JTextField guessResult;
  
-    public GameControlPanel() {
-    	setSize(new Dimension(700, 100));
-    	setMinimumSize(new Dimension(700, 100));
+    public GameControlPanel(Board board) {
+    	this.board = board;
+    	player = board.getPlayer(0);
     	
-    	//Sets up the panel size
-        
+    	// Sizing
+    	setSize(new Dimension(700, 100));
+    	setMinimumSize(new Dimension(700, 100));    	          
         setLayout(new GridLayout(2, 0));
 
         JPanel upperPanel = new JPanel();
@@ -60,7 +62,8 @@ public class GameControlPanel extends JPanel {
         JButton nextButton = new JButton("NEXT!");
         nextButton.setSize(50, 50);
         accusationButton.setSize(50, 50);
-        nextButton.addActionListener(new ButtonListener());
+        nextButton.addActionListener(new NextListener());
+        accusationButton.addActionListener(new AccusationListener());        
 
         JPanel guessPanel = new JPanel();
     	this.guess = new JTextField(10);
@@ -72,7 +75,7 @@ public class GameControlPanel extends JPanel {
         resultPanel.add(this.guessResult);
         resultPanel.setBorder(new TitledBorder(
                     new EtchedBorder(), "Guess Result"));
-
+        
         upperPanel.add(turnPanel);
         upperPanel.add(rollPanel);
         upperPanel.add(accusationButton);
@@ -83,17 +86,22 @@ public class GameControlPanel extends JPanel {
 
         add(upperPanel);
         add(lowerPanel);
-
-
     }
     
-    private class ButtonListener implements ActionListener {
+    private class NextListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (true) {
-				String errorMessage = "Please finish your turn.";
-				JOptionPane.showMessageDialog(null, errorMessage);
-			}						
+			// must check if player moved or not
+			String errorMessage = "Please finish your turn.";
+			JOptionPane.showMessageDialog(null, errorMessage);				
+			setTurn(board.nextPlayer(), board.diceRoll());						
 		}    	
+    }
+    
+    private class AccusationListener implements ActionListener {
+    	public void actionPerformed(ActionEvent e) {
+    		 AccusationPanel accusationPanel = new AccusationPanel(player);
+    		 accusationPanel.setVisible(true);
+    	}
     }
     
     //Sets turn
@@ -111,22 +119,6 @@ public class GameControlPanel extends JPanel {
     //Sets the guess results
     public void setGuessResult(String result) {
         this.guessResult.setText(result);
-    }
-    
-//    //Main for calling the GUI
-//    public static void main(String[] args) {
-//        GameControlPanel controlPanel = new GameControlPanel(); 
-//        JFrame frame = new JFrame();
-//        frame.setContentPane(controlPanel);
-//        frame.setSize(750, 180);
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setVisible(true);
-//
-//        controlPanel.setTurn(new ComputerPlayer("Dummy"), 5);
-//        controlPanel.setGuess("I have no guess!");
-//        controlPanel.setGuessResult("So you have nothing?");
-//    }
-
-
+    }    
 }
 

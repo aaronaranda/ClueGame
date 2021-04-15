@@ -11,6 +11,7 @@ import javax.swing.*;
 public class ClueGame extends JFrame {
 	private CardPanel cardPanel;
 	private GameControlPanel gameControlPanel;
+	private String name;
 	
 	private static Board board;
 	
@@ -22,35 +23,34 @@ public class ClueGame extends JFrame {
 		board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();	
-		cardPanel = new CardPanel();
-		gameControlPanel = new GameControlPanel();
-		
+		cardPanel = new CardPanel(board);
+		gameControlPanel = new GameControlPanel(board);		
 		add(board, BorderLayout.CENTER);
 		add(cardPanel, BorderLayout.EAST);
-		add(gameControlPanel, BorderLayout.SOUTH);
-
+		add(gameControlPanel, BorderLayout.SOUTH);				
+		name = board.getPlayer(0).getName();		
 	}	
 	
 
+	public String yourName() {
+		return name;
+	}
+
 	
 
 	
-	public static void main(String[] args) {
-		
-		ClueGame gui = new ClueGame();
-	  
-		gui.setVisible(true);		
-		
-		String name = board.getPlayer(1).getName();
-	    
-	    // create a jframe
-	    JFrame frame = new JFrame("Intro");
-
+	public static void main(String[] args) {		
+		ClueGame gui = new ClueGame();	  
+		gui.setVisible(true);						
 	    // show a joptionpane dialog using showMessageDialog
-	    JOptionPane.showMessageDialog(frame,
-	        "You are " + name + "\n" + "Can you find the solution" + "\n" + "before the computer players?",
+	    JOptionPane.showMessageDialog(gui,
+	        "You are " + gui.yourName() + "\n" + "Can you find the solution" + "\n" + "before the computer players?",
 	        "Welcome to Clue",
 	        JOptionPane.INFORMATION_MESSAGE);
+	    
+	 
+	    
+	    
 	    
 	}	
 }

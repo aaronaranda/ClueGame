@@ -8,6 +8,8 @@ public class HumanPlayer extends Player {
         isHuman = true;
     }
 
+  
+    
     @Override
     public Card disproveSuggestion(Solution suggestion) {
         // Allow human player to select card to disprove

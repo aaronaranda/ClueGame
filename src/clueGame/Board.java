@@ -2,6 +2,8 @@ package clueGame;
 
 import java.util.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
@@ -23,6 +25,9 @@ public class Board extends JPanel {
     private ArrayList<Player> players;
     private Set<BoardCell> targets;
     private ArrayList<Card> cards;
+    
+    public static int turnNumber;
+    
 
     // Singletop Pattern, once instance of the board
     private static Board theInstance = new Board();
@@ -37,6 +42,9 @@ public class Board extends JPanel {
     
     public Board() {
     	setSize(new Dimension(600, 600));
+    	setBackground(Color.BLACK);
+    	addMouseListener(new gameListener());
+    	turnNumber = 0;
     }
     
     public void initialize() {
@@ -287,16 +295,23 @@ public class Board extends JPanel {
     private void deal() {
         ArrayList<Card> tempDeck = new ArrayList<Card>(cards);
         int i = 1;
+        Random rand = new Random();
         while (!tempDeck.isEmpty()) {
             if (i == 6) {
                 i = 0;
-            }
-            int index = tempDeck.size() - 1;
+            }             
+            int index = rand.nextInt(tempDeck.size());
             players.get(i).updateHand(cards.get(index));
             tempDeck.remove(index);
             i++;                
         }
     }
+    
+    public int diceRoll() {
+    	Random rand = new Random();    	
+    	return rand.nextInt(6) + 1;
+    }
+
 
 
 
@@ -306,7 +321,11 @@ public class Board extends JPanel {
  */ 
 
     public Player getPlayer(int index) {
-        return players.get(index - 1);
+        return players.get(index);
+    }
+    
+    public Player nextPlayer() {
+    	return players.get(turnNumber % 6); 
     }
 
 
@@ -317,25 +336,27 @@ public class Board extends JPanel {
  */
     
     public void paintComponent(Graphics g) {
-    	super.paintComponent(g);
-    	setBackground(Color.BLACK);
-    
-        Graphics2D g2 = (Graphics2D) g;
-        
+    	super.paintComponent(g);    	    
+        Graphics2D g2 = (Graphics2D) g;        
         int w = getWidth();
-        int h = getHeight();
-        
-        double off = Math.max((double)(w), (double)(h)) / Math.min((double)(w), (double)(h));
-        
-        int offset = (int) (off * 100);
-        System.out.println(off);
-        System.out.println(offset);
-                
+        int h = getHeight();        
+        double off = Math.max((double)(w), (double)(h)) / Math.min((double)(w), (double)(h));        
+        int offset = (int) (off * 100);                       
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {  
             	grid[i][j].draw(g2, j * w / numRows, i * h / numCols, offset);            	
             	
             }
         }       
+    }
+    
+    private class gameListener implements MouseListener {
+    	public void mousePressed(MouseEvent event) {}
+    	public void mouseReleased(MouseEvent event) {}
+    	public void mouseEntered(MouseEvent event) {}
+    	public void mouseExited(MouseEvent event) {}
+    	public void mouseClicked(MouseEvent event) {
+    		
+    	}    	    	
     }
 }
