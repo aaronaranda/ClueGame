@@ -9,7 +9,7 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class ClueGame extends JFrame {
-	private CardPanel cardPanel;
+	//private CardPanel cardPanel;
 	private GameControlPanel gameControlPanel;
 	private String name;
 	
@@ -23,10 +23,10 @@ public class ClueGame extends JFrame {
 		board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();	
-		cardPanel = new CardPanel(board);
+		//cardPanel = new CardPanel(board);
 		gameControlPanel = new GameControlPanel(board);		
 		add(board, BorderLayout.CENTER);
-		add(cardPanel, BorderLayout.EAST);
+		//add(cardPanel, BorderLayout.EAST);
 		add(gameControlPanel, BorderLayout.SOUTH);				
 		name = board.getPlayer(0).getName();		
 	}	
@@ -34,6 +34,10 @@ public class ClueGame extends JFrame {
 
 	public String yourName() {
 		return name;
+	}
+	
+	public Player getHuman() {
+		return board.getPlayer(0);
 	}
 
 	

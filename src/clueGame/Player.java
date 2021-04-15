@@ -63,6 +63,10 @@ public abstract class Player {
     public Point getStart() {
     	return startPosition;
     }
+    
+    public BoardCell getStartCell() {
+    	return startCell;
+    }
 
     public ArrayList<Card> getDeck() {
         return deck;

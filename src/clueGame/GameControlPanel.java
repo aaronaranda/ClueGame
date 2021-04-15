@@ -99,8 +99,8 @@ public class GameControlPanel extends JPanel {
     
     private class AccusationListener implements ActionListener {
     	public void actionPerformed(ActionEvent e) {
-    		 AccusationPanel accusationPanel = new AccusationPanel(player);
-    		 accusationPanel.setVisible(true);
+    		// AccusationPanel accusationPanel = new AccusationPanel(player);
+    		// accusationPanel.setVisible(true);
     	}
     }
     

@@ -130,7 +130,7 @@ public class BoardCell {
     		color = Color.BLACK;
     	} else if (isWalkway) {
     		color = Color.WHITE;
-    	}    	        	
+    	} 	        	
     }   
 
     public void setStart(Player player) {

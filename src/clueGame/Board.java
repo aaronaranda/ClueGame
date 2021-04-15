@@ -327,6 +327,44 @@ public class Board extends JPanel {
     public Player nextPlayer() {
     	return players.get(turnNumber % 6); 
     }
+    public Set<BoardCell> getMoveable(int row, int col, int path) {
+    	Set<BoardCell> moveable = new HashSet<BoardCell>();
+    	BoardCell test = grid[row][col + path];
+    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
+    		moveable.add(test);
+    	}
+    	test = grid[row - path][col + path];
+    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
+    		moveable.add(test);
+    	}
+    	test = grid[row + path][col + path];
+    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
+    		moveable.add(test);
+    	}
+    	test = grid[row][col - path];
+    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
+    		moveable.add(test);
+    	}
+    	test = grid[row + path][col - path];
+    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
+    		moveable.add(test);
+    	}
+    	test = grid[row - path][col - path];
+    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
+    		moveable.add(test);
+    	}
+    	test = grid[row + path][col];
+    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
+    		moveable.add(test);
+    	}
+    	test = grid[row - path][col];
+    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
+    		moveable.add(test);
+    	}
+    	
+    	
+    	return moveable;
+    }
 
 
 
@@ -351,7 +389,20 @@ public class Board extends JPanel {
     }
     
     private class gameListener implements MouseListener {
-    	public void mousePressed(MouseEvent event) {}
+    	public void mousePressed(MouseEvent event) {
+    		int path = 1;
+    		Player test = players.get(0);
+    		BoardCell cell = grid[6][14];
+    		Set<BoardCell> moveable = getMoveable(cell.getRow(), cell.getCol(), path);
+    		int x = (event.getX() / 22) + 1; //32
+    		int y = (event.getY() / 28) + 1; //25
+    		BoardCell target = grid[x][y];
+    		//JOptionPane.showMessageDialog(null, "Location " + x + " and " + y);
+    		if (moveable.contains(target)) {
+    			String message = "You can move here.";
+    			JOptionPane.showMessageDialog(null, message);	
+    		}
+    	}
     	public void mouseReleased(MouseEvent event) {}
     	public void mouseEntered(MouseEvent event) {}
     	public void mouseExited(MouseEvent event) {}
