@@ -10,10 +10,10 @@ import javax.swing.JLabel;
 public class AccusationPanel extends JDialog {
 	public AccusationPanel(Player player) {
 		setTitle("Accusation Panel");
-		setSize(200, 200);
+		setSize(300, 300);
 	
 		
-		setLayout(new GridLayout(6, 0));
+		setLayout(new GridLayout(4, 2, 1, 1));
 		JLabel personLabel = new JLabel("Select Person Card");
 		JLabel roomLabel = new JLabel("Select Room Card");
 		JLabel weaponLabel = new JLabel("Select Weapon Card");
@@ -38,14 +38,15 @@ public class AccusationPanel extends JDialog {
 		JComboBox<String> personBox = new JComboBox<String>(personCards);
 		JComboBox<String> roomBox = new JComboBox<String>(roomCards);
 		JComboBox<String> weaponBox = new JComboBox<String>(weaponCards);
-		add(personLabel);
-		add(personBox);
-		add(roomLabel);
-		add(roomBox);
-		add(weaponLabel);
-		add(weaponBox);		
+		add(personLabel, 0, 0);
+		add(personBox, 0, 1);
+		add(roomLabel, 1, 0);
+		add(roomBox, 1, 1);
+		add(weaponLabel, 2, 0);
+		add(weaponBox, 2, 1);		
 		
 		JButton button = new JButton("Make Accusation");
+		add(button, 3, 0);
 		button.addActionListener(e -> setVisible(false));
 		
 	}
