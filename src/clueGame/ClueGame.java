@@ -9,24 +9,25 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class ClueGame extends JFrame {
-	//private CardPanel cardPanel;
+	private CardPanel cardPanel;
 	private GameControlPanel gameControlPanel;
 	private String name;
 	
 	private static Board board;
 	
 	public ClueGame() {
-		setSize(new Dimension(700, 700));
-		setMinimumSize(new Dimension(700, 700));
+		setSize(new Dimension(900, 900));
+		setMinimumSize(new Dimension(900, 900));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue! Game");		
 		board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();	
-		//cardPanel = new CardPanel(board);
-		gameControlPanel = new GameControlPanel(board);		
+		cardPanel = new CardPanel(board);
+		gameControlPanel = new GameControlPanel(board);	
+		board.setGCP(gameControlPanel);
 		add(board, BorderLayout.CENTER);
-		//add(cardPanel, BorderLayout.EAST);
+		add(cardPanel, BorderLayout.EAST);
 		add(gameControlPanel, BorderLayout.SOUTH);				
 		name = board.getPlayer(0).getName();		
 	}	
@@ -38,6 +39,11 @@ public class ClueGame extends JFrame {
 	
 	public Player getHuman() {
 		return board.getPlayer(0);
+	}
+	
+	public void setTurn() {
+		gameControlPanel.setTurn(board.getPlayer(board.turnNumber % 6), board.diceRoll());
+		
 	}
 
 	
@@ -51,6 +57,9 @@ public class ClueGame extends JFrame {
 	        "You are " + gui.yourName() + "\n" + "Can you find the solution" + "\n" + "before the computer players?",
 	        "Welcome to Clue",
 	        JOptionPane.INFORMATION_MESSAGE);
+	    
+	    gui.setTurn();
+	   
 	    
 	 
 	    

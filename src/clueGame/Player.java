@@ -1,5 +1,8 @@
 package clueGame;
 import java.util.*;
+
+import javax.swing.JOptionPane;
+
 import java.awt.*;
 
 public abstract class Player {
@@ -10,6 +13,8 @@ public abstract class Player {
     protected Color color;
     protected ArrayList<Card> deck;
     protected ArrayList<Card> seenCards;
+    protected BoardCell location;
+    protected boolean madeMove;
 
     public Player(String name) {
         this.name = name;
@@ -43,21 +48,33 @@ public abstract class Player {
         }
     }
     
-    public void setStartPosition(Point point) {
+    public void setStartPosition(Point point) {   
     	startPosition = point;
     }
     
     public void setStartPosition(BoardCell cell) {
+    	location = cell;
     	startCell = cell;
     	cell.setStart(this);
     }
+   
+    public abstract boolean moveLocation(BoardCell cell, Set<BoardCell> targest);
+    public abstract void moveLocation(Set<BoardCell> targets);
 
 /*
  * GETTERS
  */ 
 
+    public BoardCell getLocation() {
+    	return location;
+    }
+    
     public String getName() {
         return name;
+    }
+    
+    public boolean madeMove() {
+    	return madeMove;
     }
     
     public Point getStart() {

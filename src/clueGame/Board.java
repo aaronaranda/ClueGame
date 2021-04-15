@@ -25,14 +25,15 @@ public class Board extends JPanel {
     private ArrayList<Player> players;
     private Set<BoardCell> targets;
     private ArrayList<Card> cards;
-    
+    private GameControlPanel gcp;
     public static int turnNumber;
     
-
+    private Player currentPlayer;
+    
     // Singletop Pattern, once instance of the board
     private static Board theInstance = new Board();
 
-    public static Board getInstance() {
+    public static Board getInstance() {    	
         return theInstance;    
     }
 
@@ -40,8 +41,8 @@ public class Board extends JPanel {
      * INITIALIZATION
      */  
     
-    public Board() {
-    	setSize(new Dimension(600, 600));
+    public Board() {    
+    	setSize(new Dimension(800, 800));
     	setBackground(Color.BLACK);
     	addMouseListener(new gameListener());
     	turnNumber = 0;
@@ -62,6 +63,9 @@ public class Board extends JPanel {
         deal();
     }
     
+    public void setGCP(GameControlPanel gcp) {
+    	this.gcp = gcp;
+    }
     
     public void setConfigFiles(String csv, String txt) {
         layoutConfigFile = csv;
@@ -253,7 +257,7 @@ public class Board extends JPanel {
         targets = new HashSet<BoardCell>();
         int index = calcIndex(startCell);
         visited[index] = true;
-        findAllTargets(index, pathLength, visited, startCell);
+        findAllTargets(index, pathLength, visited, startCell);       
     }
 
     private void findAllTargets(
@@ -311,6 +315,22 @@ public class Board extends JPanel {
     	Random rand = new Random();    	
     	return rand.nextInt(6) + 1;
     }
+    
+    public void play(Player currentPlayer, int roll) {
+    	this.currentPlayer = currentPlayer;
+    	calcTargets(currentPlayer.getLocation(), roll);
+    	if (!currentPlayer.isHuman) {
+    		currentPlayer.moveLocation(targets);
+    		repaint();
+			turnNumber++;			
+    	} else {    	
+    		for (BoardCell c: this.targets) {
+    			c.updateTargets();
+    			repaint();
+    		}
+    	}
+    }
+    
 
 
 
@@ -327,6 +347,7 @@ public class Board extends JPanel {
     public Player nextPlayer() {
     	return players.get(turnNumber % 6); 
     }
+    
     public Set<BoardCell> getMoveable(int row, int col, int path) {
     	Set<BoardCell> moveable = new HashSet<BoardCell>();
     	BoardCell test = grid[row][col + path];
@@ -342,7 +363,7 @@ public class Board extends JPanel {
     		moveable.add(test);
     	}
     	test = grid[row][col - path];
-    	if (test.isWalkway() || test.isRoom() || test.isDoorway()) {
+    	if (test.isWalkway()) {
     		moveable.add(test);
     	}
     	test = grid[row + path][col - path];
@@ -366,7 +387,12 @@ public class Board extends JPanel {
     	return moveable;
     }
 
-
+    public Set<BoardCell> getTargets() {
+    	for (BoardCell c: targets) {
+    		System.out.println(c.getRow() + " "+ c.getCol());
+    	}
+    	return this.targets;
+    }
 
 
 /*
@@ -375,39 +401,48 @@ public class Board extends JPanel {
     
     public void paintComponent(Graphics g) {
     	super.paintComponent(g);    	    
-        Graphics2D g2 = (Graphics2D) g;        
+        Graphics2D g2 = (Graphics2D) g;
+        setLayout(null);
         int w = getWidth();
         int h = getHeight();        
         double off = Math.max((double)(w), (double)(h)) / Math.min((double)(w), (double)(h));        
         int offset = (int) (off * 100);                       
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {  
-            	grid[i][j].draw(g2, j * w / numRows, i * h / numCols, offset);            	
-            	
+            	grid[i][j].draw(g2, j * w / numCols, i * h / numRows, offset);
+            	if (grid[i][j].isLabel()) {
+            		JLabel label = new JLabel(grid[i][j].getRoom().getName());
+            		Dimension size = label.getPreferredSize();
+            		label.setBounds(
+            				(j * w) / numCols, (i * h) / numRows,
+            				size.width, size.height
+            				);
+            		add(label);
+            	}
             }
         }       
     }
     
     private class gameListener implements MouseListener {
-    	public void mousePressed(MouseEvent event) {
-    		int path = 1;
-    		Player test = players.get(0);
-    		BoardCell cell = grid[6][14];
-    		Set<BoardCell> moveable = getMoveable(cell.getRow(), cell.getCol(), path);
-    		int x = (event.getX() / 22) + 1; //32
-    		int y = (event.getY() / 28) + 1; //25
-    		BoardCell target = grid[x][y];
-    		//JOptionPane.showMessageDialog(null, "Location " + x + " and " + y);
-    		if (moveable.contains(target)) {
-    			String message = "You can move here.";
-    			JOptionPane.showMessageDialog(null, message);	
-    		}
+    	public void mousePressed(MouseEvent event) {       		    		    	
     	}
     	public void mouseReleased(MouseEvent event) {}
     	public void mouseEntered(MouseEvent event) {}
     	public void mouseExited(MouseEvent event) {}
     	public void mouseClicked(MouseEvent event) {
-    		
+
+    		int tempX = getWidth() / numCols;
+    		int tempY = getHeight() / numRows;
+    		        
+    	       
+    		int x = (event.getX() / tempX); //32
+    		int y = (event.getY() / tempY); //25
+    		System.out.println("Clicked" + y + " " + x);
+    		if (currentPlayer.moveLocation(grid[y][x], getTargets())) {
+    			repaint();
+    			turnNumber++;    
+    			gcp.setMove(true);
+    		}
     	}    	    	
     }
 }

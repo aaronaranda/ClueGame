@@ -115,8 +115,9 @@ public class BoardCell {
         passageRoom = passage;
     }
 
-    public void setOccupied() {
+    public void setOccupied(Player player) {
         isOccupied = true;
+        this.player = player;        
     }
 
     public void addAdj(BoardCell cell) {
@@ -138,6 +139,20 @@ public class BoardCell {
     	isOccupied = true;
     	this.player = player;    	    	
     }
+    
+    public void updateTargets() {
+    	color = Color.red;    	
+    }
+    
+    public void setUnoccupied() {
+    	isStart = false;
+    	isOccupied = false;
+    	color = Color.white;
+    }
+    
+    
+    
+    
  /*
   * GETTERS
   */  
@@ -212,6 +227,7 @@ public class BoardCell {
  */ 
 
     public void draw(Graphics2D g, int x, int y, int offset) {
+    	
     	g.setColor(color);
     	g.fillRect(x, y, offset, offset);
     	g.setColor(Color.BLACK);

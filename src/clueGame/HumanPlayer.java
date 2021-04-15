@@ -1,5 +1,8 @@
 package clueGame;
 import java.util.*;
+
+import javax.swing.JOptionPane;
+
 import java.awt.*;
 
 public class HumanPlayer extends Player {
@@ -8,6 +11,28 @@ public class HumanPlayer extends Player {
         isHuman = true;
     }
 
+    @Override
+    public void moveLocation(Set<BoardCell> targets) {}
+    
+    @Override
+    public boolean moveLocation(BoardCell cell, Set<BoardCell> targets) {
+    	if (targets.contains(cell)) {
+    		location.setUnoccupied();
+    		for (BoardCell c: targets) {
+    			c.setUnoccupied();
+    			
+    		}
+    		location = cell;
+    		cell.setOccupied(this);
+    		madeMove = true;
+    		return true;
+    	} else { 
+			String message = "You can't move here.";
+			JOptionPane.showMessageDialog(null, message);
+			madeMove = false;
+    	}
+    	return false;
+     }
   
     
     @Override

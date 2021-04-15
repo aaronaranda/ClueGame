@@ -9,6 +9,26 @@ public class ComputerPlayer extends Player {
     }
 
     @Override
+    public boolean moveLocation(BoardCell cell, Set<BoardCell> targets) {
+    	return true;
+    }
+    
+    @Override
+    public void moveLocation(Set<BoardCell> targets) {
+    	BoardCell[] arrTargets = new BoardCell[targets.size()];
+    	arrTargets = targets.toArray(arrTargets);
+    	Random rand = new Random();
+    	location.setUnoccupied();
+    	for (BoardCell c: targets) {
+    		c.setUnoccupied();
+    	}
+    	location = arrTargets[rand.nextInt(targets.size())];
+    	location.setOccupied(this);
+    	madeMove = true;     
+    	
+    }
+    
+    @Override
     public Card disproveSuggestion(Solution suggestion) {
         // Ensure player doesn't try to disprove their own suggestion
         if (this == suggestion.getWhoSuggested()) {

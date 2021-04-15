@@ -7,7 +7,7 @@ import javax.swing.border.TitledBorder;
 
 @SuppressWarnings("serial")
 public class CardPanel extends JPanel {
-    private static Board board;
+    private Board board;
 	private Player player;
     
    // Separate class made for panel of specific card type
@@ -19,7 +19,7 @@ public class CardPanel extends JPanel {
     public CardPanel(Board board) {
     	this.board = board;
     	player = board.getPlayer(0);	//Always gets the human player    
-    	setSize(new Dimension(100, 600));    	
+    	setSize(new Dimension(100, 800));    	
         setLayout(new GridLayout(0, 1));
         setBorder(new TitledBorder(new EtchedBorder(), "Known Cards"));
         peoplePanel = new CardTypePanel("People");

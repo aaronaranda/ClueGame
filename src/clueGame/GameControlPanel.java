@@ -12,7 +12,7 @@ import javax.swing.border.*;
 
 @SuppressWarnings("serial")
 public class GameControlPanel extends JPanel {
-	
+	private boolean canMove; 
 	private static Board board;
 	private Player player;
 	//private String playerName;
@@ -32,8 +32,8 @@ public class GameControlPanel extends JPanel {
     	player = board.getPlayer(0);
     	
     	// Sizing
-    	setSize(new Dimension(700, 100));
-    	setMinimumSize(new Dimension(700, 100));    	          
+    	setSize(new Dimension(900, 100));
+    	setMinimumSize(new Dimension(900, 100));    	          
         setLayout(new GridLayout(2, 0));
 
         JPanel upperPanel = new JPanel();
@@ -88,19 +88,26 @@ public class GameControlPanel extends JPanel {
         add(lowerPanel);
     }
     
+    public void setMove(boolean move) {
+    	canMove = move;
+    }
+    
     private class NextListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) {						
 			// must check if player moved or not
+			if (canMove && board.turnNumber > 0) {
+				setTurn(board.nextPlayer(), board.diceRoll());
+			} else {
 			String errorMessage = "Please finish your turn.";
-			JOptionPane.showMessageDialog(null, errorMessage);				
-			setTurn(board.nextPlayer(), board.diceRoll());						
+			JOptionPane.showMessageDialog(null, errorMessage);
+			}									
 		}    	
     }
     
     private class AccusationListener implements ActionListener {
     	public void actionPerformed(ActionEvent e) {
-    		// AccusationPanel accusationPanel = new AccusationPanel(player);
-    		// accusationPanel.setVisible(true);
+    		AccusationPanel accusationPanel = new AccusationPanel(player);
+    		accusationPanel.setVisible(true);
     	}
     }
     
@@ -108,6 +115,9 @@ public class GameControlPanel extends JPanel {
     public void setTurn(Player player, int roll) {
         this.playerName.setText(player.getName());
         this.roll.setText(String.valueOf(roll));
+        board.play(player, roll);
+        canMove = player.madeMove();
+      
     }
     
     //Sets the guess
