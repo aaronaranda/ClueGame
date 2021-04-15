@@ -19,8 +19,7 @@ public class Board extends JPanel {
     // Data structures
     private BoardCell[][] grid;
     private Map<Character, String> boardObjects;
-    private Map<Character, Room> roomMap;
-    private Map<Integer, Point> startPositions;
+    private Map<Character, Room> roomMap;    
     private ArrayList<Player> players;
     private Set<BoardCell> targets;
     private ArrayList<Card> cards;
@@ -36,6 +35,10 @@ public class Board extends JPanel {
      * INITIALIZATION
      */  
     
+    public Board() {
+    	setSize(new Dimension(600, 600));
+    }
+    
     public void initialize() {
         try {
             loadSetupConfig();
@@ -47,7 +50,6 @@ public class Board extends JPanel {
         } catch(BadConfigFormatException e) {
             System.out.println("Error occurred during layout configuration.");
         }
-        //setLayout(new GridLayout(numRows, numCols));
         calcAdjacencies();
         deal();
     }
@@ -62,8 +64,7 @@ public class Board extends JPanel {
         roomMap = new HashMap<Character, Room>();
         players = new ArrayList<Player>();
         cards = new ArrayList<Card>();
-        boardObjects = new HashMap<Character, String>();
-        setStartPositions();
+        boardObjects = new HashMap<Character, String>();        
 
         // Reading
         FileReader setupReader = null;
@@ -92,17 +93,17 @@ public class Board extends JPanel {
                 cards.add(new Card(name, CardType.WEAPON));
             } else if (type.equals("Player")) {
                 cards.add(new Card(name, CardType.PERSON));
-                String color = line[3];
+                int r = Integer.parseInt(line[3]);
+                int g = Integer.parseInt(line[4]);
+                int b = Integer.parseInt(line[5]);                
                 Player player = null;
-                if (initial == '1') {
+                if (initial == '0') {
                     player = new HumanPlayer(name);
                 } else {
                     player = new ComputerPlayer(name);
                 }
                 players.add(player);
-                player.updateColor(color);
-                player.setStartPosition(startPositions.get(
-                            Character.getNumericValue(initial)));
+                player.updateColor(r, g, b);               
             }
         }
         scan.close();
@@ -150,9 +151,14 @@ public class Board extends JPanel {
                     } else if (type.equals("Space")) {
                         cell.setSpace(cellInitial);
                         if (hasIndicator) {
-                            cell.hasMarker(indicator);
+                        	if (Character.isDigit(indicator)) {
+                        		players.get((int)(indicator - 48)).setStartPosition(cell);
+                        	} else {
+                        	cell.hasMarker(indicator);
+                        	}
                         }
                     }
+                    cell.updateColor(); 
                     tempBoard.add(cell);
                     col++;
                 } else {
@@ -177,9 +183,7 @@ public class Board extends JPanel {
     
     // Converts temporary board to 2D array since dimensions known at this point
     private void convertBoard(ArrayList<BoardCell> temp) {
-        grid = new BoardCell[numRows][numCols];
-        System.out.println(numRows * numCols);
-        System.out.println(temp.size());
+        grid = new BoardCell[numRows][numCols];        
         int k = 0;
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
@@ -188,18 +192,6 @@ public class Board extends JPanel {
             }
         }
     }
-
-
-    public void setStartPositions() {
-        startPositions = new HashMap<Integer, Point>();
-        startPositions.put(1, new Point(21, 5));
-        startPositions.put(2, new Point(16, 5));
-        startPositions.put(3, new Point(23, 17));
-        startPositions.put(4, new Point(14, 17));
-        startPositions.put(5, new Point(10, 19));
-        startPositions.put(6, new Point(0, 19));        
-    }
-
 
 
     public void calcAdjacencies() {
@@ -323,7 +315,7 @@ public class Board extends JPanel {
 /*
  * GRAPHICS
  */
-
+    
     public void paintComponent(Graphics g) {
     	super.paintComponent(g);
     	setBackground(Color.BLACK);
@@ -332,18 +324,18 @@ public class Board extends JPanel {
         
         int w = getWidth();
         int h = getHeight();
+        
+        double off = Math.max((double)(w), (double)(h)) / Math.min((double)(w), (double)(h));
+        
+        int offset = (int) (off * 100);
+        System.out.println(off);
+        System.out.println(offset);
                 
         for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numCols; j++) {
-            	grid[i][j].updateColor();
-            	g2.setColor(grid[i][j].getColor());        
-            	g2.fillRect(j * w / numCols, i * h / numRows, w / numRows - 2, w / numRows - 2);
-            	g2.setColor(Color.BLACK);
-            	g2.drawRect(j * w / numCols, i * h / numRows, w / numRows, w / numRows);            	
-            
+            for (int j = 0; j < numCols; j++) {  
+            	grid[i][j].draw(g2, j * w / numRows, i * h / numCols, offset);            	
+            	
             }
         }       
     }
-
-
 }

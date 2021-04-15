@@ -6,8 +6,10 @@ public class BoardCell {
     // Positioning
     int row, col;
     
-    // Color
+    // Graphics
     Color color;
+    private static final int WIDTH = 20;
+    private static final int HEIGHT = 20;
 
     // Type checks
     // Rooms
@@ -28,6 +30,7 @@ public class BoardCell {
     // Starting position, player
     private boolean isStart;
     private boolean isOccupied;
+    private Player player;
 
     // Adjacent Cells
     ArrayList<BoardCell> adjList;
@@ -56,7 +59,7 @@ public class BoardCell {
             setCenter(marker);
             setLabel(marker);                                   
         } else if (isSpace) {
-            setDoorway(marker);
+            setDoorway(marker);            
         }
     }
     
@@ -122,14 +125,19 @@ public class BoardCell {
 
     public void updateColor() {
     	if (isRoom) {
-    		color = Color.CYAN;
+    		color = new Color(212, 227, 251);
     	} else if (isSpace) {
     		color = Color.BLACK;
     	} else if (isWalkway) {
     		color = Color.WHITE;
-    	}
-    }
+    	}    	        	
+    }   
 
+    public void setStart(Player player) {
+    	isStart = true;
+    	isOccupied = true;
+    	this.player = player;    	    	
+    }
  /*
   * GETTERS
   */  
@@ -203,18 +211,16 @@ public class BoardCell {
  * GRAPHICS
  */ 
 
-    public void draw(Graphics2D g, int x, int y, int size) {
-
-    	if (isWalkway) {
-    		color = Color.WHITE;
-    	} else if (isRoom) {
-    		color = Color.cyan;
-    	} else if (isSpace) {
-    		color = Color.black;
-    	}
+    public void draw(Graphics2D g, int x, int y, int offset) {
     	g.setColor(color);
-    	g.fillRect(x, y, size, size);
-    	
+    	g.fillRect(x, y, offset, offset);
+    	g.setColor(Color.BLACK);
+    	if (!isRoom) {
+    		g.drawRect(x+1, y+1, offset + 2, offset + 2);
+    	}
+    	if (isOccupied || isStart) {
+    		g.setColor(player.color);
+    		g.fillOval(x, y, offset / 5, offset / 5);
+    	}
     }
-
 }

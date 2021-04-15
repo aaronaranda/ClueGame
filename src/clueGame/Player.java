@@ -5,7 +5,8 @@ import java.awt.*;
 public abstract class Player {
     protected String name;
     protected boolean isHuman;
-    protected Point start;
+    protected Point startPosition;
+    protected BoardCell startCell;
     protected Color color;
     protected ArrayList<Card> deck;
     protected ArrayList<Card> seenCards;
@@ -43,7 +44,12 @@ public abstract class Player {
     }
     
     public void setStartPosition(Point point) {
-    	start = point;
+    	startPosition = point;
+    }
+    
+    public void setStartPosition(BoardCell cell) {
+    	startCell = cell;
+    	cell.setStart(this);
     }
 
 /*
@@ -52,6 +58,10 @@ public abstract class Player {
 
     public String getName() {
         return name;
+    }
+    
+    public Point getStart() {
+    	return startPosition;
     }
 
     public ArrayList<Card> getDeck() {

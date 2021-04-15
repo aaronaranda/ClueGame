@@ -1,5 +1,6 @@
 package clueGame;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +10,7 @@ import javax.swing.*;
 
 import javax.swing.border.*;
 
+@SuppressWarnings("serial")
 public class GameControlPanel extends JPanel {
 	
 	
@@ -25,11 +27,12 @@ public class GameControlPanel extends JPanel {
 	private JTextField guessResult;
  
     public GameControlPanel() {
-    	
+    	setSize(new Dimension(700, 100));
+    	setMinimumSize(new Dimension(700, 100));
     	
     	//Sets up the panel size
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(2, 0));
+        
+        setLayout(new GridLayout(2, 0));
 
         JPanel upperPanel = new JPanel();
         upperPanel.setLayout(new GridLayout(1, 4));
@@ -55,10 +58,12 @@ public class GameControlPanel extends JPanel {
     	// Buttons
     	JButton accusationButton = new JButton("Make Accusation");
         JButton nextButton = new JButton("NEXT!");
+        nextButton.setSize(50, 50);
+        accusationButton.setSize(50, 50);
         nextButton.addActionListener(new ButtonListener());
 
         JPanel guessPanel = new JPanel();
-    	this.guess = new JTextField(20);
+    	this.guess = new JTextField(10);
     	guessPanel.add(this.guess);
     	guessPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess"));
 
@@ -76,23 +81,19 @@ public class GameControlPanel extends JPanel {
         lowerPanel.add(guessPanel);
         lowerPanel.add(resultPanel);
 
-        mainPanel.add(upperPanel);
-        mainPanel.add(lowerPanel);
-        add(mainPanel);
+        add(upperPanel);
+        add(lowerPanel);
+
 
     }
     
     private class ButtonListener implements ActionListener {
-
 		public void actionPerformed(ActionEvent e) {
 			if (true) {
 				String errorMessage = "Please finish your turn.";
 				JOptionPane.showMessageDialog(null, errorMessage);
-			}
-			
-			
-		}
-    	
+			}						
+		}    	
     }
     
     //Sets turn
@@ -112,19 +113,19 @@ public class GameControlPanel extends JPanel {
         this.guessResult.setText(result);
     }
     
-    //Main for calling the GUI
-    public static void main(String[] args) {
-        GameControlPanel controlPanel = new GameControlPanel(); 
-        JFrame frame = new JFrame();
-        frame.setContentPane(controlPanel);
-        frame.setSize(750, 180);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-        controlPanel.setTurn(new ComputerPlayer("Dummy"), 5);
-        controlPanel.setGuess("I have no guess!");
-        controlPanel.setGuessResult("So you have nothing?");
-    }
+//    //Main for calling the GUI
+//    public static void main(String[] args) {
+//        GameControlPanel controlPanel = new GameControlPanel(); 
+//        JFrame frame = new JFrame();
+//        frame.setContentPane(controlPanel);
+//        frame.setSize(750, 180);
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setVisible(true);
+//
+//        controlPanel.setTurn(new ComputerPlayer("Dummy"), 5);
+//        controlPanel.setGuess("I have no guess!");
+//        controlPanel.setGuessResult("So you have nothing?");
+//    }
 
 
 }
