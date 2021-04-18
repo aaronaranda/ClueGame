@@ -335,6 +335,7 @@ public class Board extends JPanel {
     
     public void play(Player currentPlayer, int roll) {
     	this.currentPlayer = currentPlayer;
+    	gcp.setMove(false);
     	calcTargets(currentPlayer.getLocation(), roll);
     	if (!currentPlayer.isHuman) {
     		currentPlayer.moveLocation(targets);
@@ -438,17 +439,13 @@ public class Board extends JPanel {
     
     
     private class gameListener implements MouseListener {
-    	public void mousePressed(MouseEvent event) {       		    		    	
-    	}
+    	public void mousePressed(MouseEvent event) {}
     	public void mouseReleased(MouseEvent event) {}
     	public void mouseEntered(MouseEvent event) {}
     	public void mouseExited(MouseEvent event) {}
     	public void mouseClicked(MouseEvent event) {
-
     		int tempX = getWidth() / numCols;
-    		int tempY = getHeight() / numRows;
-    		        
-    	       
+    		int tempY = getHeight() / numRows;     		
     		int x = (event.getX() / tempX); //32
     		int y = (event.getY() / tempY); //25
     		System.out.println("Clicked" + y + " " + x);

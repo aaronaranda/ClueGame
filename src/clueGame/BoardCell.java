@@ -101,7 +101,7 @@ public class BoardCell {
                 isDoorway = true;
                 break;
             default:
-            	return;                
+                break;
         }        
     }
 
@@ -152,8 +152,9 @@ public class BoardCell {
     	if (isDoorway) {
     		for (BoardCell cell: room.getCells()) {
     			cell.setColor(color);
-    		}    		
+    		}
     	}
+
     }
     
     public void setUnoccupied() {
@@ -271,7 +272,7 @@ public class BoardCell {
     	g.setColor(color);
     	g.fillRect(x, y, offset, offset);
     	g.setColor(Color.BLACK);
-    	if (!isRoom) {
+    	if (isWalkway) {
     		g.drawRect(x+1, y+1, offset + 2, offset + 2);
     	}
     	if (isOccupied || isStart) {
