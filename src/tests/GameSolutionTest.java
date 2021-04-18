@@ -24,7 +24,7 @@ public class GameSolutionTest {
         board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
         board.initialize();
         testCard = new Card("test card", CardType.PERSON);
-        testSuggestion = board.getPlayer('2').createSuggestion(testCard);
+        testSuggestion = board.getPlayer(2).createSuggestion();
     }    
 
     @Test
@@ -50,18 +50,18 @@ public class GameSolutionTest {
     	}
     	
     	// First false scenario with wrong person
-    	assertFalse(board.checkAccusation(
-    			people.get(0), answer.getTheRoom(), answer.getTheWeapon()
+    	assertFalse(board.checkAccusation(new Solution(playerOne,
+    			people.get(0), answer.getRoom(), answer.getWeapon())
     			));
     	
     	// Second false scenario with wrong room
-    	assertFalse(board.checkAccusation(
-    			answer.getThePerson(), rooms.get(0), answer.getTheWeapon()
+    	assertFalse(board.checkAccusation(new Solution(playerOne,
+    			answer.getPerson(), rooms.get(0), answer.getWeapon())
     			));
     	
     	// Third false scenario with wrong weapon
-    	assertFalse(board.checkAccusation(
-    			answer.getThePerson(), answer.getTheRoom(), weapons.get(0)
+    	assertFalse(board.checkAccusation(new Solution(playerOne,
+    			answer.getPerson(), answer.getRoom(), weapons.get(0))
     			));
     			    	    
     	/*
@@ -69,15 +69,15 @@ public class GameSolutionTest {
     	 * the ones in the answer
     	 */   	
     	playerOneDeck.clear();
-    	playerOneDeck.add(answer.getThePerson());
-    	playerOneDeck.add(answer.getTheRoom());
-    	playerOneDeck.add(answer.getTheWeapon());
+    	playerOneDeck.add(answer.getPerson());
+    	playerOneDeck.add(answer.getRoom());
+    	playerOneDeck.add(answer.getWeapon());
     	    	
-    	assertTrue(board.checkAccusation(
+    	assertTrue(board.checkAccusation(new Solution(playerOne,
     			playerOneDeck.get(0), 
     			playerOneDeck.get(1), 
     			playerOneDeck.get(2)
-    			));    	
+    			)));    	
     }
     
     @Test
@@ -111,8 +111,8 @@ public class GameSolutionTest {
     	
     	Card resultCard = new Card("result card", CardType.PERSON);    	
     	
-    	for (Character c: board.getPlayers().keySet()) {
-    		resultCard = board.getPlayer(c).disproveSuggestion(testSuggestion);
+    	for (Player player: board.getPlayers()) {
+    		resultCard = player.disproveSuggestion(testSuggestion);
     	}
     	
     	assertEquals(resultCard, null);

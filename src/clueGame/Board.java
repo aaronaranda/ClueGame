@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-
 import javax.swing.*;
 
 public class Board extends JPanel {
@@ -222,7 +221,6 @@ public class Board extends JPanel {
         }
     }
 
-
     public void calcAdjacencies() {
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
@@ -312,7 +310,6 @@ public class Board extends JPanel {
         }
     }
 
-
     public void deal() {
         ArrayList<Card> tempDeck = new ArrayList<Card>(cards);
         int i = 1;
@@ -352,10 +349,6 @@ public class Board extends JPanel {
     public boolean checkAccusation(Solution accusation) {
     	return theSolution.equals(accusation);
     }
-
-
-
-
 
 /*
  * GETTERS
@@ -404,6 +397,17 @@ public class Board extends JPanel {
     	return this.targets;
     }
 
+    public Set<BoardCell> getAdjList(int row, int col) {
+    	return (Set<BoardCell>) grid[row][col].getAdjList();
+    }
+    
+    public Solution getTheAnswer() {
+    	return theSolution;
+    }
+    
+    public ArrayList<Player> getPlayers() {
+    	return players;
+    }
 
 /*
  * GRAPHICS
@@ -414,29 +418,38 @@ public class Board extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         setLayout(null);
         removeAll();
-        int w = getWidth();
-        int h = getHeight();  
-        removeAll();
-        double off = Math.max((double)(w), (double)(h)) / Math.min((double)(w), (double)(h));        
-        int offset = (int) (off * 100);                       
+        int width = getWidth();
+        int height= getHeight();
+        
+        //Paint the background Color
+        setBackground(Color.BLACK);
+        
+        int cellWidth = width / (numCols + 1);
+        int cellHeight = height / (numRows + 1);
+        int cellSize = 0; 
+        
+        cellSize = Math.min(cellWidth, cellHeight);
+        int xLoc = (width - cellSize * numCols) / 2;
+        int yLoc = (height - cellSize * numRows) / 2;
+        
+
+//        double off = Math.max((double)(w), (double)(h)) / Math.min((double)(w), (double)(h));        
+        //int offset = (int) (off * 100);                       
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {  
-            	grid[i][j].draw(g2, j * w / numCols, i * h / numRows, offset);
+            	grid[i][j].draw(g2, xLoc, yLoc, cellSize);
             	if (grid[i][j].isLabel()) {      
             		String roomName = grid[i][j].getRoom().getName(); 
             		JLabel label = new JLabel(roomName);
             		Dimension size = label.getPreferredSize();
-            		label.setBounds(
-            				(j * w) / numCols - (size.width / 2),
-            				(i * h) / numRows,size.width, size.height);
-            		add(label);
+//            		label.setBounds(
+//            				(j * w) / numCols - (size.width / 2),
+//            				(i * h) / numRows, size.width, size.height);
+//            		add(label);
             	}
             }
         }       
-    }
-    
-   
-    
+    }   
     
     private class gameListener implements MouseListener {
     	public void mousePressed(MouseEvent event) {}

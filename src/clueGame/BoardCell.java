@@ -41,8 +41,7 @@ public class BoardCell {
         this.row = row;
         this.col = col;
         adjList = new ArrayList<BoardCell>();       
-    }
-    
+    }    
 
 /*
  * SETTERS
@@ -122,6 +121,10 @@ public class BoardCell {
         isOccupied = true;
         this.player = player;        
     }
+    
+    public void setOccupied(boolean occupied) {
+    	isOccupied = occupied;
+    }
 
     public void addAdj(BoardCell cell) {
         adjList.add(cell);
@@ -165,8 +168,7 @@ public class BoardCell {
     
     public void setInitial(Character initial) {
     	this.initial = initial;
-    }
-    
+    }   
     
  /*
   * GETTERS
@@ -267,17 +269,18 @@ public class BoardCell {
  * GRAPHICS
  */ 
 
-    public void draw(Graphics2D g, int x, int y, int offset) {
-    	
+    public void draw(Graphics2D g, int x, int y, int size) {
+    	int h = row * size + y;
+    	int w = col * size + x;    	
     	g.setColor(color);
-    	g.fillRect(x, y, offset, offset);
+    	g.fillRect(w, h, size, size);
     	g.setColor(Color.BLACK);
     	if (isWalkway) {
-    		g.drawRect(x+1, y+1, offset + 2, offset + 2);
+    		g.drawRect(w + 1, h + 1, size + 2, size + 2);
     	}
     	if (isOccupied || isStart) {
     		g.setColor(player.color);
-    		g.fillOval(x, y, offset / 5, offset / 5);
+    		g.fillOval(w, h, size , size);
     	}
     }
 }

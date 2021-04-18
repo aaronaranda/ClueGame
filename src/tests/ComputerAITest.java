@@ -102,15 +102,15 @@ public class ComputerAITest {
 		assertEquals(bool, true);
 
 		//Adds seen room test
-		aIPlayer.updateSeen(card1);
-		aIPlayer.updateSeen(card2);
-		aIPlayer.updateSeen(card3);
-		aIPlayer.updateSeen(card4);
-		aIPlayer.updateSeen(card5);
-		aIPlayer.updateSeen(card6);
-		aIPlayer.updateSeen(card7);
-		aIPlayer.updateSeen(card8);
-		aIPlayer.updateSeen(card9);
+//		aIPlayer.updateSeen(card1);
+//		aIPlayer.updateSeen(card2);
+//		aIPlayer.updateSeen(card3);
+//		aIPlayer.updateSeen(card4);
+//		aIPlayer.updateSeen(card5);
+//		aIPlayer.updateSeen(card6);
+//		aIPlayer.updateSeen(card7);
+//		aIPlayer.updateSeen(card8);
+//		aIPlayer.updateSeen(card9);
 		
 		//Creates test cells
 		room = aIPlayer.selectTargets();
@@ -118,7 +118,7 @@ public class ComputerAITest {
 		//Tests that the room was still selected even with seen rooms
 		bool = false;
 		iterator = 0;
-		for (Card c: aIPlayer.getSeenRoomCards()) {
+		for (Card c: aIPlayer.getDeck()) {
 			if (c == room) {
 				iterator += 1;
 			}

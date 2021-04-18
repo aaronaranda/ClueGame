@@ -97,11 +97,11 @@ public class FileInitTest {
 	@Test
 	public void testInitials() {
 		BoardCell cell = board.getCell(10, 12);
-		assertEquals('X', cell.getInitial());
+		assertTrue(cell.getInitial().equals('X'));
 		cell = board.getCell(22,13);
-		assertEquals('D', cell.getInitial());
+		assertTrue(cell.getInitial().equals('D'));
 		cell = board.getCell(14, 21);
-		assertEquals('T', cell.getInitial());		
+		assertTrue(cell.getInitial().equals('T'));		
 	}
 	
 }
