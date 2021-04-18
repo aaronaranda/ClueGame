@@ -270,6 +270,13 @@ public class BoardCell {
  */ 
 
     public void draw(Graphics2D g, int x, int y, int size) {
+    	if (isRoom && !isDoorway) {
+    		color = new Color(212, 227, 251);
+    	} else if (isSpace) {
+    		color = Color.BLACK;
+    	} else if (isWalkway) {
+    		color = Color.WHITE;    		
+    	} 	    
     	int h = row * size + y;
     	int w = col * size + x;    	
     	g.setColor(color);

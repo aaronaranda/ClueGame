@@ -442,10 +442,11 @@ public class Board extends JPanel {
             		String roomName = grid[i][j].getRoom().getName(); 
             		JLabel label = new JLabel(roomName);
             		Dimension size = label.getPreferredSize();
-//            		label.setBounds(
-//            				(j * w) / numCols - (size.width / 2),
-//            				(i * h) / numRows, size.width, size.height);
-//            		add(label);
+            		//int h = row * size + y;
+                	//int w = col * size + x; 
+            		label.setBounds(
+            				j * cellSize + xLoc, i * cellSize + yLoc, size.width, size.height);
+            		add(label);
             	}
             }
         }       
