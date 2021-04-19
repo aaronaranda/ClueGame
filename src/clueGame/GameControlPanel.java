@@ -27,8 +27,8 @@ public class GameControlPanel extends JPanel {
 	//private String guessResult;
 	private JTextField guessResult;
  
-    public GameControlPanel(Board board) {
-    	this.board = board;
+    public GameControlPanel() {
+    	this.board = Board.getInstance();
     	player = board.getPlayer(0);
     	
     	// Sizing
@@ -89,19 +89,24 @@ public class GameControlPanel extends JPanel {
         add(lowerPanel);
     }
     
-    public void setMove(boolean move) {
-    	canMove = move;
+    public void start() {
+    	player = board.getPlayer(0);
+    	int roll = board.diceRoll();
+    	setTurn(player, roll);
+    	board.play(player, roll);
     }
+     
     
     private class NextListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {						
 			// must check if player moved or not
-			player.setRoll(board.diceRoll());
-			if (canMove && board.turnNumber > 0) {
-				setTurn(board.nextPlayer(), player.getRoll());
+			if (!player.madeMove()) {
+				JOptionPane.showMessageDialog(null, "Please finish your turn.");
 			} else {
-			String errorMessage = "Please finish your turn.";
-			JOptionPane.showMessageDialog(null, errorMessage);
+				player = board.getPlayer(Board.turnNumber % 6);
+				int roll = board.diceRoll();
+				setTurn(player, roll);
+				board.play(player, roll);
 			}									
 		}    	
     }
@@ -117,9 +122,7 @@ public class GameControlPanel extends JPanel {
     public void setTurn(Player player, int roll) {
         this.playerName.setText(player.getName());
         this.roll.setText(String.valueOf(roll));
-        board.play(player, roll);
-        canMove = player.madeMove();
-      
+        repaint();              
     }
     
     //Sets the guess

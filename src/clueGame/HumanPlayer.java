@@ -12,29 +12,41 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public void moveLocation(Set<BoardCell> targets) {}
+    public void moveLocation() {}
     
     @Override
-    public boolean moveLocation(BoardCell cell, Set<BoardCell> targets) {
-    	if (targets.contains(cell)) {
+    public boolean moveLocation(BoardCell cell) {
+    	if (this.board.getTargets().contains(cell)) {
     		location.setUnoccupied();
-    		for (BoardCell c: targets) {
-    			c.setUnoccupied();
-    			
+    		for (BoardCell targetCells: this.board.getTargets()) {
+    			targetCells.setUnoccupied();    			
     		}
     		location = cell;
     		cell.setOccupied(this);
     		madeMove = true;
+    		Board.turnNumber++;
+    		this.board.getTargets().clear();
+    		this.board.repaint();
     		return true;
-    	} else { 
-			String message = "Location " + cell.getRow() + " " + cell.getCol();
-			JOptionPane.showMessageDialog(null, message);
+    	} else { 			
 			madeMove = false;
 			return false;
     	}
     	
      }
-  
+    
+    
+    public void move() {
+    	madeMove = false;
+    	this.board.showTargets();
+    }
+
+    public boolean hasMoved() {
+    	return madeMove;
+    }
+    
+    
+    
     
     @Override
     public Card disproveSuggestion(Solution suggestion) {

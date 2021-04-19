@@ -12,6 +12,9 @@ public class Board extends JPanel {
     // Sizing
     private int numRows;
     private int numCols;
+    private int cellSize;
+    private int xOffset;
+    private int yOffset;
 
     // Config files
     private String layoutConfigFile;
@@ -30,6 +33,8 @@ public class Board extends JPanel {
     // Current turn
     public static int turnNumber;   
     private Player currentPlayer;
+    
+    private HumanPlayer humanPlayer;
     
     // Answer to the game
     private static Solution theSolution;
@@ -117,6 +122,7 @@ public class Board extends JPanel {
                 Player player = null;
                 if (initial == '0') {
                     player = new HumanPlayer(name);
+                    humanPlayer = (HumanPlayer) player;
                 } else {
                     player = new ComputerPlayer(name);
                 }
@@ -176,8 +182,7 @@ public class Board extends JPanel {
                         	cell.hasMarker(indicator);                      
                         	}
                         }
-                    }
-                    cell.updateColor(); 
+                    }                    
                     tempBoard.add(cell);
                     col++;
                 } else {
@@ -325,98 +330,41 @@ public class Board extends JPanel {
         }
     }
     
+    
+    public boolean checkAccusation(Solution accusation) {
+    	return theSolution.equals(accusation);
+    }
+    
     public int diceRoll() {
     	Random rand = new Random();    	
     	return rand.nextInt(6) + 1;
     }
     
-    public void play(Player currentPlayer, int roll) {
-    	this.currentPlayer = currentPlayer;
-    	gcp.setMove(false);
+    public boolean play(Player currentPlayer, int roll) {
+    	this.currentPlayer = currentPlayer;    	
     	calcTargets(currentPlayer.getLocation(), roll);
-    	if (!currentPlayer.isHuman) {
-    		currentPlayer.moveLocation(targets);
+    	if (!currentPlayer.equals(humanPlayer)) {
+    		currentPlayer.moveLocation();
+    		targets.clear();
     		repaint();
-			turnNumber++;			
-    	} else {    	
-    		for (BoardCell c: this.targets) {
-    			c.updateTargets();
-    			repaint();
-    		}
-    	}
-    }
-    
-    public boolean checkAccusation(Solution accusation) {
-    	return theSolution.equals(accusation);
-    }
-
-/*
- * GETTERS
- */ 
-
-    public Player getPlayer(int index) {
-        return players.get(index);
-    }
-    
-    public Player nextPlayer() {
-    	return players.get(turnNumber % 6); 
-    }
-    
-   public BoardCell getCell(int row, int col) {
-	   return grid[row][col];
-   }
-   
-   public Room getRoom(BoardCell cell) {
-	   return cell.getRoom();
-   }
-   
-   public Room getRoom(Character initial) {
-	   return roomMap.get(initial);
-   }
-   
-   public int getNumRows() {
-	   return numRows;
-   }
-   
-   public int getNumColumns() {
-	   return numCols;
-   }  
-
-   public String getWeapon(int index) {
-	   return weapons.get(index);
-   }
-   
-   public ArrayList<Card> getDeck() {
-	   return cards;
-   }
-   
-    public Set<BoardCell> getTargets() {
-    	for (BoardCell c: targets) {
-    		System.out.println(c.getRow() + " "+ c.getCol());
-    	}
-    	return this.targets;
-    }
-
-    public Set<BoardCell> getAdjList(int row, int col) {
-    	return (Set<BoardCell>) grid[row][col].getAdjList();
-    }
-    
-    public Solution getTheAnswer() {
-    	return theSolution;
-    }
-    
-    public ArrayList<Player> getPlayers() {
-    	return players;
-    }
+			turnNumber++;
+			return true;
+    	} else if (currentPlayer.equals(humanPlayer)) {
+    		humanPlayer.move();
+    		repaint();
+    		return humanPlayer.madeMove();
+   		}
+    	return false;
+   	}
 
 /*
  * GRAPHICS
  */
     
-    public void paintComponent(Graphics g) {
+    public final void paintComponent(Graphics g) {
     	super.paintComponent(g);    	    
         Graphics2D g2 = (Graphics2D) g;
-        setLayout(null);
+        
         removeAll();
         int width = getWidth();
         int height= getHeight();
@@ -424,38 +372,63 @@ public class Board extends JPanel {
         //Paint the background Color
         setBackground(Color.BLACK);
         
+        // Get cell sizing based on board width and height
         int cellWidth = width / (numCols + 1);
         int cellHeight = height / (numRows + 1);
-        int cellSize = 0; 
-        
+         
+        // Equal cell width and height to maintain square cells
         cellSize = Math.min(cellWidth, cellHeight);
-        int xLoc = (width - cellSize * numCols) / 2;
-        int yLoc = (height - cellSize * numRows) / 2;
         
-
-//        double off = Math.max((double)(w), (double)(h)) / Math.min((double)(w), (double)(h));        
-        //int offset = (int) (off * 100);                       
+        // Offsets to keep board in board JPanel, regardless of screen resizing
+        xOffset = (width - cellSize * numCols) / 2;
+        yOffset = (height - cellSize * numRows) / 2;
+        
         for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numCols; j++) {  
-            	if (targets != null) {
-            		grid[i][j].draw(g2, xLoc, yLoc, cellSize , targets);
-            	}
-            	if (targets == null) {
-            		grid[i][j].draw(g2, xLoc, yLoc, cellSize);
-            	}
+            for (int j = 0; j < numCols; j++) {              
+            	grid[i][j].draw(g2, xOffset, yOffset, cellSize);            	
             	if (grid[i][j].isLabel()) {      
             		String roomName = grid[i][j].getRoom().getName(); 
             		JLabel label = new JLabel(roomName);
             		Dimension size = label.getPreferredSize();
-            		//int h = row * size + y;
-                	//int w = col * size + x; 
             		label.setBounds(
-            				j * cellSize + xLoc, i * cellSize + yLoc, size.width, size.height);
+            				j * cellSize + xOffset, i * cellSize + yOffset, size.width, size.height);
             		add(label);
             	}
             }
         }       
     }   
+    
+    // Shows targets to humanPlayer as red, including rooms
+    public void showTargets() {
+    	if (targets.isEmpty()) {
+    		return;
+    	}    	
+    	for (BoardCell cell: targets) {
+    		if (cell.isRoom()) {
+    			for (BoardCell roomCell: cell.getRoom().getCells()) {
+    				roomCell.setTarget(true);
+    				targets.add(roomCell);
+    			}
+    		} else {
+    			cell.setTarget(true);
+    		}
+    	}
+    	this.repaint();    	
+    }
+    
+    // Gets the cell associated with the location on JPanel that is clicked
+    public BoardCell getClickedCell(int x , int y) {
+    	int row = (y - yOffset) / cellSize;
+    	int col = (x - xOffset) / cellSize;
+    	BoardCell clickedCell = grid[row][col];
+    	if (clickedCell.isRoom()) {
+    		clickedCell = clickedCell.getRoom().getCenterCell();
+    	}
+    	if (targets.contains(clickedCell)) {
+    		return clickedCell;
+    	} 
+    	return null;    	
+    }
     
     private class gameListener implements MouseListener {
     	public void mousePressed(MouseEvent event) {}
@@ -463,17 +436,86 @@ public class Board extends JPanel {
     	public void mouseEntered(MouseEvent event) {}
     	public void mouseExited(MouseEvent event) {}
     	public void mouseClicked(MouseEvent event) {
-    		int tempX = getWidth() / numRows;
-    		int tempY = getHeight() / numCols;     		
-    		int x = (event.getX() / tempX); //32
-    		int y = (event.getY() / tempY); //25
-    		BoardCell currentCell = grid[x][y];
-    		calcTargets(currentCell, currentPlayer.getRoll());
-    		if (currentPlayer.moveLocation(currentCell, targets)) {
-    			repaint();
-    			turnNumber++;    
-    			gcp.setMove(true);
+    		if (!humanPlayer.hasMoved()) {
+    			BoardCell clickedCell = getClickedCell(event.getX(), event.getY());
+    			if  (clickedCell.equals(null)) {
+    				JOptionPane.showMessageDialog(null, "Invalid selection");
+    			} else {
+    				humanPlayer.moveLocation(clickedCell);	
+    				repaint();
+    			}
     		}
+//    		int tempX = getWidth() / numRows;
+//    		int tempY = getHeight() / numCols;     		
+//    		int x = (event.getX() / tempX); //32
+//    		int y = (event.getY() / tempY); //25
+//    		BoardCell currentCell = grid[x][y];
+//    		calcTargets(currentCell, currentPlayer.getRoll());
+//    		if (currentPlayer.moveLocation(currentCell, targets)) {
+//    			repaint();
+//    			turnNumber++;    
+//    			gcp.setMove(true);
+//    		}
     	}    	    	
     }
+    
+    
+    /*
+     * GETTERS
+     */ 
+
+        public Player getPlayer(int index) {
+            return players.get(index);
+        }
+        
+        public Player nextPlayer() {
+        	return players.get(turnNumber % 6); 
+        }
+        
+       public BoardCell getCell(int row, int col) {
+    	   return grid[row][col];
+       }
+       
+       public Room getRoom(BoardCell cell) {
+    	   return cell.getRoom();
+       }
+       
+       public Room getRoom(Character initial) {
+    	   return roomMap.get(initial);
+       }
+       
+       public int getNumRows() {
+    	   return numRows;
+       }
+       
+       public int getNumColumns() {
+    	   return numCols;
+       }  
+
+       public String getWeapon(int index) {
+    	   return weapons.get(index);
+       }
+       
+       public ArrayList<Card> getDeck() {
+    	   return cards;
+       }
+       
+        public Set<BoardCell> getTargets() {
+        	for (BoardCell c: targets) {
+        		System.out.println(c.getRow() + " "+ c.getCol());
+        	}
+        	return this.targets;
+        }
+
+        public Set<BoardCell> getAdjList(int row, int col) {
+        	return (Set<BoardCell>) grid[row][col].getAdjList();
+        }
+        
+        public Solution getTheAnswer() {
+        	return theSolution;
+        }
+        
+        public ArrayList<Player> getPlayers() {
+        	return players;
+        }
 }

@@ -6,26 +6,23 @@ public class ComputerPlayer extends Player {
     public ComputerPlayer(String name) {
         super(name);
         this.isHuman = false;
+        this.madeMove = false;
     }
 
     @Override
-    public boolean moveLocation(BoardCell cell, Set<BoardCell> targets) {
+    public boolean moveLocation(BoardCell cell) {
     	return true;
     }
     
     @Override
-    public void moveLocation(Set<BoardCell> targets) {
-    	BoardCell[] arrTargets = new BoardCell[targets.size()];
-    	arrTargets = targets.toArray(arrTargets);
+    public void moveLocation() {
+    	BoardCell[] arrTargets = new BoardCell[this.board.getTargets().size()];
+    	arrTargets = this.board.getTargets().toArray(arrTargets);
     	Random rand = new Random();
-    	location.setUnoccupied();
-    	for (BoardCell c: targets) {
-    		c.setUnoccupied();
-    	}
-    	location = arrTargets[rand.nextInt(targets.size())];
+    	location.setUnoccupied();    	
+    	location = arrTargets[rand.nextInt(this.board.getTargets().size())];
     	location.setOccupied(this);
-    	madeMove = true;     
-    	
+    	madeMove = true;         	
     }
     
     @Override

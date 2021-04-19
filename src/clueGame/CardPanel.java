@@ -16,8 +16,8 @@ public class CardPanel extends JPanel {
     private CardTypePanel weaponsPanel;
     
     // Constructor sets up overall panel
-    public CardPanel(Board board) {
-    	this.board = board;
+    public CardPanel() {
+    	this.board = Board.getInstance();
     	player = board.getPlayer(0);	//Always gets the human player    
     	setSize(new Dimension(100, 800));    	
         setLayout(new GridLayout(0, 1));

@@ -31,6 +31,7 @@ public class BoardCell {
     private boolean isStart;
     private boolean isOccupied;
     private Player player;
+    private boolean isTarget;
 
     // Adjacent Cells
     ArrayList<BoardCell> adjList;
@@ -117,54 +118,38 @@ public class BoardCell {
         passageRoom = passage;
     }
 
-    public void setOccupied(Player player) {
-        isOccupied = true;
-        this.player = player;        
-    }
-    
-    public void setOccupied(boolean occupied) {
-    	isOccupied = occupied;
-    }
-
     public void addAdj(BoardCell cell) {
         adjList.add(cell);
     }
 
-    public void updateColor() {
-    	if (isRoom) {
-    		color = new Color(212, 227, 251);
-    	} else if (isSpace) {
-    		color = Color.BLACK;
-    	} else if (isWalkway) {
-    		color = Color.WHITE;    		
-    	} 	        	
-    }   
-
+   
+     
     public void setStart(Player player) {
     	isStart = true;
     	isOccupied = true;
     	this.player = player;    	    	
     }
+        
     
-    public void setColor(Color color) {
-    	this.color = color;
-    }
-    
-    public void updateTargets() {
-    	color = Color.red; 
-    	if (isDoorway) {
-    		for (BoardCell cell: room.getCells()) {
-    			cell.setColor(color);
-    		}
-    	}
-
+    public void setTarget(boolean isTarget) {
+    	this.isTarget = isTarget;      	
     }
     
     public void setUnoccupied() {
+    	isTarget = false;
     	isStart = false;
-    	isOccupied = false;
-    	color = Color.white;
+    	isOccupied = false;   
     }
+    
+    public void setOccupied(Player player) {
+    	isTarget = false;
+        isOccupied = true;
+        this.player = player;        
+    }
+    
+//    public void setOccupied(boolean occupied) {
+//    	isOccupied = occupied;
+//    }
     
     public void setInitial(Character initial) {
     	this.initial = initial;
@@ -215,7 +200,7 @@ public class BoardCell {
         return isStart;
     }
 
-    public boolean isOccupied() {
+    public boolean isOccupied() {    	
         return isOccupied;
     }
 //Objects
@@ -269,15 +254,19 @@ public class BoardCell {
  * GRAPHICS
  */ 
 
-    public void draw(Graphics2D g, int x, int y, int size) {
-    	boolean isTarget = false;
+    public void draw(Graphics2D g, int x, int y, int size) {    	
     	if (isRoom && !isDoorway) {
     		color = new Color(212, 227, 251);
-    	} else if (isSpace) {
+    	} 
+    	if (isSpace) {
     		color = Color.BLACK;
-    	} else if (isWalkway) {
+    	} 
+    	if (isWalkway) {
     		color = Color.WHITE;    		
-    	} 	  
+    	} 
+    	if (isTarget) {
+    		color = Color.red;
+    	}
     	int h = row * size + y;
     	int w = col * size + x;    	
     	g.setColor(color);
@@ -291,34 +280,34 @@ public class BoardCell {
     		g.fillOval(w, h, size , size);
     	}
     }
-    
-    public void draw(Graphics2D g, int x, int y, int size, Set<BoardCell> targets ) {
-    	boolean isTarget = false;
-    	BoardCell currentCell = new BoardCell(x, y);
-    	targets.remove(null);
-    	if (!targets.isEmpty()) {
-    		if (targets.contains(currentCell)) {
-    			color = Color.red;
-    		}
-    	}
-    	else if (isRoom && !isDoorway) {
-    		color = new Color(212, 227, 251);
-    	} else if (isSpace) {
-    		color = Color.BLACK;
-    	} else if (isWalkway) {
-    		color = Color.WHITE;    		
-    	} 	  
-    	int h = row * size + y;
-    	int w = col * size + x;    	
-    	g.setColor(color);
-    	g.fillRect(w, h, size, size);
-    	g.setColor(Color.BLACK);
-    	if (isWalkway) {
-    		g.drawRect(w + 1, h + 1, size + 2, size + 2);
-    	}
-    	if (isOccupied || isStart) {
-    		g.setColor(player.color);
-    		g.fillOval(w, h, size , size);
-    	}
-    }
+//    
+//    public void draw(Graphics2D g, int x, int y, int size, Set<BoardCell> targets ) {
+//    	
+//
+//
+//    	if (!targets.isEmpty()) {
+//    		if (targets.contains(this)) {
+//    			color = Color.red;
+//    		}
+//    	}
+//    	else if (isRoom && !isDoorway) {
+//    		color = new Color(212, 227, 251);
+//    	} else if (isSpace) {
+//    		color = Color.BLACK;
+//    	} else if (isWalkway) {
+//    		color = Color.WHITE;    		
+//    	} 	  
+//    	int h = row * size + y;
+//    	int w = col * size + x;    	
+//    	g.setColor(color);
+//    	g.fillRect(w, h, size, size);
+//    	g.setColor(Color.BLACK);
+//    	if (isWalkway) {
+//    		g.drawRect(w + 1, h + 1, size + 2, size + 2);
+//    	}
+//    	if (isOccupied || isStart) {
+//    		g.setColor(player.color);
+//    		g.fillOval(w, h, size , size);
+//    	}
+//    }
 }

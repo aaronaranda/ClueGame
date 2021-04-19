@@ -16,11 +16,15 @@ public abstract class Player {
     protected ArrayList<Card> seenCards;
     protected BoardCell location;
     protected boolean madeMove;
+    protected Board board;
+    
 
     public Player(String name) {
         this.name = name;
         deck = new ArrayList<Card>();
         seenCards = new ArrayList<Card>();
+        board = Board.getInstance();
+        
     }
 
     public abstract Card disproveSuggestion(Solution suggestion);
@@ -59,13 +63,17 @@ public abstract class Player {
     	cell.setStart(this);
     }
     
-    public void setRoll(int roll) {
-    	this.roll = roll;
+   
+    public void setPosition(BoardCell cell) {
+    	if (!cell.equals(location)) {
+    		location.setUnoccupied();
+    		cell.setOccupied(this);
+    		location = cell;    		
+    	}
     }
    
-   
-    public abstract boolean moveLocation(BoardCell cell, Set<BoardCell> targest);
-    public abstract void moveLocation(Set<BoardCell> targets);
+    public abstract boolean moveLocation(BoardCell cell);
+    public abstract void moveLocation();
 
 /*
  * GETTERS

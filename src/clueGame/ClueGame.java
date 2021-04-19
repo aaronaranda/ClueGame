@@ -23,8 +23,8 @@ public class ClueGame extends JFrame {
 		board = Board.getInstance();
 		board.setConfigFiles("ClueLayout306.csv", "ClueSetup306.txt");
 		board.initialize();	
-		cardPanel = new CardPanel(board);
-		gameControlPanel = new GameControlPanel(board);	
+		cardPanel = new CardPanel();
+		gameControlPanel = new GameControlPanel();	
 		board.setGCP(gameControlPanel);
 		add(board, BorderLayout.CENTER);
 		add(cardPanel, BorderLayout.EAST);
@@ -41,8 +41,8 @@ public class ClueGame extends JFrame {
 		return board.getPlayer(0);
 	}
 	
-	public void setTurn() {
-		gameControlPanel.setTurn(board.getPlayer(board.turnNumber % 6), board.diceRoll());
+	public void startGame() {
+		gameControlPanel.start();
 		
 	}
 
@@ -58,7 +58,7 @@ public class ClueGame extends JFrame {
 	        "Welcome to Clue",
 	        JOptionPane.INFORMATION_MESSAGE);
 	    
-	    gui.setTurn();
+	    gui.startGame();
 	   
 	    
 	 
