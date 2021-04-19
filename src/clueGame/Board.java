@@ -1,5 +1,6 @@
 package clueGame;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -402,8 +403,9 @@ public class Board extends JPanel {
     public void showTargets() {
     	if (targets.isEmpty()) {
     		return;
-    	}    	
-    	for (BoardCell cell: targets) {
+    	}
+    	ArrayList<BoardCell> tempTargets = new ArrayList<BoardCell>(targets);
+    	for (BoardCell cell: tempTargets) {
     		if (cell.isRoom()) {
     			for (BoardCell roomCell: cell.getRoom().getCells()) {
     				roomCell.setTarget(true);
@@ -413,7 +415,7 @@ public class Board extends JPanel {
     			cell.setTarget(true);
     		}
     	}
-    	this.repaint();    	
+    	this.repaint();
     }
     
     // Gets the cell associated with the location on JPanel that is clicked
@@ -432,31 +434,20 @@ public class Board extends JPanel {
     
     private class gameListener implements MouseListener {
     	public void mousePressed(MouseEvent event) {}
-    	public void mouseReleased(MouseEvent event) {}
+    	public void mouseReleased(MouseEvent event) {
+            if (!humanPlayer.hasMoved()) {
+                BoardCell clickedCell = getClickedCell(event.getX(), event.getY());
+                if  (clickedCell == null) {
+                    JOptionPane.showMessageDialog(null, "Invalid selection");
+                } else {
+                    humanPlayer.moveLocation(clickedCell);
+                    repaint();
+                }
+            }
+        }
     	public void mouseEntered(MouseEvent event) {}
     	public void mouseExited(MouseEvent event) {}
-    	public void mouseClicked(MouseEvent event) {
-    		if (!humanPlayer.hasMoved()) {
-    			BoardCell clickedCell = getClickedCell(event.getX(), event.getY());
-    			if  (clickedCell.equals(null)) {
-    				JOptionPane.showMessageDialog(null, "Invalid selection");
-    			} else {
-    				humanPlayer.moveLocation(clickedCell);	
-    				repaint();
-    			}
-    		}
-//    		int tempX = getWidth() / numRows;
-//    		int tempY = getHeight() / numCols;     		
-//    		int x = (event.getX() / tempX); //32
-//    		int y = (event.getY() / tempY); //25
-//    		BoardCell currentCell = grid[x][y];
-//    		calcTargets(currentCell, currentPlayer.getRoll());
-//    		if (currentPlayer.moveLocation(currentCell, targets)) {
-//    			repaint();
-//    			turnNumber++;    
-//    			gcp.setMove(true);
-//    		}
-    	}    	    	
+    	public void mouseClicked(MouseEvent event) {}
     }
     
     
@@ -501,14 +492,11 @@ public class Board extends JPanel {
        }
        
         public Set<BoardCell> getTargets() {
-        	for (BoardCell c: targets) {
-        		System.out.println(c.getRow() + " "+ c.getCol());
-        	}
         	return this.targets;
         }
 
-        public Set<BoardCell> getAdjList(int row, int col) {
-        	return (Set<BoardCell>) grid[row][col].getAdjList();
+        public ArrayList<BoardCell> getAdjList(int row, int col) {
+        	return grid[row][col].getAdjList();
         }
         
         public Solution getTheAnswer() {

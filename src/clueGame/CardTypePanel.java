@@ -12,12 +12,20 @@ public class CardTypePanel extends JPanel {
 
     public CardTypePanel(String type) {
     	setSize(new Dimension(100, 200));
-    	
+    	setBackground(Color.BLACK);
         setLayout(new GridLayout(0, 1));
-        setBorder(new TitledBorder(new EtchedBorder(), type));
+        setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
+                type, 0, 0, null, Color.WHITE));
         inHandPanel = new JPanel(new GridLayout(0, 1));
         seenPanel = new JPanel(new GridLayout(0, 1));
-        seenPanel.add(new JLabel("Seen:"));
+        seenPanel.setBackground(Color.BLACK);
+        seenPanel.setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
+                "Seen:", 0, 0, null, Color.WHITE));
+        inHandPanel.setBackground(Color.BLACK);
+        inHandPanel.setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
+                "In Hand:", 0, 0, null, Color.WHITE));
+
+
         inHandCards = new ArrayList<Card>();
         seenCards = new ArrayList<Card>();
         inHandCards.add(new Card("None", CardType.PERSON));

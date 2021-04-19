@@ -21,10 +21,13 @@ public class CardPanel extends JPanel {
     	player = board.getPlayer(0);	//Always gets the human player    
     	setSize(new Dimension(100, 800));    	
         setLayout(new GridLayout(0, 1));
-        setBorder(new TitledBorder(new EtchedBorder(), "Known Cards"));
-        peoplePanel = new CardTypePanel("People");
-        roomsPanel = new CardTypePanel("Rooms");
-        weaponsPanel = new CardTypePanel("Weapons");
+
+        setBackground(Color.BLACK);
+        setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
+                "CARDS", 0, 0, null, Color.WHITE));
+        peoplePanel = new CardTypePanel("PEOPLE");
+        roomsPanel = new CardTypePanel("ROOMS");
+        weaponsPanel = new CardTypePanel("WEAPONS");
         add(peoplePanel);
         add(roomsPanel);
         add(weaponsPanel);

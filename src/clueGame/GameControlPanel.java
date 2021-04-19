@@ -1,7 +1,5 @@
 package clueGame;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,7 +17,8 @@ public class GameControlPanel extends JPanel {
 	private JTextField playerName;
 		
 	//private int roll;
-	private JTextField roll; 
+	private JTextField roll;
+	private int numRoll;
 	
 	//private String guess;
 	private JTextField guess;
@@ -45,37 +44,55 @@ public class GameControlPanel extends JPanel {
         // Whose turn is it?
     	JPanel turnPanel = new JPanel();
         turnPanel.setLayout(new GridLayout(2, 0));
-     	JLabel turnLabel = new JLabel("Whose turn?");
-    	this.playerName = new JTextField(20);
-    	turnPanel.add(turnLabel);
-    	this.playerName.setForeground(player.getColor());
+    	playerName = new JTextField(15);
+    	playerName.setBackground(Color.BLACK);
+    	turnPanel.setBackground(Color.BLACK);
+    	turnPanel.setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
+                "TURN:", 0, 0, null, Color.WHITE));
         turnPanel.add(this.playerName);
                
         // Roll
         JPanel rollPanel = new JPanel();
-        JLabel rollLabel = new JLabel("Roll: ");
-        this.roll = new JTextField(20);
-        rollPanel.add(rollLabel);
+        rollPanel.setLayout(new GridLayout(2, 0));
+        roll = new JTextField(15);
+        roll.setBackground(Color.BLACK);
+        roll.setForeground(Color.WHITE);
+        rollPanel.setBackground(Color.BLACK);
+        rollPanel.setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
+                "ROLL:", 0, 0, null, Color.WHITE));
         rollPanel.add(this.roll);
 
     	// Buttons
-    	JButton accusationButton = new JButton("Make Accusation");
+    	JButton accusationButton = new JButton("ACCUSE!");
+    	accusationButton.setForeground(Color.WHITE);
+        accusationButton.setOpaque(true);
+    	accusationButton.setBackground(Color.BLACK);
+    	accusationButton.setBorder(new BevelBorder(BevelBorder.RAISED, Color.CYAN, Color.WHITE));
+
         JButton nextButton = new JButton("NEXT!");
-        nextButton.setSize(50, 50);
-        accusationButton.setSize(50, 50);
+        nextButton.setForeground(Color.WHITE);
+        nextButton.setOpaque(true);
+        nextButton.setBackground(Color.BLACK);
+        nextButton.setBorder(new BevelBorder(BevelBorder.RAISED, Color.CYAN, Color.WHITE));
+
         nextButton.addActionListener(new NextListener());
         accusationButton.addActionListener(new AccusationListener());        
 
         JPanel guessPanel = new JPanel();
     	this.guess = new JTextField(10);
     	guessPanel.add(this.guess);
-    	guessPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess"));
+    	guessPanel.setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
+                "GUESS", 0, 0, null, Color.WHITE));
+    	guessPanel.setForeground(Color.WHITE);
+    	guessPanel.setBackground(Color.BLACK);
 
         JPanel resultPanel = new JPanel();
         this.guessResult = new JTextField(20);
         resultPanel.add(this.guessResult);
         resultPanel.setBorder(new TitledBorder(
-                    new EtchedBorder(), "Guess Result"));
+                   new EtchedBorder(Color.CYAN, Color.WHITE), "RESULT", 0, 0, null, Color.WHITE));
+        resultPanel.setForeground(Color.WHITE);
+        resultPanel.setBackground(Color.BLACK);
         
         upperPanel.add(turnPanel);
         upperPanel.add(rollPanel);
@@ -92,7 +109,7 @@ public class GameControlPanel extends JPanel {
     public void start() {
     	player = board.getPlayer(0);
     	int roll = board.diceRoll();
-    	setTurn(player, roll);
+    	setTurn();
     	board.play(player, roll);
     }
      
@@ -104,9 +121,9 @@ public class GameControlPanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "Please finish your turn.");
 			} else {
 				player = board.getPlayer(Board.turnNumber % 6);
-				int roll = board.diceRoll();
-				setTurn(player, roll);
-				board.play(player, roll);
+				numRoll = board.diceRoll();
+				setTurn();
+				play();
 			}									
 		}    	
     }
@@ -119,10 +136,14 @@ public class GameControlPanel extends JPanel {
     }
     
     //Sets turn
-    public void setTurn(Player player, int roll) {
-        this.playerName.setText(player.getName());
-        this.roll.setText(String.valueOf(roll));
-        repaint();              
+    public void setTurn() {
+        playerName.setText(player.getName());
+        playerName.setForeground(player.getColor());
+        roll.setText(String.valueOf(numRoll));
+    }
+
+    public void play() {
+        board.play(player, numRoll);
     }
     
     //Sets the guess

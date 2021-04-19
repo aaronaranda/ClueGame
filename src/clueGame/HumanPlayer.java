@@ -16,17 +16,20 @@ public class HumanPlayer extends Player {
     
     @Override
     public boolean moveLocation(BoardCell cell) {
-    	if (this.board.getTargets().contains(cell)) {
+    	if (this.board.getTargets().contains(cell) && !cell.isOccupied()) {
     		location.setUnoccupied();
     		for (BoardCell targetCells: this.board.getTargets()) {
     			targetCells.setUnoccupied();    			
     		}
-    		location = cell;
+    		if (cell.isRoom()) {
+    		    location = cell.getRoom().getCenterCell();
+            } else {
+                location = cell;
+            }
     		cell.setOccupied(this);
     		madeMove = true;
     		Board.turnNumber++;
     		this.board.getTargets().clear();
-    		this.board.repaint();
     		return true;
     	} else { 			
 			madeMove = false;

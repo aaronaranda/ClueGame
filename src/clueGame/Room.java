@@ -29,10 +29,12 @@ public class Room {
  */         
     public void setLabelCell(BoardCell cell) {
         labelCell = cell;
+        addCell(cell);
     }
 
     public void setCenterCell(BoardCell cell) {
         centerCell = cell;
+        addCell(cell);
     }
 
     public void addCell(BoardCell cell) {
