@@ -7,6 +7,7 @@ import java.awt.*;
 
 public abstract class Player {
     protected String name;
+    protected int roll;
     protected boolean isHuman;
     protected Point startPosition;
     protected BoardCell startCell;
@@ -57,6 +58,11 @@ public abstract class Player {
     	startCell = cell;
     	cell.setStart(this);
     }
+    
+    public void setRoll(int roll) {
+    	this.roll = roll;
+    }
+   
    
     public abstract boolean moveLocation(BoardCell cell, Set<BoardCell> targest);
     public abstract void moveLocation(Set<BoardCell> targets);
@@ -67,6 +73,10 @@ public abstract class Player {
 
     public BoardCell getLocation() {
     	return location;
+    }
+    
+    public int getRoll() {
+    	return roll;
     }
     
     public String getName() {
@@ -95,6 +105,9 @@ public abstract class Player {
 
     public ArrayList<Card> getSeen() {
         return seenCards;
+    }
+    public Color getColor() {
+    	return color;
     }
 
     public ArrayList<Card> getPersonCards(boolean seen) {

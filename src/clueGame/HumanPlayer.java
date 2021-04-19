@@ -27,11 +27,12 @@ public class HumanPlayer extends Player {
     		madeMove = true;
     		return true;
     	} else { 
-			String message = "You can't move here.";
+			String message = "Location " + cell.getRow() + " " + cell.getCol();
 			JOptionPane.showMessageDialog(null, message);
 			madeMove = false;
+			return false;
     	}
-    	return false;
+    	
      }
   
     

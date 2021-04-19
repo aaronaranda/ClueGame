@@ -270,13 +270,44 @@ public class BoardCell {
  */ 
 
     public void draw(Graphics2D g, int x, int y, int size) {
+    	boolean isTarget = false;
     	if (isRoom && !isDoorway) {
     		color = new Color(212, 227, 251);
     	} else if (isSpace) {
     		color = Color.BLACK;
     	} else if (isWalkway) {
     		color = Color.WHITE;    		
-    	} 	    
+    	} 	  
+    	int h = row * size + y;
+    	int w = col * size + x;    	
+    	g.setColor(color);
+    	g.fillRect(w, h, size, size);
+    	g.setColor(Color.BLACK);
+    	if (isWalkway) {
+    		g.drawRect(w + 1, h + 1, size + 2, size + 2);
+    	}
+    	if (isOccupied || isStart) {
+    		g.setColor(player.color);
+    		g.fillOval(w, h, size , size);
+    	}
+    }
+    
+    public void draw(Graphics2D g, int x, int y, int size, Set<BoardCell> targets ) {
+    	boolean isTarget = false;
+    	BoardCell currentCell = new BoardCell(x, y);
+    	targets.remove(null);
+    	if (!targets.isEmpty()) {
+    		if (targets.contains(currentCell)) {
+    			color = Color.red;
+    		}
+    	}
+    	else if (isRoom && !isDoorway) {
+    		color = new Color(212, 227, 251);
+    	} else if (isSpace) {
+    		color = Color.BLACK;
+    	} else if (isWalkway) {
+    		color = Color.WHITE;    		
+    	} 	  
     	int h = row * size + y;
     	int w = col * size + x;    	
     	g.setColor(color);

@@ -437,7 +437,12 @@ public class Board extends JPanel {
         //int offset = (int) (off * 100);                       
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {  
-            	grid[i][j].draw(g2, xLoc, yLoc, cellSize);
+            	if (targets != null) {
+            		grid[i][j].draw(g2, xLoc, yLoc, cellSize , targets);
+            	}
+            	if (targets == null) {
+            		grid[i][j].draw(g2, xLoc, yLoc, cellSize);
+            	}
             	if (grid[i][j].isLabel()) {      
             		String roomName = grid[i][j].getRoom().getName(); 
             		JLabel label = new JLabel(roomName);
@@ -458,12 +463,13 @@ public class Board extends JPanel {
     	public void mouseEntered(MouseEvent event) {}
     	public void mouseExited(MouseEvent event) {}
     	public void mouseClicked(MouseEvent event) {
-    		int tempX = getWidth() / numCols;
-    		int tempY = getHeight() / numRows;     		
+    		int tempX = getWidth() / numRows;
+    		int tempY = getHeight() / numCols;     		
     		int x = (event.getX() / tempX); //32
     		int y = (event.getY() / tempY); //25
-    		System.out.println("Clicked" + y + " " + x);
-    		if (currentPlayer.moveLocation(grid[y][x], getTargets())) {
+    		BoardCell currentCell = grid[x][y];
+    		calcTargets(currentCell, currentPlayer.getRoll());
+    		if (currentPlayer.moveLocation(currentCell, targets)) {
     			repaint();
     			turnNumber++;    
     			gcp.setMove(true);

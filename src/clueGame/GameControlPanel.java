@@ -48,6 +48,7 @@ public class GameControlPanel extends JPanel {
      	JLabel turnLabel = new JLabel("Whose turn?");
     	this.playerName = new JTextField(20);
     	turnPanel.add(turnLabel);
+    	this.playerName.setForeground(player.getColor());
         turnPanel.add(this.playerName);
                
         // Roll
@@ -95,8 +96,9 @@ public class GameControlPanel extends JPanel {
     private class NextListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {						
 			// must check if player moved or not
+			player.setRoll(board.diceRoll());
 			if (canMove && board.turnNumber > 0) {
-				setTurn(board.nextPlayer(), board.diceRoll());
+				setTurn(board.nextPlayer(), player.getRoll());
 			} else {
 			String errorMessage = "Please finish your turn.";
 			JOptionPane.showMessageDialog(null, errorMessage);

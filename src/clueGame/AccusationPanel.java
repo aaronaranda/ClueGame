@@ -17,6 +17,7 @@ public class AccusationPanel extends JDialog {
 		JLabel personLabel = new JLabel("Select Person Card");
 		JLabel roomLabel = new JLabel("Select Room Card");
 		JLabel weaponLabel = new JLabel("Select Weapon Card");
+		JLabel fillerLabel = new JLabel("");
 		String[] personCards = new String[player.getPersonCards(false).size()];
 		String[] roomCards = new String[player.getRoomCards(false).size()];
 		String[] weaponCards = new String[player.getWeaponCards(false).size()];
@@ -47,7 +48,9 @@ public class AccusationPanel extends JDialog {
 		
 		JButton button = new JButton("Make Accusation");
 		add(button, 3, 0);
+		add(fillerLabel, 3, 1);
 		button.addActionListener(e -> setVisible(false));
+		
 		
 	}
 }
