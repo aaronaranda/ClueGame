@@ -1,17 +1,29 @@
 package clueGame;
 
 import java.awt.*;
+import java.io.IOException;
 
-public class Card {
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+
+public class Card extends JTextField {
     private String name;
     private CardType type;
     private boolean seen;
     private Color color;
-
-    public Card(String name, CardType type) {
+    private Image image;
+    private Border cardBorder;
+    
+    public Card(String name, CardType type, Color color) {
         this.name = name;
         this.type = type;
-        setColor();
+        this.color = color;
+        setText(name);
+      
     }
 
     public boolean equals(Card target) {
@@ -26,16 +38,24 @@ public class Card {
     public void seeCard() {
         seen = true;
     }
-
-    private void setColor() {
-        if (type.equals(CardType.PERSON)) {
-            // get color of the associated player
-        } else if (type.equals(CardType.WEAPON)) {
-            color = Color.RED;
-        } else if (type.equals(CardType.ROOM)) {
-            color = Color.CYAN;
-        }
-    }
+    
+   
+  
+//    @Override 
+//    protected void paintComponent(Graphics g) {
+//    	g.drawImage(image, 20, 20, this);
+//    }
+//    
+//    public Image getImage() {
+//    	Image image = null;
+//    	try {
+//    		image = ImageIO.read(this.c.getResource("icons/" + name + ".png"));
+//    	} catch(IOException e) {
+//    		e.printStackTrace();
+//    	}
+//    	return image;    
+//    }
+    
 
 /*
  * GETTERS
@@ -53,8 +73,8 @@ public class Card {
         return seen;
     }
 
-    public Color Color() {
+    public Color getColor() {
         return color;
     }
-    
+   
 }

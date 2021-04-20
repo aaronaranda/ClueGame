@@ -12,12 +12,12 @@ Room, Hall, H
 Space, Unused, X
 Space, Walkway, W
 // Weapons
-Weapon, Sword, 1
-Weapon, Pistol, 2
-Weapon, Broom, 3
-Weapon, Pencil, 4
-Weapon, Rock, 5
-Weapon, Lighter, 6
+Weapon, Sword, 0 
+Weapon, Pistol, 1 
+Weapon, Broom, 2 
+Weapon, Pencil, 3 
+Weapon, Rock, 4 
+Weapon, Lighter, 5 
 // Players
 Player, Johnny, 0, 55, 200, 255
 Player, Cooper, 1, 255, 155, 55

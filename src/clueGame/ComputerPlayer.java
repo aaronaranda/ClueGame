@@ -20,7 +20,7 @@ public class ComputerPlayer extends Player {
 			BoardCell[] arrTargets = new BoardCell[this.board.getTargets().size()];
 			arrTargets = this.board.getTargets().toArray(arrTargets);
 			Random rand = new Random();
-			location.setUnoccupied();
+			location.setUnoccupied(this);
 			System.out.println("Computer player target index: " + arrTargets.length);
 			int index = rand.nextInt(arrTargets.length);
 			location = arrTargets[index];

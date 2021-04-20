@@ -25,22 +25,22 @@ public class CardTypePanel extends JPanel {
         inHandPanel.setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
                 "In Hand:", 0, 0, null, Color.WHITE));
 
-
         inHandCards = new ArrayList<Card>();
         seenCards = new ArrayList<Card>();
-        inHandCards.add(new Card("None", CardType.PERSON));
-        seenCards.add(new Card("None", CardType.PERSON));
+        inHandCards.add(new Card("None", CardType.PERSON, Color.WHITE));
+        seenCards.add(new Card("None", CardType.PERSON, Color.WHITE));
         displayCards();
         add(inHandPanel);
         add(seenPanel);
     }
 
     private void displayCards() {
-        for (Card c: inHandCards) {
-            inHandPanel.add(new JTextField(c.getName(), 10));
+        for (Card card: inHandCards) {
+        	inHandPanel.add(card);
+        
         }
-        for (Card c: seenCards) {
-            seenPanel.add(new JTextField(c.getName(), 10));
+        for (Card card: seenCards) {
+            seenPanel.add(card);
         }
     }
 

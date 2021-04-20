@@ -66,7 +66,7 @@ public abstract class Player {
    
     public void setPosition(BoardCell cell) {
     	if (!cell.equals(location)) {
-    		location.setUnoccupied();
+    		location.setUnoccupied(this);
     		cell.setOccupied(this);
     		location = cell;    		
     	}

@@ -32,6 +32,9 @@ public class BoardCell {
     private boolean isOccupied;
     private Player player;
     private boolean isTarget;
+    
+    // Room Centers ocuppied my multiple players
+    private ArrayList<Player> roomPlayers;
 
     // Adjacent Cells
     ArrayList<BoardCell> adjList;
@@ -67,6 +70,7 @@ public class BoardCell {
         if (marker.equals('*')) {
             isCenter = true;
             room.setCenterCell(this);
+            roomPlayers = new ArrayList<Player>();
         } else {
             isCenter = false;
         }
@@ -136,16 +140,26 @@ public class BoardCell {
     	this.isTarget = isTarget;      	
     }
     
-    public void setUnoccupied() {
+ 
+    
+    public void setUnoccupied(Player player) {
     	isTarget = false;
-    	isStart = false;
-    	isOccupied = false;   
+    	isStart = false;    	
+    	if (isCenter && !roomPlayers.isEmpty()) {
+    		roomPlayers.remove(player);
+    	} else {
+    		isOccupied = false;
+    	}    	   	    
     }
     
     public void setOccupied(Player player) {
     	isTarget = false;
-        isOccupied = true;
-        this.player = player;        
+        isOccupied = true;             
+        if (isCenter) {
+        	roomPlayers.add(player);
+        } else {
+        	this.player = player;
+        }
     }
     
 //    public void setOccupied(boolean occupied) {
@@ -155,6 +169,7 @@ public class BoardCell {
     public void setInitial(Character initial) {
     	this.initial = initial;
     }   
+    
     
  /*
   * GETTERS
@@ -250,6 +265,14 @@ public class BoardCell {
     	}
     	return null;
     }
+    
+    public ArrayList<Player> getRoomPlayers() {
+    	return roomPlayers;
+    }
+    
+    public Player getPlayer() {
+    	return player;
+    }
 
 /*
  * GRAPHICS
@@ -276,39 +299,5 @@ public class BoardCell {
     	if (isWalkway) {
     		g.drawRect(w + 1, h + 1, size + 2, size + 2);
     	}
-    	if (isOccupied || isStart) {
-    		g.setColor(player.color);
-    		g.fillOval(w, h, size , size);
-    	}
     }
-//    
-//    public void draw(Graphics2D g, int x, int y, int size, Set<BoardCell> targets ) {
-//    	
-//
-//
-//    	if (!targets.isEmpty()) {
-//    		if (targets.contains(this)) {
-//    			color = Color.red;
-//    		}
-//    	}
-//    	else if (isRoom && !isDoorway) {
-//    		color = new Color(212, 227, 251);
-//    	} else if (isSpace) {
-//    		color = Color.BLACK;
-//    	} else if (isWalkway) {
-//    		color = Color.WHITE;    		
-//    	} 	  
-//    	int h = row * size + y;
-//    	int w = col * size + x;    	
-//    	g.setColor(color);
-//    	g.fillRect(w, h, size, size);
-//    	g.setColor(Color.BLACK);
-//    	if (isWalkway) {
-//    		g.drawRect(w + 1, h + 1, size + 2, size + 2);
-//    	}
-//    	if (isOccupied || isStart) {
-//    		g.setColor(player.color);
-//    		g.fillOval(w, h, size , size);
-//    	}
-//    }
 }

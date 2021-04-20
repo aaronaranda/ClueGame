@@ -111,12 +111,11 @@ public class Board extends JPanel {
             if (type.equals("Room")) {
                 Room room = new Room(name, initial);
                 roomMap.putIfAbsent(initial, room);
-                cards.add(new Card(room.getName(), CardType.ROOM));
+                cards.add(new Card(room.getName(), CardType.ROOM, Color.WHITE));
             } else if (type.equals("Weapon")) {
             	weapons.add(name);
-                cards.add(new Card(name, CardType.WEAPON));
-            } else if (type.equals("Player")) {
-                cards.add(new Card(name, CardType.PERSON));
+                cards.add(new Card(name, CardType.WEAPON, Color.WHITE));
+            } else if (type.equals("Player")) {              
                 int r = Integer.parseInt(line[3]);
                 int g = Integer.parseInt(line[4]);
                 int b = Integer.parseInt(line[5]);                
@@ -128,7 +127,8 @@ public class Board extends JPanel {
                     player = new ComputerPlayer(name);
                 }
                 players.add(player);
-                player.updateColor(r, g, b);               
+                player.updateColor(r, g, b);
+                cards.add(new Card(name, CardType.PERSON, new Color(r, g, b)));
             }
         }
         scan.close();
@@ -341,6 +341,7 @@ public class Board extends JPanel {
     	return rand.nextInt(6) + 1;
     }
     
+    // Keeps track of how humanPlayer making a move or not   
     public boolean play(Player currentPlayer, int roll) {
     	this.currentPlayer = currentPlayer;    	
     	calcTargets(currentPlayer.getLocation(), roll);
@@ -353,6 +354,7 @@ public class Board extends JPanel {
     	} else if (currentPlayer.equals(humanPlayer)) {
     		humanPlayer.move();
     		repaint();
+    		turnNumber++;
     		return humanPlayer.madeMove();
    		}
     	return false;
@@ -397,7 +399,37 @@ public class Board extends JPanel {
             	}
             }
         }       
+        drawPlayers(g2);
     }   
+    
+    // Draws player
+    // Players are drawn after cells so that rooms with multiple players aren't covered by cells   
+    private void drawPlayers(Graphics2D g) {
+    	ArrayList<BoardCell> playerLocations = new ArrayList<BoardCell>();    	
+    	for (Player player: players) {
+    		playerLocations.add(player.getLocation());    		
+    	}
+    	 
+    	for (BoardCell cell: playerLocations) {
+    		if (cell.isOccupied() || cell.isStart()) {
+    			int y = cell.getRow() * cellSize + yOffset;
+				int x = cell.getCol() * cellSize + xOffset;
+    			if (cell.isCenter() && !cell.getRoomPlayers().isEmpty()) {
+    				for (int i = 0; i < cell.getRoomPlayers().size(); i++) {    					    					
+    					g.setColor(cell.getRoomPlayers().get(i).getColor());
+    					g.fillOval(x + (10 * i), y, cellSize, cellSize);
+    					g.setColor(Color.BLACK);
+    					g.drawOval(x + (10 * i), y, cellSize, cellSize);
+    				}
+    			} else if (!cell.isCenter()) {
+    				g.setColor(cell.getPlayer().getColor());
+    				g.fillOval(x, y, cellSize, cellSize);
+    				g.setColor(Color.BLACK);
+    				g.drawOval(x, y, cellSize, cellSize);
+    			}
+    		}
+    	}	
+    }
     
     // Shows targets to humanPlayer as red, including rooms
     public void showTargets() {
