@@ -22,8 +22,7 @@ public class Card extends JTextField {
         this.name = name;
         this.type = type;
         this.color = color;
-        setText(name);
-      
+        setText(name);      
     }
 
     public boolean equals(Card target) {

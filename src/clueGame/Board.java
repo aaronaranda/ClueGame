@@ -151,8 +151,9 @@ public class Board extends JPanel {
 
         while (scan.hasNext()) {
             int col = 0;
-            String[] line = scan.next().split(",");
-            for (String initial: line) {
+            String[] line = scan.next().split(",");  
+            
+            for (String initial: line) {            	
                 char cellInitial = initial.charAt(0);
                 Character indicator = null;
                 boolean hasIndicator = false;
@@ -195,13 +196,13 @@ public class Board extends JPanel {
             }
             row++;
             if (maxCol != col) {
-                throw new BadConfigFormatException(maxCol, col);
+                throw new BadConfigFormatException(maxCol, col, row);
             }
         }
         scan.close();
         numRows = row;
         numCols = maxCol;
-
+        
         //Convert the board to a 2D array, now that there are set dimensions
         convertBoard(tempBoard);
     }

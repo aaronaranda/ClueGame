@@ -1,7 +1,7 @@
 // Rooms and room cards
 Room, Courtyard, C
-Room, Castle Entrance, E
-Room, Knights Training Hall, K
+Room, Castle, E
+Room, Knights Hall, K
 Room, Armory, A
 Room, Storage, S
 Room, Garden, G

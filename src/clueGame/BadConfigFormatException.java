@@ -18,10 +18,10 @@ public class BadConfigFormatException extends Exception {
                 );
     }
 
-    public BadConfigFormatException(int expectedColSize, int falseColSize) {
+    public BadConfigFormatException(int expectedColSize, int falseColSize, int row) {
         System.out.println(
                 "Dimension Error: Expected a column size of " + expectedColSize
-                + ", instead got " + falseColSize + "."
+                + ", instead got " + falseColSize + " at row " + row + "."
                 );
     }
 }
