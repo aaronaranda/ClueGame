@@ -19,7 +19,8 @@ public class CardPanel extends JPanel {
     public CardPanel() {
     	this.board = Board.getInstance();
     	player = board.getPlayer(0);	//Always gets the human player    
-    	setSize(new Dimension(100, 800));    	
+    	setSize(new Dimension(150, 800));   
+    	setMinimumSize(new Dimension(150, 800));
         setLayout(new GridLayout(0, 1));
 
         setBackground(Color.BLACK);

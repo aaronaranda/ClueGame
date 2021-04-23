@@ -1,18 +1,27 @@
 package clueGame;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class AccusationPanel extends JDialog {
-	public AccusationPanel(Player player) {
+	private static Board board = Board.getInstance();
+	private Player player = board.getPlayer(0);
+	
+	private JComboBox<String> personBox;
+	private JComboBox<String> roomBox;
+	private JComboBox<String> weaponBox;
+	
+	
+	public AccusationPanel() {
 		setTitle("Accusation Panel");
 		setSize(300, 300);
-	
-		
 		setLayout(new GridLayout(4, 2, 1, 1));
 		JLabel personLabel = new JLabel("Select Person Card");
 		JLabel roomLabel = new JLabel("Select Room Card");
@@ -36,9 +45,9 @@ public class AccusationPanel extends JDialog {
 			weaponCards[i] = player.getWeaponCards(false).get(i).getName();
 			i++;
 		}
-		JComboBox<String> personBox = new JComboBox<String>(personCards);
-		JComboBox<String> roomBox = new JComboBox<String>(roomCards);
-		JComboBox<String> weaponBox = new JComboBox<String>(weaponCards);
+		personBox = new JComboBox<String>(personCards);
+		roomBox = new JComboBox<String>(roomCards);
+		weaponBox = new JComboBox<String>(weaponCards);
 		add(personLabel, 0, 0);
 		add(personBox, 0, 1);
 		add(roomLabel, 1, 0);
@@ -47,10 +56,61 @@ public class AccusationPanel extends JDialog {
 		add(weaponBox, 2, 1);		
 		
 		JButton button = new JButton("Make Accusation");
+		button.addActionListener(new AccusationListener());
 		add(button, 3, 0);
-		add(fillerLabel, 3, 1);
-		button.addActionListener(e -> setVisible(false));
-		
-		
+		add(fillerLabel, 3, 1);			
 	}
+	
+	private Solution checkAccusation() {		
+		Card personCard = player.getCard((String)personBox.getSelectedItem());
+		Card roomCard = player.getCard((String)roomBox.getSelectedItem());
+		Card weaponCard = player.getCard((String)weaponBox.getSelectedItem());		
+		if (personCard == null || roomCard == null || weaponCard == null) {
+			JOptionPane.showMessageDialog(null, "Sorry, you don't have enough cards");
+			setVisible(false);			
+		} else {
+			Solution accusation = new Solution(player, personCard, roomCard, weaponCard);
+			return accusation;
+		}		
+		return null;
+	}
+	
+	
+	private class AccusationListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			Solution accusation = checkAccusation();
+			if (accusation != null) {
+				boolean win = board.checkAccusation(accusation);
+				if (win) {
+					JOptionPane.showMessageDialog(null, "You won!");
+				} else {
+					JOptionPane.showMessageDialog(null, "Sorry, that was wrong. You lose...");
+				}				
+			}
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

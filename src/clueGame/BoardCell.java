@@ -16,7 +16,7 @@ public class BoardCell {
     private boolean isRoom;
     private boolean isCenter;
     private boolean isLabel;    
-    private Room room;
+    private Room room;   
     // SecretPassage
     private boolean isPassage;
     private Room passageRoom;
@@ -161,11 +161,7 @@ public class BoardCell {
         	this.player = player;
         }
     }
-    
-//    public void setOccupied(boolean occupied) {
-//    	isOccupied = occupied;
-//    }
-    
+        
     public void setInitial(Character initial) {
     	this.initial = initial;
     }   
@@ -247,6 +243,7 @@ public class BoardCell {
     public Character getInitial() {
     	return initial;
     }
+        
     
     public Point getRoomFromDoorway() {
     	if (isDoorway) {
@@ -278,7 +275,10 @@ public class BoardCell {
  * GRAPHICS
  */ 
 
-    public void draw(Graphics2D g, int x, int y, int size) {    	
+    public void draw(Graphics2D g, int x, int y, int size) {
+    	int h = row * size + y;
+    	int w = col * size + x;
+    	
     	if (isRoom && !isDoorway) {
     		color = new Color(212, 227, 251);
     	} 
@@ -289,15 +289,45 @@ public class BoardCell {
     		color = Color.WHITE;    		
     	} 
     	if (isTarget) {
-    		color = Color.red;
-    	}
-    	int h = row * size + y;
-    	int w = col * size + x;    	
-    	g.setColor(color);
+    		color = Color.RED;
+    	}    	
+    	g.setColor(color);  
     	g.fillRect(w, h, size, size);
-    	g.setColor(Color.BLACK);
+    	
     	if (isWalkway) {
-    		g.drawRect(w + 1, h + 1, size + 2, size + 2);
+    		g.setColor(Color.BLACK);
+    		g.fillRect(w, h, 1, size - 1);
+    		g.fillRect(w, h, size - 1, 1);
+    	} 
+    		
+    	if (isDoorway && !isTarget) {
+    		drawDoorway(g, x, y, size);
+    	}   
+    }
+    
+    public void drawDoorway(Graphics2D g, int x, int y, int size) {
+    	// Draw a 2 pixel thick line for doorways on adjRoomCell
+    	int xStart = col * size + x;
+    	int yStart = row * size + y;    	
+    	double width = 0;    	
+    	double height = 0;
+    	g.setColor(Color.RED);
+    	if (doorDirection == DoorDirection.DOWN) {    		
+    		yStart = (int)(yStart + (0.8 * size));
+    		width = size;
+    		height = 0.2 * size;
+    	} else if (doorDirection == DoorDirection.UP) {   		    		
+    		width = size;
+    		height = 0.2 * size;    				
+    	} else if (doorDirection == DoorDirection.LEFT) {    		
+    		width = 0.2 * size;
+    		height = size;
+    	} else if (doorDirection == DoorDirection.RIGHT) {
+    		xStart = (int)(xStart + (0.8 * size));    		
+    		width = (0.2 * size);
+    		height = size;
     	}
+    	g.fillRect(xStart + 1, yStart + 1,
+    			(int)(width), (int)(height));
     }
 }

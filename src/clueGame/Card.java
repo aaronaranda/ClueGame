@@ -2,12 +2,11 @@ package clueGame;
 
 import java.awt.*;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 public class Card extends JTextField {
@@ -15,14 +14,28 @@ public class Card extends JTextField {
     private CardType type;
     private boolean seen;
     private Color color;
-    private Image image;
-    private Border cardBorder;
+    private ImageIcon icon;
+    private JLabel iconLabel;
+    
     
     public Card(String name, CardType type, Color color) {
         this.name = name;
         this.type = type;
         this.color = color;
-        setText(name);      
+        setText(name);     
+        this.setEditable(false);
+        this.setSize(new Dimension(150, 50));
+        if (type.equals(CardType.WEAPON)) {        	// Weapon cards get an icon 
+        	icon = new ImageIcon("./icons/" + name + ".png");
+        	Image im = icon.getImage();
+        	Image newImage = im.getScaledInstance(50, 50, Image.SCALE_SMOOTH); // must be rescaled
+        	icon = new ImageIcon(newImage);
+        	iconLabel = new JLabel();
+        	iconLabel.setIcon(icon);
+        	iconLabel.setSize(20, 20);
+            add(iconLabel);
+ 
+        }              
     }
 
     public boolean equals(Card target) {
@@ -37,24 +50,6 @@ public class Card extends JTextField {
     public void seeCard() {
         seen = true;
     }
-    
-   
-  
-//    @Override 
-//    protected void paintComponent(Graphics g) {
-//    	g.drawImage(image, 20, 20, this);
-//    }
-//    
-//    public Image getImage() {
-//    	Image image = null;
-//    	try {
-//    		image = ImageIO.read(this.c.getResource("icons/" + name + ".png"));
-//    	} catch(IOException e) {
-//    		e.printStackTrace();
-//    	}
-//    	return image;    
-//    }
-    
 
 /*
  * GETTERS
@@ -74,6 +69,10 @@ public class Card extends JTextField {
 
     public Color getColor() {
         return color;
+    }
+   
+    public JLabel getLabel() {
+    	return iconLabel;
     }
    
 }

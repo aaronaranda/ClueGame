@@ -117,6 +117,15 @@ public abstract class Player {
     public Color getColor() {
     	return color;
     }
+    
+    public Card getCard(String cardName) {
+    	for (Card card: this.deck) {
+    		if (card.getName().equals(cardName)) {
+    			return card;
+    		}
+    	}
+    	return null;
+    }
 
     public ArrayList<Card> getPersonCards(boolean seen) {
         ArrayList<Card> personCards = new ArrayList<Card>();

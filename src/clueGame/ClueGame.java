@@ -22,7 +22,7 @@ public class ClueGame extends JFrame {
 		setTitle("Clue! Game");
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		board = Board.getInstance();
-		board.setConfigFiles("ClueLayout1.csv", "ClueSetup.txt");
+		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();	
 		cardPanel = new CardPanel();
 		gameControlPanel = new GameControlPanel();	

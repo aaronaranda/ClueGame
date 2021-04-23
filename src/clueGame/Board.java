@@ -221,7 +221,7 @@ public class Board extends JPanel {
         	for (int j = 0; j < numCols; j++) {
         		if (grid[i][j].isDoorway()) {
             		int row = grid[i][j].getRoomFromDoorway().y;
-            		int col = grid[i][j].getRoomFromDoorway().x;
+            		int col = grid[i][j].getRoomFromDoorway().x;            	
             		grid[i][j].setRoom(grid[i + row][j + col].getRoom());            		            		
             	}
         	}

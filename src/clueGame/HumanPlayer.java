@@ -47,8 +47,7 @@ public class HumanPlayer extends Player {
     public boolean hasMoved() {
     	return madeMove;
     }
-    
-    
+        
     
     
     @Override
