@@ -44,12 +44,13 @@ public abstract class Player {
         this.color = new Color(r, g, b);
     }
 
-    public void updateHand(Card card) {
+    public void updateHand(Card card) {   	
         if (deck.contains(card)) {
             deck.get(deck.indexOf(card)).seeCard();
-            seenCards.add(card);
+            seenCards.add(card);           
         } else {
             deck.add(card);
+            card.setHolder(this);
         }
     }
     

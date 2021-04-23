@@ -15,9 +15,19 @@ public class Solution {
 
     public Solution(Player player) {
         Random rand = new Random(player.getDeck().size());
-        person = player.getPersonCards(true).get(rand.nextInt());
-        room = player.getRoomCards(true).get(rand.nextInt());
-        weapon = player.getWeaponCards(true).get(rand.nextInt());
+        if (!player.getPersonCards(true).isEmpty()) {
+        	int size = player.getPersonCards(true).size();
+        	person = player.getPersonCards(true).get(rand.nextInt(size));
+        }
+        if (!player.getRoomCards(true).isEmpty()) {
+        	int size = player.getRoomCards(true).size();
+        	room = player.getRoomCards(true).get(rand.nextInt(size));
+        } 
+        if (!player.getWeaponCards(true).isEmpty()) {
+        	int size = player.getWeaponCards(true).size();
+        	weapon = player.getWeaponCards(true).get(rand.nextInt(size));
+        }
+        
         whoSuggested = player;       
     }
     

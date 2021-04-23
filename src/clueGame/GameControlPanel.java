@@ -28,6 +28,7 @@ public class GameControlPanel extends JPanel {
  
     public GameControlPanel() {    	
     	player = board.getPlayer(0);
+    	board.setGCP(this);
     	
     	// Sizing
     	setSize(new Dimension(900, 100));
@@ -78,7 +79,7 @@ public class GameControlPanel extends JPanel {
         accusationButton.addActionListener(new AccusationListener());        
 
         JPanel guessPanel = new JPanel();
-    	this.guess = new JTextField(10);
+    	this.guess = new JTextField(30);
     	guessPanel.add(this.guess);
     	guessPanel.setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
                 "GUESS", 0, 0, null, Color.WHITE));
@@ -86,7 +87,7 @@ public class GameControlPanel extends JPanel {
     	guessPanel.setBackground(Color.BLACK);
 
         JPanel resultPanel = new JPanel();
-        this.guessResult = new JTextField(20);
+        this.guessResult = new JTextField(30);
         resultPanel.add(this.guessResult);
         resultPanel.setBorder(new TitledBorder(
                    new EtchedBorder(Color.CYAN, Color.WHITE), "RESULT", 0, 0, null, Color.WHITE));
@@ -146,14 +147,17 @@ public class GameControlPanel extends JPanel {
     }
     
     //Sets the guess
-    public void setGuess(String guess) {
+    public void setGuess(String guess, Color color) {
         this.guess.setText(guess);
+        this.guess.setBackground(color);
+        
     }
     
     
     //Sets the guess results
-    public void setGuessResult(String result) {
+    public void setGuessResult(String result, Color color) {
         this.guessResult.setText(result);
+        
     }    
 }
 

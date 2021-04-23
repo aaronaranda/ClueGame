@@ -25,6 +25,7 @@ public class ComputerPlayer extends Player {
 			location = arrTargets[index];
 			if (location.isRoom()) {
 				location = location.getRoom().getCenterCell();
+				
 			}
 			location.setOccupied(this);
 			madeMove = true;
@@ -54,7 +55,6 @@ public class ComputerPlayer extends Player {
     public Solution createSuggestion() {
     	// Constructor of solution passed a ComputerPlayer creates a randomized suggestion
         Solution suggestion = new Solution(this);
-        Random rand = new Random();
         return suggestion;
     }
     

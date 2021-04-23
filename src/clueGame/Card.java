@@ -1,13 +1,9 @@
 package clueGame;
 
 import java.awt.*;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.*;
-import javax.swing.border.Border;
+
 
 public class Card extends JTextField {
     private String name;
@@ -16,6 +12,7 @@ public class Card extends JTextField {
     private Color color;
     private ImageIcon icon;
     private JLabel iconLabel;
+    private Player holder;
     
     
     public Card(String name, CardType type, Color color) {
@@ -50,6 +47,10 @@ public class Card extends JTextField {
     public void seeCard() {
         seen = true;
     }
+    
+    public void setHolder(Player player) {
+    	this.holder = player;
+    }
 
 /*
  * GETTERS
@@ -73,6 +74,10 @@ public class Card extends JTextField {
    
     public JLabel getLabel() {
     	return iconLabel;
+    }
+    
+    public Player getHolder() {
+    	return holder;
     }
    
 }

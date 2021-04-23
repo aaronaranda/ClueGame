@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import javax.swing.*;
 
-public class Board extends JPanel {
+public class Board extends JPanel implements MouseListener {
     // Sizing
     private int numRows;
     private int numCols;
@@ -30,6 +30,7 @@ public class Board extends JPanel {
     private Set<BoardCell> targets;
     private ArrayList<Card> cards;
     private GameControlPanel gcp;
+    private CardPanel cp;
    
     // Current turn
     public static int turnNumber;   
@@ -54,7 +55,7 @@ public class Board extends JPanel {
     public Board() {    
     	setSize(new Dimension(800, 800));
     	setBackground(Color.BLACK);
-    	addMouseListener(new gameListener());
+    	addMouseListener(this);
     	turnNumber = 0;
     }
     
@@ -75,6 +76,10 @@ public class Board extends JPanel {
     
     public void setGCP(GameControlPanel gcp) {
     	this.gcp = gcp;
+    }
+    
+    public void setCardPanel(CardPanel cp) {
+    	this.cp = cp;
     }
     
     public void setConfigFiles(String csv, String txt) {
@@ -332,6 +337,38 @@ public class Board extends JPanel {
         }
     }
     
+    public boolean makeSuggestion(Solution suggestion, Player player) {
+    	gcp.setGuess(
+				suggestion.getPerson().getName() + ", " + 
+    	suggestion.getRoom().getName() + ", " + suggestion.getWeapon().getName(),
+    	player.getColor());
+    	Card disproval = handleSuggestion(suggestion, player);
+    	if (disproval != null) {
+    		disproval.seeCard();
+    		if (player == humanPlayer) {
+    			gcp.setGuessResult(disproval.getName(), disproval.getHolder().getColor());
+    			cp.updateCardsPanel();
+    		} else {
+    			gcp.setGuessResult("Disproved!", disproval.getHolder().getColor());
+    		}
+    	} else {
+    		gcp.setGuessResult("No clue", null);
+    	}
+    	return disproval != null;
+    	
+    }
+    
+    public Card handleSuggestion(Solution suggestion, Player player) {
+    	Card disproval = null;
+    	for (Player p: players ) {
+    		disproval = p.disproveSuggestion(suggestion);
+    		if (disproval != null) {
+    			break;
+    		}
+    	}
+    	return disproval;    	 
+    }
+    
     
     public boolean checkAccusation(Solution accusation) {
     	return theSolution.equals(accusation);
@@ -348,6 +385,9 @@ public class Board extends JPanel {
     	calcTargets(currentPlayer.getLocation(), roll);
     	if (!currentPlayer.equals(humanPlayer)) {
     		currentPlayer.moveLocation();
+    		if (currentPlayer.getLocation().isRoom()) {
+    			makeSuggestion(currentPlayer.createSuggestion(), currentPlayer);
+    		}
     		targets.clear();
     		repaint();
 			turnNumber++;
@@ -465,23 +505,26 @@ public class Board extends JPanel {
     	return null;    	
     }
     
-    private class gameListener implements MouseListener {
-    	public void mousePressed(MouseEvent event) {}
-    	public void mouseReleased(MouseEvent event) {
+    @Override 
+    public void mouseReleased(MouseEvent event) {
             if (!humanPlayer.hasMoved()) {
                 BoardCell clickedCell = getClickedCell(event.getX(), event.getY());
                 if  (clickedCell == null) {
                     JOptionPane.showMessageDialog(null, "Invalid selection");
                 } else {
                     humanPlayer.moveLocation(clickedCell);
+                    if (humanPlayer.getLocation().isRoom()) {
+                    	SuggestionBox suggestionBox = new SuggestionBox(this, humanPlayer.getLocation().getRoom());
+                    }
                     repaint();
                 }
             }
-        }
-    	public void mouseEntered(MouseEvent event) {}
-    	public void mouseExited(MouseEvent event) {}
-    	public void mouseClicked(MouseEvent event) {}
     }
+
+    public void mouseEntered(MouseEvent event) {}
+    public void mouseExited(MouseEvent event) {}
+    public void mouseClicked(MouseEvent event) {}
+    
     
     
     /*
@@ -527,6 +570,15 @@ public class Board extends JPanel {
         public Set<BoardCell> getTargets() {
         	return this.targets;
         }
+        
+        public Card getCard(String name) {
+        	for (Card c: cards) {
+        		if (c.getName().equals(name)) {
+        			return c;
+        		}
+        	}
+        	return null;        	
+        }
 
         public ArrayList<BoardCell> getAdjList(int row, int col) {
         	return grid[row][col].getAdjList();
@@ -539,4 +591,10 @@ public class Board extends JPanel {
         public ArrayList<Player> getPlayers() {
         	return players;
         }
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
 }
