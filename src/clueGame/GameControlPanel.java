@@ -10,9 +10,9 @@ import javax.swing.border.*;
 
 @SuppressWarnings("serial")
 public class GameControlPanel extends JPanel {
-	private boolean canMove; 
-	private static Board board;
+	private static Board board = Board.getInstance();
 	private Player player;
+	
 	//private String playerName;
 	private JTextField playerName;
 		
@@ -26,8 +26,7 @@ public class GameControlPanel extends JPanel {
 	//private String guessResult;
 	private JTextField guessResult;
  
-    public GameControlPanel() {
-    	this.board = Board.getInstance();
+    public GameControlPanel() {    	
     	player = board.getPlayer(0);
     	
     	// Sizing
@@ -130,7 +129,7 @@ public class GameControlPanel extends JPanel {
     
     private class AccusationListener implements ActionListener {
     	public void actionPerformed(ActionEvent e) {
-    		AccusationPanel accusationPanel = new AccusationPanel(player);
+    		AccusationPanel accusationPanel = new AccusationPanel();
     		accusationPanel.setVisible(true);
     	}
     }

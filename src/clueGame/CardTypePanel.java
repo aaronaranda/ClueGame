@@ -11,7 +11,8 @@ public class CardTypePanel extends JPanel {
     private ArrayList<Card> seenCards;
 
     public CardTypePanel(String type) {
-    	setSize(new Dimension(100, 200));
+    	setSize(new Dimension(150, 200));
+    	setMinimumSize(new Dimension(150, 200));
     	setBackground(Color.BLACK);
         setLayout(new GridLayout(0, 1));
         setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
@@ -35,12 +36,22 @@ public class CardTypePanel extends JPanel {
     }
 
     private void displayCards() {
+    	
         for (Card card: inHandCards) {
-        	inHandPanel.add(card);
-        
+        	if (card.getType().equals(CardType.WEAPON)) {
+        		inHandPanel.add("Left", card.getLabel());
+        		//inHandPanel.add("Right", card);        		       		
+        	} else {
+        		inHandPanel.add(card);
+        	}
         }
         for (Card card: seenCards) {
-            seenPanel.add(card);
+        	if (card.getType().equals(CardType.WEAPON)) {
+        		seenPanel.add("Left", card.getLabel());
+        		//seenPanel.add("Right", card);
+        	} else {
+        		seenPanel.add(card);
+        	}
         }
     }
 
@@ -54,10 +65,8 @@ public class CardTypePanel extends JPanel {
         if (seenCards.size() > 1) {
             seenCards.remove(0);
         }
-        inHandPanel.removeAll();
-        inHandPanel.add(new JLabel("In Hand:"));
-        seenPanel.removeAll();
-        seenPanel.add(new JLabel("Seen:"));
+        inHandPanel.removeAll();      
+        seenPanel.removeAll();      
         displayCards();
     }
 }
