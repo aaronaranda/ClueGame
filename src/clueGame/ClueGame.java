@@ -1,10 +1,6 @@
 package clueGame;
 
-import java.util.*;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-
 import javax.swing.*;
 
 @SuppressWarnings("serial")
@@ -33,23 +29,14 @@ public class ClueGame extends JFrame {
 		name = board.getPlayer(0).getName();		
 	}	
 	
-
 	public String yourName() {
 		return name;
 	}
 	
-	public Player getHuman() {
-		return board.getPlayer(0);
-	}
-	
 	public void startGame() {
 		gameControlPanel.start();
-		
 	}
 
-	
-
-	
 	public static void main(String[] args) {		
 		ClueGame gui = new ClueGame();	  
 		gui.setVisible(true);						
@@ -57,14 +44,7 @@ public class ClueGame extends JFrame {
 	    JOptionPane.showMessageDialog(gui,
 	        "You are " + gui.yourName() + "\n" + "Can you find the solution" + "\n" + "before the computer players?",
 	        "Welcome to Clue",
-	        JOptionPane.INFORMATION_MESSAGE);
-	    
-	    gui.startGame();
-	   
-	    
-	 
-	    
-	    
-	    
+	        JOptionPane.INFORMATION_MESSAGE);	    
+	    gui.startGame();	    
 	}	
 }

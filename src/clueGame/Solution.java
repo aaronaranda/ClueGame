@@ -5,7 +5,7 @@ public class Solution {
     private Card person, room, weapon;
     private Player whoSuggested;
 
-
+    // Constructor for humanplayer created suggestion
     public Solution(Player player, Card person, Card room, Card weapon) {
         this.person = person;
         this.room = room;
@@ -13,6 +13,7 @@ public class Solution {
         whoSuggested = player;
     }
 
+    // Constructor for ComputerPlayer created suggestion
     public Solution(Player player, Board board) {    	
         Random rand = new Random(player.getDeck().size());
         Card roomCard = null;
@@ -40,6 +41,7 @@ public class Solution {
         whoSuggested = player;       
     }
     
+    // Constructor for creating the answer to the game, where a player doesn't need to be specified
     public Solution(Card person, Card room, Card weapon) {
     	this.person = person;
     	this.room = room;

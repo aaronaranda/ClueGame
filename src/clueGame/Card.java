@@ -5,8 +5,9 @@ import javax.swing.ImageIcon;
 import javax.swing.*;
 
 
-public class Card extends JTextField {
-    private String name;
+@SuppressWarnings("serial")
+public class Card extends JTextField {	
+	private String name;
     private CardType type;
     private boolean seen;
     private Color color;

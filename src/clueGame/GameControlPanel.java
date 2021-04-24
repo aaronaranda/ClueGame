@@ -105,6 +105,7 @@ public class GameControlPanel extends JPanel {
         add(lowerPanel);
     }
     
+    // Called just to start the game, ensures that humam player is started first
     public void start() {
     	player = board.getPlayer(0);
     	numRoll = board.diceRoll();    	
@@ -112,7 +113,7 @@ public class GameControlPanel extends JPanel {
     	board.play(player, numRoll);
     }
      
-    
+    // Next player
     private class NextListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {						
 			// must check if player moved or not
@@ -127,19 +128,24 @@ public class GameControlPanel extends JPanel {
 		}    	
     }
     
+    // Handles pressing accusation button by displaying accusation window
     private class AccusationListener implements ActionListener {
     	public void actionPerformed(ActionEvent e) {
-    		GuessBox accusation = new GuessBox();
+    		if (player == board.getPlayer(0)) {
+    			GuessBox accusation = new GuessBox();
+    		} else {
+    			JOptionPane.showMessageDialog(board, "It isn't your turn yet.");
+    		}
     	}
     }
     
-    //Sets turn
+    //Sets turn, updates displayed info on who's turn it is
     public void setTurn() {
         playerName.setText(player.getName());
         playerName.setForeground(player.getColor());
         roll.setText(String.valueOf(numRoll));
     }
-
+    
     public void play() {
         board.play(player, numRoll);
     }

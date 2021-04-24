@@ -53,10 +53,7 @@ public class ComputerPlayer extends Player {
         }
         return null;
     }
-    
-     
-     
-
+         
     @Override
     public Solution createSuggestion(Room room) {
     	// Constructor of solution passed a ComputerPlayer creates a randomized suggestion
@@ -74,51 +71,9 @@ public class ComputerPlayer extends Player {
     		}
     	}
     }
-    	
-   
-
-     
-//    public Card selectTargets() {
-//        Random rand = new Random(this.deck.size());
-//		int randNumber = 0;
-//		int seen = 0;
-//		Card target;
-//		ArrayList<Card> roomDeck = new ArrayList<Card>();
-//		//Loops through the deck and adds each room card type to its respective card ArrayList
-//		//As long as it hasn't already been seen
-//		for (Card c: this.deck) {
-//			if (c.getType().equals(CardType.ROOM)) {
-//				for (Card x: this.getRoomCards(true)) {
-//					if (x == c) {
-//						seen += 1;
-//					}
-//				}
-//				if (seen > 0) {
-//					seen = 0;
-//					continue;
-//				}
-//				else {
-//					roomDeck.add(c);
-//				}
-//			}
-//		}
-//		//If all rooms are seen then one is just selected from random
-//		if (roomDeck.size() == 0) {
-//			randNumber = rand.nextInt(this.getRoomCards(true).size());
-//			target = this.getRoomCards(true).get(randNumber);
-//			return target;
-//		}
-//		//Will choose a room at random from the list of non-seen rooms
-//		else {
-//			randNumber = rand.nextInt(this.getRoomCards(false).size());
-//			target = this.getRoomCards(false).get(randNumber);
-//			return target;
-//		}
-//    }
-
+    
 	@Override
-	public Solution createSuggestion() {
-		// TODO Auto-generated method stub
+	public Solution createSuggestion() {	
 		return null;
 	}
 }

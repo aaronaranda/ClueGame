@@ -1,6 +1,5 @@
 package clueGame;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -9,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class Board extends JPanel implements MouseListener {
     // Sizing
     private int numRows;
@@ -323,6 +323,7 @@ public class Board extends JPanel implements MouseListener {
         }
     }
 
+    // Deals cards to players
     public void deal() {
         ArrayList<Card> tempDeck = new ArrayList<Card>(cards);
         int i = 1;
@@ -338,6 +339,7 @@ public class Board extends JPanel implements MouseListener {
         }
     }
     
+    // Used to create the answer to the game
     private void createSolution() {
     	Random rand = new Random();
     	ArrayList<Card> personCards = new ArrayList<Card>(getCards(CardType.PERSON));
@@ -593,6 +595,7 @@ public class Board extends JPanel implements MouseListener {
         	return this.targets;
         }
         
+        // Specific card based on name
         public Card getCard(String name) {
         	for (Card c: cards) {
         		if (c.getName().equals(name)) {
@@ -602,6 +605,7 @@ public class Board extends JPanel implements MouseListener {
         	return null;        	
         }
         
+        // Return cards of the a specified type from the entire deck
         public ArrayList<Card> getCards(CardType type) {
         	ArrayList<Card> cardsOfType = new ArrayList<Card>();
         	for (Card card: cards) {
@@ -628,8 +632,6 @@ public class Board extends JPanel implements MouseListener {
         }
 
 		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mousePressed(MouseEvent arg0){}			
+		
 }
