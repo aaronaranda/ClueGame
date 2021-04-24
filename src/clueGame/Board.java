@@ -358,13 +358,13 @@ public class Board extends JPanel implements MouseListener {
     	Card disproval = handleSuggestion(suggestion, player);
     	if (disproval != null) {
     		disproval.seeCard();
-    		player.updateHand(disproval);
     		if (player == humanPlayer) {
     			gcp.setGuessResult(disproval.getName(), disproval.getHolder().getColor());
     			cp.updateCardsPanel();
     		} else {
     			gcp.setGuessResult("Disproved!", disproval.getHolder().getColor());
     		}
+    		player.updateHand(disproval);
     	} else {
     		gcp.setGuessResult("No clue", (Color)null);
     	}
@@ -619,6 +619,12 @@ public class Board extends JPanel implements MouseListener {
         
         public ArrayList<Player> getPlayers() {
         	return players;
+        }
+        
+        public String getTheAnswer() {
+        	return ("It was actually " + theSolution.getPerson().getName() +
+        			" in the " + theSolution.getRoom().getName() +
+        			" with the " + theSolution.getWeapon().getName() + ".");
         }
 
 		@Override
