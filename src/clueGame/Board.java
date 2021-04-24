@@ -55,7 +55,7 @@ public class Board extends JPanel implements MouseListener {
     public Board() {    
     	setSize(new Dimension(800, 800));
     	setBackground(Color.BLACK);
-    	addMouseListener(this);
+    	addMouseListener(this);    
     	turnNumber = 0;
     }
     
@@ -72,6 +72,7 @@ public class Board extends JPanel implements MouseListener {
         }
         calcAdjacencies();
         deal();
+        createSolution();
     }
     
     public void setGCP(GameControlPanel gcp) {
@@ -337,6 +338,18 @@ public class Board extends JPanel implements MouseListener {
         }
     }
     
+    private void createSolution() {
+    	Random rand = new Random();
+    	ArrayList<Card> personCards = new ArrayList<Card>(getCards(CardType.PERSON));
+    	ArrayList<Card> roomCards = new ArrayList<Card>(getCards(CardType.ROOM));
+    	ArrayList<Card> weaponCards = new ArrayList<Card>(getCards(CardType.WEAPON));    	
+    	Card person = personCards.get(rand.nextInt(personCards.size()));    	
+    	Card room = roomCards.get(rand.nextInt(roomCards.size()));
+    	Card weapon = weaponCards.get(rand.nextInt(weaponCards.size()));    	
+    	theSolution = new Solution(person, room, weapon);   	
+    }
+    
+    
     public boolean makeSuggestion(Solution suggestion, Player player) {
     	gcp.setGuess(
 				suggestion.getPerson().getName() + ", " + 
@@ -523,7 +536,7 @@ public class Board extends JPanel implements MouseListener {
                 } else {
                     humanPlayer.moveLocation(clickedCell);
                     if (humanPlayer.getLocation().isRoom()) {
-                    	SuggestionBox suggestionBox = new SuggestionBox(this, humanPlayer.getLocation().getRoom());
+                    	GuessBox suggestionBox = new GuessBox(this, humanPlayer.getLocation().getRoom());
                     }
                     repaint();
                 }
@@ -588,14 +601,21 @@ public class Board extends JPanel implements MouseListener {
         	}
         	return null;        	
         }
+        
+        public ArrayList<Card> getCards(CardType type) {
+        	ArrayList<Card> cardsOfType = new ArrayList<Card>();
+        	for (Card card: cards) {
+        		if (card.getType().equals(type)) {
+        			cardsOfType.add(card);
+        		}
+        	}
+        	return cardsOfType;
+        }
 
         public ArrayList<BoardCell> getAdjList(int row, int col) {
         	return grid[row][col].getAdjList();
         }
-        
-        public Solution getTheAnswer() {
-        	return theSolution;
-        }
+       
         
         public ArrayList<Player> getPlayers() {
         	return players;

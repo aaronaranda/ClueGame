@@ -25,11 +25,10 @@ public class GameControlPanel extends JPanel {
 	
 	//private String guessResult;
 	private JTextField guessResult;
- 
+	 
     public GameControlPanel() {    	
     	player = board.getPlayer(0);
-    	board.setGCP(this);
-    	
+    	board.setGCP(this);    	
     	// Sizing
     	setSize(new Dimension(900, 100));
     	setMinimumSize(new Dimension(900, 100));    	          
@@ -130,8 +129,7 @@ public class GameControlPanel extends JPanel {
     
     private class AccusationListener implements ActionListener {
     	public void actionPerformed(ActionEvent e) {
-    		AccusationPanel accusationPanel = new AccusationPanel();
-    		accusationPanel.setVisible(true);
+    		GuessBox accusation = new GuessBox();
     	}
     }
     

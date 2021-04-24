@@ -33,15 +33,17 @@ public class Solution {
         		weaponCards.add(card);
         	}
         }
-        int size = personCards.size();
-        System.out.println(size);
+        int size = personCards.size();        
         person = personCards.get(rand.nextInt(size));
-        size = weaponCards.size();
-        System.out.println(size);
+        size = weaponCards.size();        
         weapon = weaponCards.get(rand.nextInt(size));
-        
-        
         whoSuggested = player;       
+    }
+    
+    public Solution(Card person, Card room, Card weapon) {
+    	this.person = person;
+    	this.room = room;
+    	this.weapon = weapon;    	
     }
     
     public boolean equals(Solution solution) {
