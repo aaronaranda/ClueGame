@@ -51,23 +51,34 @@ public class HumanPlayer extends Player {
     
     
     @Override
-    public Card disproveSuggestion(Solution suggestion) {
-        // Allow human player to select card to disprove
-        Card disproval = null;
-        return disproval;
+    public Card disproveSuggestion(Solution suggestion) {    
+    	if (this.equals(suggestion.getWhoSuggested())) {
+    		return null;
+    	}
+        for (Card card: deck) {
+        	if (card.equals(suggestion.getPerson())) {
+        		return card;
+        	} else if (card.equals(suggestion.getRoom())) {
+        		return card;
+        	} else if (card.equals(suggestion.getWeapon())) {
+        		return card;
+        	}
+        }
+        return null;
     }
 
     @Override
     public Solution createSuggestion() {
-        Solution suggestion = null;
+      
         // Human player chooses cards
         // Create solution with 3 cards
-        return suggestion;        
+        return null;      
     }
 
-    @Override
-    public Card selectTargets() {
-        // choose where to move
-    	return null;
-    }
+   
+	@Override
+	public Solution createSuggestion(Room room) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

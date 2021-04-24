@@ -13,15 +13,25 @@ public class Card extends JTextField {
     private ImageIcon icon;
     private JLabel iconLabel;
     private Player holder;
+    private Board board = Board.getInstance();
+    private Player cardOfPlayer;	// Player that player card refers to
     
     
     public Card(String name, CardType type, Color color) {
+    	
         this.name = name;
         this.type = type;
         this.color = color;
         setText(name);     
         this.setEditable(false);
         this.setSize(new Dimension(150, 50));
+        if (type.equals(CardType.PERSON)) {
+        	for (Player player: board.getPlayers()) {
+        		if (player.getName().equals(name)) {
+        			cardOfPlayer = player;
+        		}
+        	}
+        }
         if (type.equals(CardType.WEAPON)) {        	// Weapon cards get an icon 
         	icon = new ImageIcon("./icons/" + name + ".png");
         	Image im = icon.getImage();
@@ -78,6 +88,10 @@ public class Card extends JTextField {
     
     public Player getHolder() {
     	return holder;
+    }
+    
+    public Player getReferencedPlayer() {
+    	return cardOfPlayer;
     }
    
 }

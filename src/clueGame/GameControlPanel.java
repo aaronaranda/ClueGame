@@ -108,9 +108,9 @@ public class GameControlPanel extends JPanel {
     
     public void start() {
     	player = board.getPlayer(0);
-    	int roll = board.diceRoll();
+    	numRoll = board.diceRoll();    	
     	setTurn();
-    	board.play(player, roll);
+    	board.play(player, numRoll);
     }
      
     
@@ -157,6 +157,7 @@ public class GameControlPanel extends JPanel {
     //Sets the guess results
     public void setGuessResult(String result, Color color) {
         this.guessResult.setText(result);
+        this.guessResult.setBackground(color);
         
     }    
 }

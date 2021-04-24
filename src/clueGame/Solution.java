@@ -9,24 +9,37 @@ public class Solution {
     public Solution(Player player, Card person, Card room, Card weapon) {
         this.person = person;
         this.room = room;
-        this.weapon = weapon;
+        this.weapon = weapon;        
         whoSuggested = player;
     }
 
-    public Solution(Player player) {
+    public Solution(Player player, Board board) {    	
         Random rand = new Random(player.getDeck().size());
-        if (!player.getPersonCards(true).isEmpty()) {
-        	int size = player.getPersonCards(true).size();
-        	person = player.getPersonCards(true).get(rand.nextInt(size));
+        Card roomCard = null;
+        String roomName = player.getLocation().getRoom().getName();
+        for (Card card: board.getDeck()) {
+        	if (card.getName().equals(roomName)) {
+        		roomCard = card;
+        	}
         }
-        if (!player.getRoomCards(true).isEmpty()) {
-        	int size = player.getRoomCards(true).size();
-        	room = player.getRoomCards(true).get(rand.nextInt(size));
-        } 
-        if (!player.getWeaponCards(true).isEmpty()) {
-        	int size = player.getWeaponCards(true).size();
-        	weapon = player.getWeaponCards(true).get(rand.nextInt(size));
+        room = roomCard;
+        ArrayList<Card> personCards = new ArrayList<Card>();
+        ArrayList<Card> weaponCards = new ArrayList<Card>();
+                
+        for (Card card: board.getDeck()) {
+        	if (card.getType().equals(CardType.PERSON) && !player.getDeck().contains(card)) {
+        		personCards.add(card);
+        	} else if (card.getType().equals(CardType.WEAPON) && !player.getDeck().contains(card)) {
+        		weaponCards.add(card);
+        	}
         }
+        int size = personCards.size();
+        System.out.println(size);
+        person = personCards.get(rand.nextInt(size));
+        size = weaponCards.size();
+        System.out.println(size);
+        weapon = weaponCards.get(rand.nextInt(size));
+        
         
         whoSuggested = player;       
     }

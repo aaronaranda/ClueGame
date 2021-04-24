@@ -29,7 +29,8 @@ public abstract class Player {
 
     public abstract Card disproveSuggestion(Solution suggestion);
     public abstract Solution createSuggestion();
-    public abstract Card selectTargets();
+    public abstract Solution createSuggestion(Room room); // For computerplayer    
+
 
    
 /*
@@ -71,6 +72,10 @@ public abstract class Player {
     		cell.setOccupied(this);
     		location = cell;    		
     	}
+    }
+    
+    public boolean equals(Player player) {
+    	return (this.name.equals(player.getName()));
     }
    
     public abstract boolean moveLocation(BoardCell cell);

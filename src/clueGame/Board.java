@@ -345,6 +345,7 @@ public class Board extends JPanel implements MouseListener {
     	Card disproval = handleSuggestion(suggestion, player);
     	if (disproval != null) {
     		disproval.seeCard();
+    		player.updateHand(disproval);
     		if (player == humanPlayer) {
     			gcp.setGuessResult(disproval.getName(), disproval.getHolder().getColor());
     			cp.updateCardsPanel();
@@ -352,16 +353,20 @@ public class Board extends JPanel implements MouseListener {
     			gcp.setGuessResult("Disproved!", disproval.getHolder().getColor());
     		}
     	} else {
-    		gcp.setGuessResult("No clue", null);
+    		gcp.setGuessResult("No clue", (Color)null);
     	}
     	return disproval != null;
     	
     }
     
     public Card handleSuggestion(Solution suggestion, Player player) {
-    	Card disproval = null;
-    	for (Player p: players ) {
-    		disproval = p.disproveSuggestion(suggestion);
+    	Card disproval = null;    	
+    	Player suggestedPlayer = suggestion.getPerson().getReferencedPlayer();
+    	suggestedPlayer.moveLocation(player.getLocation());
+    	for (Player p: players) {    		
+    		if (!p.equals(player)) {
+    			disproval = p.disproveSuggestion(suggestion);
+    		}
     		if (disproval != null) {
     			break;
     		}
@@ -386,7 +391,11 @@ public class Board extends JPanel implements MouseListener {
     	if (!currentPlayer.equals(humanPlayer)) {
     		currentPlayer.moveLocation();
     		if (currentPlayer.getLocation().isRoom()) {
-    			makeSuggestion(currentPlayer.createSuggestion(), currentPlayer);
+    			Solution aiSuggestion = currentPlayer.createSuggestion(
+    					currentPlayer.getLocation().getRoom());
+    			if (aiSuggestion != null) {
+    				makeSuggestion(aiSuggestion, currentPlayer);
+    			}
     		}
     		targets.clear();
     		repaint();
