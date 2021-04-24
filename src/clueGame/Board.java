@@ -400,8 +400,7 @@ public class Board extends JPanel implements MouseListener {
     }
     
     // Keeps track of how humanPlayer making a move or not   
-    public boolean play(Player currentPlayer, int roll) {
-    	System.out.println(turnNumber);
+    public boolean play(Player currentPlayer, int roll) {    	
     	this.currentPlayer = currentPlayer;    	
     	calcTargets(currentPlayer.getLocation(), roll);
     	if (!currentPlayer.equals(humanPlayer)) {
@@ -456,13 +455,12 @@ public class Board extends JPanel implements MouseListener {
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {              
             	grid[i][j].draw(g2, xOffset, yOffset, cellSize);            	
-            	if (grid[i][j].isLabel()) {      
-            		String roomName = grid[i][j].getRoom().getName(); 
-            		JLabel label = new JLabel(roomName);
+            	if (grid[i][j].isLabel()) {                  		
+            		JLabel label = grid[i][j].getIcon(cellSize);
             		Dimension size = label.getPreferredSize();
             		label.setBounds(
             				j * cellSize + xOffset, i * cellSize + yOffset, size.width, size.height);
-            		add(label);
+            		add(label);            		            		
             	}
             }
         }       

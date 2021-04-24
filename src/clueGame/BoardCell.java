@@ -1,5 +1,9 @@
 package clueGame;
 import java.util.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 import java.awt.*;
 
 public class BoardCell {
@@ -329,5 +333,17 @@ public class BoardCell {
     	}
     	g.fillRect(xStart + 1, yStart + 1,
     			(int)(width), (int)(height));
+    }
+    
+    public JLabel getIcon(int size) {    	
+    	ImageIcon icon = room.getIcon();
+    	Image im = icon.getImage();
+    	Image newImage = im.getScaledInstance(2 * size, 2 * size, Image.SCALE_SMOOTH);
+    	icon = new ImageIcon(newImage);
+    	JLabel iconLabel = new JLabel();
+    	iconLabel.setIcon(icon);
+    	iconLabel.setSize(2 * size, 2 * size);
+    	return iconLabel;
+    	
     }
 }

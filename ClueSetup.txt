@@ -1,13 +1,13 @@
 // Rooms and room cards
 Room, Courtyard, C
 Room, Castle, E
-Room, Knights Hall, K
+Room, Knight Hall, K
 Room, Armory, A
 Room, Storage, S
 Room, Garden, G
 Room, Bedroom, B
-Room, Dining Hall, D
-Room, Throne Room, T
+Room, Dining, D
+Room, Throne, T
 // other spaces on board
 Space, Unused, X
 Space, Walkway, W

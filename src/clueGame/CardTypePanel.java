@@ -17,8 +17,8 @@ public class CardTypePanel extends JPanel {
         setLayout(new GridLayout(0, 1));
         setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
                 type, 0, 0, null, Color.WHITE));
-        inHandPanel = new JPanel(new GridLayout(0, 1));
-        seenPanel = new JPanel(new GridLayout(0, 1));
+        inHandPanel = new JPanel(new GridLayout(0, 2));
+        seenPanel = new JPanel(new GridLayout(0, 2));
         seenPanel.setBackground(Color.BLACK);
         seenPanel.setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
                 "Seen:", 0, 0, null, Color.WHITE));
@@ -37,21 +37,13 @@ public class CardTypePanel extends JPanel {
 
     private void displayCards() {
     	
-        for (Card card: inHandCards) {
-        	if (card.getType().equals(CardType.WEAPON)) {
-        		inHandPanel.add("Left", card.getLabel());
-        		//inHandPanel.add("Right", card);        		       		
-        	} else {
-        		inHandPanel.add(card);
-        	}
+        for (Card card: inHandCards) {        
+        	inHandPanel.add(card.getLabel());
+        	inHandPanel.add(card);        		       		                	
         }
         for (Card card: seenCards) {
-        	if (card.getType().equals(CardType.WEAPON)) {
-        		seenPanel.add("Left", card.getLabel());
-        		//seenPanel.add("Right", card);
-        	} else {
-        		seenPanel.add(card);
-        	}
+        	seenPanel.add(card.getLabel());
+        	seenPanel.add(card);               		        
         }
     }
 

@@ -1,24 +1,32 @@
 package clueGame;
 import java.util.*;
 import java.awt.*;
-
-public class Room {
+import javax.swing.*;
+public class Room extends JLabel {
     // Identification
     private String name;   
     private Character initial;
+    private ImageIcon icon;
     
     // Pointers to center and label cells
     private BoardCell labelCell;
     private BoardCell centerCell;
 
     // Data structure of cells w/in room
-    private ArrayList<BoardCell> roomCells;
+    private ArrayList<BoardCell> roomCells;    
 
     // Constructor
     public Room(String name, Character initial) {
         this.name = name;
         this.initial = initial;
         roomCells = new ArrayList<BoardCell>();
+        //Icon
+        if (this.name.contains(" ")) {
+        	String[] temp = name.split(" ");
+        	icon = new ImageIcon("./icons/" + temp[0] + ".png"); 
+        } else {
+        	icon = new ImageIcon("./icons/" + name + ".png");
+        }                        
     }
 
     // Graphics
@@ -64,6 +72,10 @@ public class Room {
     
     public ArrayList<BoardCell> getCells() {
     	return roomCells;
+    }
+    
+    public ImageIcon getIcon() {
+    	return icon;
     }
 
 

@@ -33,17 +33,15 @@ public class Card extends JTextField {
         		}
         	}
         }
-        if (type.equals(CardType.WEAPON)) {        	// Weapon cards get an icon 
-        	icon = new ImageIcon("./icons/" + name + ".png");
-        	Image im = icon.getImage();
-        	Image newImage = im.getScaledInstance(50, 50, Image.SCALE_SMOOTH); // must be rescaled
-        	icon = new ImageIcon(newImage);
-        	iconLabel = new JLabel();
-        	iconLabel.setIcon(icon);
-        	iconLabel.setSize(20, 20);
-            add(iconLabel);
- 
-        }              
+         
+        icon = new ImageIcon("./icons/" + name + ".png");
+        Image im = icon.getImage();
+        Image newImage = im.getScaledInstance(50, 50, Image.SCALE_SMOOTH); // must be rescaled
+        icon = new ImageIcon(newImage);
+        iconLabel = new JLabel();
+        iconLabel.setIcon(icon);
+        iconLabel.setSize(20, 20);
+           add(iconLabel);                       
     }
 
     public boolean equals(Card target) {
