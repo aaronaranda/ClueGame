@@ -344,10 +344,19 @@ public class Board extends JPanel implements MouseListener {
     	Random rand = new Random();
     	ArrayList<Card> personCards = new ArrayList<Card>(getCards(CardType.PERSON));
     	ArrayList<Card> roomCards = new ArrayList<Card>(getCards(CardType.ROOM));
-    	ArrayList<Card> weaponCards = new ArrayList<Card>(getCards(CardType.WEAPON));    	
-    	Card person = personCards.get(rand.nextInt(personCards.size()));    	
-    	Card room = roomCards.get(rand.nextInt(roomCards.size()));
-    	Card weapon = weaponCards.get(rand.nextInt(weaponCards.size()));    	
+    	ArrayList<Card> weaponCards = new ArrayList<Card>(getCards(CardType.WEAPON));
+    	Card person = null;
+    	Card room = null;
+    	Card weapon = null;    		
+    	if (!personCards.isEmpty()) {
+    		person = personCards.get(rand.nextInt(personCards.size()));
+    	}
+    	if (!roomCards.isEmpty()) {
+    		room = roomCards.get(rand.nextInt(roomCards.size()));
+    	}
+    	if (!weaponCards.isEmpty()) {
+    		weapon = weaponCards.get(rand.nextInt(weaponCards.size()));	
+    	}    	    
     	theSolution = new Solution(person, room, weapon);   	
     }
     
