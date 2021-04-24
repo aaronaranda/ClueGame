@@ -110,7 +110,7 @@ public class GameControlPanel extends JPanel {
     	player = board.getPlayer(0);
     	numRoll = board.diceRoll();    	
     	setTurn();
-    	board.play(player, numRoll);
+    	play();
     }
      
     // Next player
@@ -119,7 +119,7 @@ public class GameControlPanel extends JPanel {
 			// must check if player moved or not
 			if (!player.madeMove()) {
 				JOptionPane.showMessageDialog(null, "Please finish your turn.");
-			} else {
+			} else {		
 				player = board.getPlayer(Board.turnNumber % 6);
 				numRoll = board.diceRoll();
 				setTurn();

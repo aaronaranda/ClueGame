@@ -401,6 +401,7 @@ public class Board extends JPanel implements MouseListener {
     
     // Keeps track of how humanPlayer making a move or not   
     public boolean play(Player currentPlayer, int roll) {
+    	System.out.println(turnNumber);
     	this.currentPlayer = currentPlayer;    	
     	calcTargets(currentPlayer.getLocation(), roll);
     	if (!currentPlayer.equals(humanPlayer)) {
@@ -413,8 +414,8 @@ public class Board extends JPanel implements MouseListener {
     			}
     		}
     		targets.clear();
-    		repaint();
-			turnNumber++;
+    		repaint();	
+    		turnNumber++;
 			return true;
     	} else if (currentPlayer.equals(humanPlayer)) {
     		humanPlayer.move();
@@ -422,6 +423,7 @@ public class Board extends JPanel implements MouseListener {
     		turnNumber++;
     		return humanPlayer.madeMove();
    		}
+    	
     	return false;
    	}
 
@@ -531,16 +533,20 @@ public class Board extends JPanel implements MouseListener {
     
     @Override 
     public void mouseReleased(MouseEvent event) {
+    	if (currentPlayer != humanPlayer) {
+    		JOptionPane.showMessageDialog(this,	"It isn't your turn. Press NEXT");    		
+    	}
             if (!humanPlayer.hasMoved()) {
                 BoardCell clickedCell = getClickedCell(event.getX(), event.getY());
                 if  (clickedCell == null) {
                     JOptionPane.showMessageDialog(null, "Invalid selection");
                 } else {
-                    humanPlayer.moveLocation(clickedCell);
+                    humanPlayer.moveLocation(clickedCell);                  
+                    repaint();
                     if (humanPlayer.getLocation().isRoom()) {
                     	GuessBox suggestionBox = new GuessBox(this, humanPlayer.getLocation().getRoom());
+                    	humanPlayer.setMove(true);                    
                     }
-                    repaint();
                 }
             }
     }

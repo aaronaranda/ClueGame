@@ -27,8 +27,7 @@ public class HumanPlayer extends Player {
                 location = cell;
             }
     		cell.setOccupied(this);
-    		madeMove = true;
-    		Board.turnNumber++;
+    		madeMove = true;    		
     		this.board.getTargets().clear();
     		return true;
     	} else { 			
@@ -46,6 +45,10 @@ public class HumanPlayer extends Player {
 
     public boolean hasMoved() {
     	return madeMove;
+    }
+    
+    public void setMove(boolean move) {
+    	madeMove = move;
     }
         
     

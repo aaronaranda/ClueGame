@@ -77,6 +77,8 @@ public abstract class Player {
     public boolean equals(Player player) {
     	return (this.name.equals(player.getName()));
     }
+    
+    
    
     public abstract boolean moveLocation(BoardCell cell);
     public abstract void moveLocation();
