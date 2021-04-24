@@ -25,10 +25,10 @@ public class GameControlPanel extends JPanel {
 	
 	//private String guessResult;
 	private JTextField guessResult;
- 
+	 
     public GameControlPanel() {    	
     	player = board.getPlayer(0);
-    	
+    	board.setGCP(this);    	
     	// Sizing
     	setSize(new Dimension(900, 100));
     	setMinimumSize(new Dimension(900, 100));    	          
@@ -78,7 +78,7 @@ public class GameControlPanel extends JPanel {
         accusationButton.addActionListener(new AccusationListener());        
 
         JPanel guessPanel = new JPanel();
-    	this.guess = new JTextField(10);
+    	this.guess = new JTextField(30);
     	guessPanel.add(this.guess);
     	guessPanel.setBorder(new TitledBorder(new EtchedBorder(Color.CYAN, Color.WHITE),
                 "GUESS", 0, 0, null, Color.WHITE));
@@ -86,7 +86,7 @@ public class GameControlPanel extends JPanel {
     	guessPanel.setBackground(Color.BLACK);
 
         JPanel resultPanel = new JPanel();
-        this.guessResult = new JTextField(20);
+        this.guessResult = new JTextField(30);
         resultPanel.add(this.guessResult);
         resultPanel.setBorder(new TitledBorder(
                    new EtchedBorder(Color.CYAN, Color.WHITE), "RESULT", 0, 0, null, Color.WHITE));
@@ -105,14 +105,15 @@ public class GameControlPanel extends JPanel {
         add(lowerPanel);
     }
     
+    // Called just to start the game, ensures that humam player is started first
     public void start() {
     	player = board.getPlayer(0);
-    	int roll = board.diceRoll();
+    	numRoll = board.diceRoll();    	
     	setTurn();
-    	board.play(player, roll);
+    	board.play(player, numRoll);
     }
      
-    
+    // Next player
     private class NextListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {						
 			// must check if player moved or not
@@ -127,33 +128,41 @@ public class GameControlPanel extends JPanel {
 		}    	
     }
     
+    // Handles pressing accusation button by displaying accusation window
     private class AccusationListener implements ActionListener {
     	public void actionPerformed(ActionEvent e) {
-    		AccusationPanel accusationPanel = new AccusationPanel();
-    		accusationPanel.setVisible(true);
+    		if (player == board.getPlayer(0)) {
+    			GuessBox accusation = new GuessBox();
+    		} else {
+    			JOptionPane.showMessageDialog(board, "It isn't your turn yet.");
+    		}
     	}
     }
     
-    //Sets turn
+    //Sets turn, updates displayed info on who's turn it is
     public void setTurn() {
         playerName.setText(player.getName());
         playerName.setForeground(player.getColor());
         roll.setText(String.valueOf(numRoll));
     }
-
+    
     public void play() {
         board.play(player, numRoll);
     }
     
     //Sets the guess
-    public void setGuess(String guess) {
+    public void setGuess(String guess, Color color) {
         this.guess.setText(guess);
+        this.guess.setBackground(color);
+        
     }
     
     
     //Sets the guess results
-    public void setGuessResult(String result) {
+    public void setGuessResult(String result, Color color) {
         this.guessResult.setText(result);
+        this.guessResult.setBackground(color);
+        
     }    
 }
 

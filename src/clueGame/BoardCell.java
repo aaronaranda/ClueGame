@@ -288,7 +288,7 @@ public class BoardCell {
     	if (isWalkway) {
     		color = Color.WHITE;    		
     	} 
-    	if (isTarget) {
+    	if (!isDoorway && isTarget) {
     		color = Color.RED;
     	}    	
     	g.setColor(color);  

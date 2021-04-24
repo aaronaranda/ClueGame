@@ -5,20 +5,47 @@ public class Solution {
     private Card person, room, weapon;
     private Player whoSuggested;
 
-
+    // Constructor for humanplayer created suggestion
     public Solution(Player player, Card person, Card room, Card weapon) {
         this.person = person;
         this.room = room;
-        this.weapon = weapon;
+        this.weapon = weapon;        
         whoSuggested = player;
     }
 
-    public Solution(Player player) {
+    // Constructor for ComputerPlayer created suggestion
+    public Solution(Player player, Board board) {    	
         Random rand = new Random(player.getDeck().size());
-        person = player.getPersonCards(true).get(rand.nextInt());
-        room = player.getRoomCards(true).get(rand.nextInt());
-        weapon = player.getWeaponCards(true).get(rand.nextInt());
+        Card roomCard = null;
+        String roomName = player.getLocation().getRoom().getName();
+        for (Card card: board.getDeck()) {
+        	if (card.getName().equals(roomName)) {
+        		roomCard = card;
+        	}
+        }
+        room = roomCard;
+        ArrayList<Card> personCards = new ArrayList<Card>();
+        ArrayList<Card> weaponCards = new ArrayList<Card>();
+                
+        for (Card card: board.getDeck()) {
+        	if (card.getType().equals(CardType.PERSON) && !player.getDeck().contains(card)) {
+        		personCards.add(card);
+        	} else if (card.getType().equals(CardType.WEAPON) && !player.getDeck().contains(card)) {
+        		weaponCards.add(card);
+        	}
+        }
+        int size = personCards.size();        
+        person = personCards.get(rand.nextInt(size));
+        size = weaponCards.size();        
+        weapon = weaponCards.get(rand.nextInt(size));
         whoSuggested = player;       
+    }
+    
+    // Constructor for creating the answer to the game, where a player doesn't need to be specified
+    public Solution(Card person, Card room, Card weapon) {
+    	this.person = person;
+    	this.room = room;
+    	this.weapon = weapon;    	
     }
     
     public boolean equals(Solution solution) {

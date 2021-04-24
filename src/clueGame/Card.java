@@ -1,30 +1,38 @@
 package clueGame;
 
 import java.awt.*;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.*;
-import javax.swing.border.Border;
 
-public class Card extends JTextField {
-    private String name;
+
+@SuppressWarnings("serial")
+public class Card extends JTextField {	
+	private String name;
     private CardType type;
     private boolean seen;
     private Color color;
     private ImageIcon icon;
     private JLabel iconLabel;
+    private Player holder;
+    private Board board = Board.getInstance();
+    private Player cardOfPlayer;	// Player that player card refers to
     
     
     public Card(String name, CardType type, Color color) {
+    	
         this.name = name;
         this.type = type;
         this.color = color;
         setText(name);     
         this.setEditable(false);
         this.setSize(new Dimension(150, 50));
+        if (type.equals(CardType.PERSON)) {
+        	for (Player player: board.getPlayers()) {
+        		if (player.getName().equals(name)) {
+        			cardOfPlayer = player;
+        		}
+        	}
+        }
         if (type.equals(CardType.WEAPON)) {        	// Weapon cards get an icon 
         	icon = new ImageIcon("./icons/" + name + ".png");
         	Image im = icon.getImage();
@@ -50,6 +58,10 @@ public class Card extends JTextField {
     public void seeCard() {
         seen = true;
     }
+    
+    public void setHolder(Player player) {
+    	this.holder = player;
+    }
 
 /*
  * GETTERS
@@ -73,6 +85,14 @@ public class Card extends JTextField {
    
     public JLabel getLabel() {
     	return iconLabel;
+    }
+    
+    public Player getHolder() {
+    	return holder;
+    }
+    
+    public Player getReferencedPlayer() {
+    	return cardOfPlayer;
     }
    
 }

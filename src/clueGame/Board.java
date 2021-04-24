@@ -1,6 +1,5 @@
 package clueGame;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -9,7 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import javax.swing.*;
 
-public class Board extends JPanel {
+@SuppressWarnings("serial")
+public class Board extends JPanel implements MouseListener {
     // Sizing
     private int numRows;
     private int numCols;
@@ -30,6 +30,7 @@ public class Board extends JPanel {
     private Set<BoardCell> targets;
     private ArrayList<Card> cards;
     private GameControlPanel gcp;
+    private CardPanel cp;
    
     // Current turn
     public static int turnNumber;   
@@ -54,7 +55,7 @@ public class Board extends JPanel {
     public Board() {    
     	setSize(new Dimension(800, 800));
     	setBackground(Color.BLACK);
-    	addMouseListener(new gameListener());
+    	addMouseListener(this);    
     	turnNumber = 0;
     }
     
@@ -71,10 +72,15 @@ public class Board extends JPanel {
         }
         calcAdjacencies();
         deal();
+        createSolution();
     }
     
     public void setGCP(GameControlPanel gcp) {
     	this.gcp = gcp;
+    }
+    
+    public void setCardPanel(CardPanel cp) {
+    	this.cp = cp;
     }
     
     public void setConfigFiles(String csv, String txt) {
@@ -317,6 +323,7 @@ public class Board extends JPanel {
         }
     }
 
+    // Deals cards to players
     public void deal() {
         ArrayList<Card> tempDeck = new ArrayList<Card>(cards);
         int i = 1;
@@ -330,6 +337,56 @@ public class Board extends JPanel {
             tempDeck.remove(index);
             i++;                
         }
+    }
+    
+    // Used to create the answer to the game
+    private void createSolution() {
+    	Random rand = new Random();
+    	ArrayList<Card> personCards = new ArrayList<Card>(getCards(CardType.PERSON));
+    	ArrayList<Card> roomCards = new ArrayList<Card>(getCards(CardType.ROOM));
+    	ArrayList<Card> weaponCards = new ArrayList<Card>(getCards(CardType.WEAPON));    	
+    	Card person = personCards.get(rand.nextInt(personCards.size()));    	
+    	Card room = roomCards.get(rand.nextInt(roomCards.size()));
+    	Card weapon = weaponCards.get(rand.nextInt(weaponCards.size()));    	
+    	theSolution = new Solution(person, room, weapon);   	
+    }
+    
+    
+    public boolean makeSuggestion(Solution suggestion, Player player) {
+    	gcp.setGuess(
+				suggestion.getPerson().getName() + ", " + 
+    	suggestion.getRoom().getName() + ", " + suggestion.getWeapon().getName(),
+    	player.getColor());
+    	Card disproval = handleSuggestion(suggestion, player);
+    	if (disproval != null) {
+    		disproval.seeCard();
+    		if (player == humanPlayer) {
+    			gcp.setGuessResult(disproval.getName(), disproval.getHolder().getColor());
+    			cp.updateCardsPanel();
+    		} else {
+    			gcp.setGuessResult("Disproved!", disproval.getHolder().getColor());
+    		}
+    		player.updateHand(disproval);
+    	} else {
+    		gcp.setGuessResult("No clue", (Color)null);
+    	}
+    	return disproval != null;
+    	
+    }
+    
+    public Card handleSuggestion(Solution suggestion, Player player) {
+    	Card disproval = null;    	
+    	Player suggestedPlayer = suggestion.getPerson().getReferencedPlayer();
+    	suggestedPlayer.moveLocation(player.getLocation());
+    	for (Player p: players) {    		
+    		if (!p.equals(player)) {
+    			disproval = p.disproveSuggestion(suggestion);
+    		}
+    		if (disproval != null) {
+    			break;
+    		}
+    	}
+    	return disproval;    	 
     }
     
     
@@ -348,6 +405,13 @@ public class Board extends JPanel {
     	calcTargets(currentPlayer.getLocation(), roll);
     	if (!currentPlayer.equals(humanPlayer)) {
     		currentPlayer.moveLocation();
+    		if (currentPlayer.getLocation().isRoom()) {
+    			Solution aiSuggestion = currentPlayer.createSuggestion(
+    					currentPlayer.getLocation().getRoom());
+    			if (aiSuggestion != null) {
+    				makeSuggestion(aiSuggestion, currentPlayer);
+    			}
+    		}
     		targets.clear();
     		repaint();
 			turnNumber++;
@@ -465,23 +529,26 @@ public class Board extends JPanel {
     	return null;    	
     }
     
-    private class gameListener implements MouseListener {
-    	public void mousePressed(MouseEvent event) {}
-    	public void mouseReleased(MouseEvent event) {
+    @Override 
+    public void mouseReleased(MouseEvent event) {
             if (!humanPlayer.hasMoved()) {
                 BoardCell clickedCell = getClickedCell(event.getX(), event.getY());
                 if  (clickedCell == null) {
                     JOptionPane.showMessageDialog(null, "Invalid selection");
                 } else {
                     humanPlayer.moveLocation(clickedCell);
+                    if (humanPlayer.getLocation().isRoom()) {
+                    	GuessBox suggestionBox = new GuessBox(this, humanPlayer.getLocation().getRoom());
+                    }
                     repaint();
                 }
             }
-        }
-    	public void mouseEntered(MouseEvent event) {}
-    	public void mouseExited(MouseEvent event) {}
-    	public void mouseClicked(MouseEvent event) {}
     }
+
+    public void mouseEntered(MouseEvent event) {}
+    public void mouseExited(MouseEvent event) {}
+    public void mouseClicked(MouseEvent event) {}
+    
     
     
     /*
@@ -527,16 +594,44 @@ public class Board extends JPanel {
         public Set<BoardCell> getTargets() {
         	return this.targets;
         }
+        
+        // Specific card based on name
+        public Card getCard(String name) {
+        	for (Card c: cards) {
+        		if (c.getName().equals(name)) {
+        			return c;
+        		}
+        	}
+        	return null;        	
+        }
+        
+        // Return cards of the a specified type from the entire deck
+        public ArrayList<Card> getCards(CardType type) {
+        	ArrayList<Card> cardsOfType = new ArrayList<Card>();
+        	for (Card card: cards) {
+        		if (card.getType().equals(type)) {
+        			cardsOfType.add(card);
+        		}
+        	}
+        	return cardsOfType;
+        }
 
         public ArrayList<BoardCell> getAdjList(int row, int col) {
         	return grid[row][col].getAdjList();
         }
-        
-        public Solution getTheAnswer() {
-        	return theSolution;
-        }
+       
         
         public ArrayList<Player> getPlayers() {
         	return players;
         }
+        
+        public String getTheAnswer() {
+        	return ("It was actually " + theSolution.getPerson().getName() +
+        			" in the " + theSolution.getRoom().getName() +
+        			" with the " + theSolution.getWeapon().getName() + ".");
+        }
+
+		@Override
+		public void mousePressed(MouseEvent arg0){}			
+		
 }

@@ -29,7 +29,8 @@ public abstract class Player {
 
     public abstract Card disproveSuggestion(Solution suggestion);
     public abstract Solution createSuggestion();
-    public abstract Card selectTargets();
+    public abstract Solution createSuggestion(Room room); // For computerplayer    
+
 
    
 /*
@@ -44,12 +45,13 @@ public abstract class Player {
         this.color = new Color(r, g, b);
     }
 
-    public void updateHand(Card card) {
+    public void updateHand(Card card) {   	
         if (deck.contains(card)) {
             deck.get(deck.indexOf(card)).seeCard();
-            seenCards.add(card);
+            seenCards.add(card);           
         } else {
             deck.add(card);
+            card.setHolder(this);
         }
     }
     
@@ -70,6 +72,10 @@ public abstract class Player {
     		cell.setOccupied(this);
     		location = cell;    		
     	}
+    }
+    
+    public boolean equals(Player player) {
+    	return (this.name.equals(player.getName()));
     }
    
     public abstract boolean moveLocation(BoardCell cell);
